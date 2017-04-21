@@ -15,12 +15,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +38,8 @@ import br.com.belongapps.meuacai.cardapioOnline.model.FormadePagamento;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.meuacai.cardapioOnline.model.Pedido;
+
+import static android.content.ContentValues.TAG;
 
 public class FinalizarPedidoActivity extends AppCompatActivity {
 
@@ -54,6 +60,10 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     private FormadePagamento formadePagamentoSelecionada = new FormadePagamento();
     private List<FormadePagamento> formasDePagamento = FormardePagamentoDAO.getFormasdePagamento();
+
+    DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+
+    String numerodopedido = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +156,66 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private void beforeEnviarPedido(Pedido pedido) {
         Date dataPedido = new Date();
 
+
     }
 
+    public void updateNumero(List<String> list) {
+
+        if (list.isEmpty()) {
+            numerodopedido = "0001";
+
+        } else {
+            numerodopedido = list.get(list.size() - 1);
+            Log.println(Log.ERROR, "Ultimo Pedido: ", list.get(list.size() - 1));
+        }
+    }
+
+    public String gerarNumeroPedido(String numero) {
+
+        int intnum = Integer.parseInt(numero);
+        intnum++;
+
+        NumberFormat formatter = new DecimalFormat("00000");
+
+        numero = formatter.format(intnum);
+
+        return numero;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> list = new ArrayList<String>();
+
+                try {
+                    for (DataSnapshot pedido : dataSnapshot.getChildren()) {
+                        for (DataSnapshot dia : pedido.getChildren()) {
+                            String numpedido = dia.child("numero_pedido").getValue().toString();
+
+                            Log.println(Log.ERROR, "NUM: ", numpedido);
+                            list.add(numpedido);
+                        }
+                    }
+
+                    updateNumero(list);
+                } catch (NullPointerException n) {
+                    list.add("0001");
+                    updateNumero(list);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        database.child("pedidostestes").addValueEventListener(postListener);
+    }
 }
