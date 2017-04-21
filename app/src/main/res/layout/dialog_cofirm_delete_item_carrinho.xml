@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/border_popups"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:padding="10dp"
+        android:text="Confirmação"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Deseja realmente excluir este item do carrinho?"
+        android:textStyle="bold"
+        android:textAlignment="center"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/border_bottom_around"
+        android:backgroundTint="@color/colorPrimary">
+
+        <Button
+            android:id="@+id/bt_cancel_excluir_item_carrinho"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/bt_confirmar_excluir_item_carrinho"
+            android:background="@android:color/transparent"
+            android:text="FECHAR"
+            android:textColor="#FFF"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/bt_confirmar_excluir_item_carrinho"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:text="SIM"
+            android:textColor="#FFF"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+</LinearLayout>

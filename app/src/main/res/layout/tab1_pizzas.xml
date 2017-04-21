@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.CardapioMainActivity">
+
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:progressTint="@color/colorPrimary"
+        android:visibility="gone"
+        android:theme="@style/MyProgressbarColor"
+        android:id="@+id/progressbar_escolher_pizzas" />
+
+    <TextView
+        android:id="@+id/textTabPizzas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F5F5F5"
+        android:paddingBottom="6dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="6dp"
+        android:text="Escolha o tamanho:"
+        android:textSize="20sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_pizzas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textTabPizzas">
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

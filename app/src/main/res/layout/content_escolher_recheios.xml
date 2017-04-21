@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_escolher_recheio"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_escolher_recheio"
+    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.EscolherRecheioActivity">
+
+    <ProgressBar
+        android:id="@+id/progressbar_escolher_recheios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:theme="@style/MyProgressbarColor"
+        android:visibility="gone" />
+
+
+    <LinearLayout
+        android:id="@+id/layout_list_recheios"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="?actionBarSize"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/qtd_recheios_para_escolha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F5F5F5"
+            android:paddingBottom="6dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:text="" />
+
+        <!--<ListView
+            android:id="@+id/list_recheios"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+        </ListView>-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_recheios"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:background="@color/colorPrimary"
+        android:id="@+id/buttons"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_height="50dp">
+
+        <Button
+            android:id="@+id/bt_proximo_recheios"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:drawableRight="@drawable/icon_right"
+            android:text="PRÓXIMO"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/bt_voltar_recheios"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/bt_proximo_recheios"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/icon_left"
+            android:text="VOLTAR"
+            android:textColor="@android:color/white"/>
+    </RelativeLayout>
+
+</RelativeLayout>

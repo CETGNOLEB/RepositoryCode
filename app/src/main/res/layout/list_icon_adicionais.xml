@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_adicionais"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/item_img_adicionais"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_nome_adicionais"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Amendoim"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/item_valor_unit_adicionais"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="R$ 1.00"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_gravity="end"
+                android:layout_marginRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/bt_mais_adicionais"
+                    android:background="@drawable/ic_minus_circle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <TextView
+                    android:id="@+id/qtd_do_adicionais"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="0"
+                    android:textSize="20dp"
+                    android:background="@drawable/border_qtd_item"/>
+
+
+                <ImageButton
+                    android:id="@+id/bt_menos_adicionais"
+                    android:background="@drawable/ic_plus_circle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

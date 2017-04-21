@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_item_recheio"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+        <ImageView
+            android:id="@+id/item_img_recheio"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingTop="25dp"
+            android:layout_alignParentTop="true"
+            android:paddingRight="10dp"
+            android:layout_toRightOf="@+id/item_img_recheio"
+            android:layout_toEndOf="@+id/item_img_recheio">
+
+            <TextView
+                android:id="@+id/item_nome_recheio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="AMENDOIN"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/qtd_item_recheio"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:text="0"
+                android:layout_toLeftOf="@+id/item_selecionado_recheio_quatro"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/item_selecionado_recheio_quatro"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_toLeftOf="@+id/item_selecionado_recheio_tres"
+                android:background="@drawable/ic_check"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/item_selecionado_recheio_tres"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_toLeftOf="@+id/item_selecionado_recheio_dois"
+                android:background="@drawable/ic_check"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/item_selecionado_recheio_dois"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_toLeftOf="@+id/item_selecionado_recheio_um"
+                android:background="@drawable/ic_check"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/item_selecionado_recheio_um"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:paddingRight="5dp"
+                android:background="@drawable/ic_check"
+                android:visibility="gone"/>
+
+
+        </RelativeLayout>
+
+
+        <!--<LinearLayout-->
+        <!--android:layout_gravity="end"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/bt_menos_recheio"-->
+        <!--android:background="@drawable/button_more_qtd"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:src="@drawable/ic_minus"/>-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/qtd_do_recheio"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:paddingBottom="2dp"-->
+        <!--android:paddingTop="2dp"-->
+        <!--android:paddingLeft="8dp"-->
+        <!--android:paddingRight="8dp"-->
+        <!--android:text="0"-->
+        <!--android:textSize="20dp"-->
+        <!--android:background="@drawable/border_qtd_item"/>-->
+
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/bt_mais_recheio"-->
+        <!--android:background="@drawable/button_more_qtd"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:src="@drawable/icon_more_qtd"/>-->
+        <!--</LinearLayout>-->
+
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

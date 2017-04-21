@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--KISABOR-->
+    <color name="colorPrimary">#BC2026</color>
+    <color name="colorPrimaryDark">#85121F</color>
+    <color name="colorAccent">#FFCB2C</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+
+    <!--OUTRAS CORES-->
+    <color name="tabIndication">#FFCB2C</color>
+
+    <color name="dialogBackground">#616161</color>
+
+
+    <!--ALEX-->
+    <!--<color name="colorPrimary">#6E2B77</color>
+    <color name="colorPrimaryDark">#481e4f</color>
+    <color name="colorAccent">#FFCB2C</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+
+    &lt;!&ndash;OUTRAS CORES&ndash;&gt;
+    <color name="tabIndication">#FFCB2C</color>-->
+
+
+</resources>

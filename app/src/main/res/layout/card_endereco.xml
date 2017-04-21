@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/card_endereco"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <!--<ImageView
+            android:id="@+id/endereco_img"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp" />-->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:src="@drawable/endereco_img"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#ff000000" />
+
+        <LinearLayout
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="5dp">
+
+            <TextView
+                android:id="@+id/endereco_nome_rua"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:text="Rua: Tabelião Enéias"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/endereco_numero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="3dp"
+                android:text="Nº: 35" />
+
+            <TextView
+                android:id="@+id/endereco_nome_bairro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="3dp"
+                android:text="Bairro: Rodoviária" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&#8942;"
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/card_endereco_option"
+                android:textAppearance="?android:textAppearanceLarge"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

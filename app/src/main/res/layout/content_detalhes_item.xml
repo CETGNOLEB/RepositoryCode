@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_escolher_recheio"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="?attr/actionBarSize"
+    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.DetalhesdoItemActivity"
+    tools:showIn="@layout/activity_detalhes_item">
+
+
+    <ProgressBar
+        android:id="@+id/progressbar_escolher_adicionais"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layoutButton"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_detalhes_item"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginTop="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_produto_detalhe_item"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:id="@+id/nome_produto_detalhe_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Nome Produto"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/descricao_produto_detalhe_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Descriçao do Produto" />
+
+
+                <TextView
+                    android:id="@+id/valor_produto_detalhe_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="R$ 10,00"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_observacoes_item"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_below="@+id/card_detalhes_item"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_observacao_produto_detalhe_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Observações:"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/txt_optional"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:text="(Opcional)"/>
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/observacao_produto_detalhe_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#BDBDBD"
+                    android:textColor="@color/colorPrimary"
+                    android:hint="Exemplo: sem isto."
+                    android:backgroundTint="@color/colorPrimary"/>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_quantidade_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_observacoes_item"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="15dp">
+
+                <TextView
+                    android:id="@+id/txt_quantidade_produto_detalhe_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Quantidade:"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp">
+
+                    <Button
+                        android:id="@+id/bt_diminuir_qtd_item_detalhe_produto"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="#BDBDBD"
+                        android:text="-"
+                        android:textColor="#FFF"
+                        android:textSize="25dp" />
+
+
+                    <LinearLayout
+                        android:id="@+id/layout_txt_qtd"
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
+                        android:layout_toRightOf="@+id/bt_diminuir_qtd_item_detalhe_produto"
+                        android:background="@drawable/border_cinza">
+
+                        <TextView
+                            android:id="@+id/txt_qtd_item_delathe_produto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingTop="10dp"
+                            android:text=""
+                            android:textAlignment="center"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/bt_aumentar_qtd_item_detalhe_produto"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_toRightOf="@+id/layout_txt_qtd"
+                        android:background="#BDBDBD"
+                        android:text="+"
+                        android:textColor="#FFF"
+                        android:textSize="20dp" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <Button
+            android:id="@+id/bt_add_ao_carrinho_ou_esc_metade2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorPrimary"
+            android:text="Adicionar ao Carrinho"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="br.com.belongapps.meuacai.seguranca.activities.LoginActivity">
+
+    <ImageView
+        android:id="@+id/logoAlex"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/belong"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:layout_below="@+id/logoAlex"
+        android:background="@drawable/border_button"
+        android:textCursorDrawable="@null"
+        android:hint="Email"/>
+
+    <EditText
+        android:id="@+id/senha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:layout_below="@+id/email"
+        android:background="@drawable/border_button"
+        android:hint="Senha"/>
+
+    <Button
+        android:id="@+id/button_entrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/senha"
+        android:background="@drawable/border_button_white"
+        android:textColor="@android:color/white"
+        android:text="ENTRAR"/>
+
+    <LinearLayout
+        android:id="@+id/opcoes_entrada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_entrar"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cadastra-se"
+            android:layout_gravity="left"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/opcoes_entrada"
+        android:layout_toRightOf="@+id/opcoes_entrada">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Esqueceu a senha?"
+            android:layout_gravity="right"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entrar com o Facebook"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"/>
+
+</RelativeLayout>

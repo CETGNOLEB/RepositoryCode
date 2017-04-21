@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Belong Tecnologia</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!--MINHAS STRINGS-->
+    <string name="action_carrinho">Carrinho</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_teste">TesteActivity</string>
+    <string name="title_activity_pedidos_realizados">Meus Pedidos</string>
+
+</resources>
