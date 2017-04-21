@@ -51,6 +51,7 @@ public class EscolherAdicionalActivity extends AppCompatActivity {
         mListViewAdicionais = (ListView) findViewById(R.id.list_adicionais);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://appacai001.firebaseio.com/itens_cardapio/2");
+        databaseReference.keepSynced(true);
 
         FirebaseListAdapter<ItemCardapio> firebaseListAdapter = new FirebaseListAdapter<ItemCardapio>(
                 this,

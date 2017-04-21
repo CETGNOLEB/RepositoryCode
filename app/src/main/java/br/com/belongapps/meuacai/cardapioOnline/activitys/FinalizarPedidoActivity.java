@@ -69,6 +69,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finalizar_pedido);
+        database.keepSynced(true);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_enviar_pedido);
         mToolbar.setTitle("Finalizar Pedido");

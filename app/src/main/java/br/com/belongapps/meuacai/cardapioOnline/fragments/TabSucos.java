@@ -20,6 +20,8 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -61,6 +63,7 @@ public class TabSucos extends Fragment {
 
         mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_escolher_suco);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("8");
+        mDatabaseReference.keepSynced(true);
 
         mSucosList = (RecyclerView) getView().findViewById(R.id.list_sucos);
         mSucosList.setHasFixedSize(true);
@@ -148,9 +151,20 @@ public class TabSucos extends Fragment {
 
         }
 
-        public void setImagem(Context context, String url) {
-            ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_suco);
-            Picasso.with(context).load(url).into(item_ref_image);
+        public void setImagem(final Context context, final String url) {
+            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_suco);
+
+            Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(item_ref_image, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+                    Picasso.with(context).load(url).into(item_ref_image);
+                }
+            });
         }
 
     }

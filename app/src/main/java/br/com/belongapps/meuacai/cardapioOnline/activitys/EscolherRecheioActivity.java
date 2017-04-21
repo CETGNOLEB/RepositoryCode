@@ -112,6 +112,7 @@ public class EscolherRecheioActivity extends AppCompatActivity {
         super.onStart();
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("4");
+        mDatabaseReference.keepSynced(true);
         mListViewRecheios = (RecyclerView) findViewById(R.id.list_recheios);
         mListViewRecheios.setHasFixedSize(true);
         mListViewRecheios.setLayoutManager(new LinearLayoutManager(this));

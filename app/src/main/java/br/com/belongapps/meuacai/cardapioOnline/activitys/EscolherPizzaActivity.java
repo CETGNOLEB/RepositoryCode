@@ -77,6 +77,7 @@ public class EscolherPizzaActivity extends AppCompatActivity {
         itemPedido = new ItemPedido();
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("5");
+        mDatabaseReference.keepSynced(true);
         mListViewPizzas = (RecyclerView) findViewById(R.id.list_sabor_pizzas);
         mListViewPizzas.setHasFixedSize(true);
         mListViewPizzas.setLayoutManager(new LinearLayoutManager(this));

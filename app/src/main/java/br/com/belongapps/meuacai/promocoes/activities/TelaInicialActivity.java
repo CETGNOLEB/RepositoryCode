@@ -23,16 +23,13 @@ public class TelaInicialActivity extends AppCompatActivity {
 
     private List<Promocao> promocoes;
 
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference ref = database.getReference("/promocoes");
-
-    /*private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-    private ChildEventListener childEventListener;*/
+    final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_inicial);
+        database.keepSynced(true);
 
         btFazerPedido = (Button) findViewById(R.id.bt_realizar_pedido);
 
