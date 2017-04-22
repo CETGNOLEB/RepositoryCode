@@ -59,6 +59,7 @@ public class TesteActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
                 ultimo = gerarNumeroPedido(ultimo);
+                ultimonumero.setText(ultimo);
                 Log.println(Log.ERROR, "Teste Final", ultimo);
             }
         });
@@ -122,6 +123,6 @@ public class TesteActivity extends AppCompatActivity {
             }
         };
 
-        database.child("pedidostestes").addValueEventListener(postListener);
+        database.child("pedidos").addValueEventListener(postListener);
     }
 }

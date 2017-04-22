@@ -1,23 +1,25 @@
 package br.com.belongapps.meuacai.cardapioOnline.model;
 
 
-public class ItemCardapio{
+public class ItemCardapio {
 
     private String nome;
     private String descricao;
     private String ref_img;
     private double valor_unit;
+    private double preco_promocional;
     private long qtd_recheios;
     private String status_item;
 
     private String categoria_id;
 
 
-    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, long qtd_recheios, String status_item, String categoria_id) {
+    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, long qtd_recheios, String status_item, String categoria_id) {
         this.nome = nome;
         this.descricao = descricao;
         this.ref_img = ref_img;
         this.valor_unit = valor_unit;
+        this.preco_promocional = preco_promocional;
         this.qtd_recheios = qtd_recheios;
         this.status_item = status_item;
         this.categoria_id = categoria_id;
@@ -65,6 +67,14 @@ public class ItemCardapio{
 
     public void setValor_unit(double valor_unit) {
         this.valor_unit = valor_unit;
+    }
+
+    public double getPreco_promocional() {
+        return preco_promocional;
+    }
+
+    public void setPreco_promocional(double preco_promocional) {
+        this.preco_promocional = preco_promocional;
     }
 
     public String getStatus_item() {

@@ -10,6 +10,10 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".cardapioOnline.activitys.CardapioMainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".cardapioOnline.activitys.EscolherRecheioActivity" />
@@ -25,13 +29,13 @@
         <activity android:name=".seguranca.activities.LoginActivity"/>
         <activity android:name=".promocoes.activities.PromocoesActivity" />
         <activity android:name=".promocoes.activities.TelaInicialActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".posPedido.activities.MeusPedidosActivity"/>
         <activity android:name=".posPedido.activities.AcompanharPedidoActivity" />
+        <activity android:name=".cardapioOnline.activitys.TesteActivity">
+
+        </activity>
 
     </application>
 

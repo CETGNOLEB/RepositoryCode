@@ -7,12 +7,8 @@
 
         <item
             android:id="@+id/nav_cardapio"
-            android:icon="@drawable/ic_menu_cardapio"
+            android:icon="@drawable/ic_icon_menu"
             android:title="Cardápio" />
-        <item
-            android:id="@+id/nav_promocoes"
-            android:icon="@drawable/ic_tag"
-            android:title="Promoções" />
         <item
             android:id="@+id/nav_carrinho"
             android:icon="@drawable/ic_cart"

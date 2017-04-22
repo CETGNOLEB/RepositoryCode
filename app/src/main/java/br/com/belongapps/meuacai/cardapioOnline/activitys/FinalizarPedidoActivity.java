@@ -90,6 +90,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         finalizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.println(Log.ERROR, "NUMERO: ", numerodopedido);
+
                 AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this);
                 View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_pedido_finalizado, null);
 
@@ -196,8 +198,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                     for (DataSnapshot pedido : dataSnapshot.getChildren()) {
                         for (DataSnapshot dia : pedido.getChildren()) {
                             String numpedido = dia.child("numero_pedido").getValue().toString();
-
-                            Log.println(Log.ERROR, "NUM: ", numpedido);
                             list.add(numpedido);
                         }
                     }
@@ -217,6 +217,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             }
         };
 
-        database.child("pedidostestes").addValueEventListener(postListener);
+        database.child("pedidos").addValueEventListener(postListener);
     }
 }

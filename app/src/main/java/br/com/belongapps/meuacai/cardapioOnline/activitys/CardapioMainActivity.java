@@ -19,6 +19,7 @@ import android.view.MenuItem;
 
 import br.com.belongapps.meuacai.R;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabPizzas;
+import br.com.belongapps.meuacai.cardapioOnline.fragments.TabPromocoes;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabSucos;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabVitaminas;
 import br.com.belongapps.meuacai.gerencial.activities.EnderecosActivity;
@@ -111,9 +112,6 @@ public class CardapioMainActivity extends AppCompatActivity
         if (id == R.id.nav_cardapio) {
             Intent i = new Intent(CardapioMainActivity.this, CardapioMainActivity.class);
             startActivity(i);
-        } else if (id == R.id.nav_promocoes) {
-            Intent i = new Intent(CardapioMainActivity.this, PromocoesActivity.class);
-            startActivity(i);
         } else if (id == R.id.nav_carrinho) {
             Intent i = new Intent(CardapioMainActivity.this, CarrinhoActivity.class);
             startActivity(i);
@@ -147,32 +145,36 @@ public class CardapioMainActivity extends AppCompatActivity
 
             switch (position) {
                 case 0:
+                    TabPromocoes tabPromocoes = new TabPromocoes();
+                    return tabPromocoes;
+
+                case 1:
                     TabPizzas tabPizzas = new TabPizzas();
                     return tabPizzas;
 
-                case 1:
+                case 2:
                     TabSanduiches tabSanduiches = new TabSanduiches();
                     return tabSanduiches;
 
-                case 2:
+                case 3:
                     TabSalgados tabSalgados = new TabSalgados();
                     return tabSalgados;
 
-                case 3:
+                case 4:
                     TabCombos tabCombos = new TabCombos();
                     return tabCombos;
 
-                case 4:
+                case 5:
 
                     TabAcai tabAcai = new TabAcai();
                     return tabAcai;
 
-                case 5:
+                case 6:
 
                     TabVitaminas tabVitaminas = new TabVitaminas();
                     return tabVitaminas;
 
-                case 6:
+                case 7:
 
                     TabSucos tabSucos = new TabSucos();
                     return tabSucos;
@@ -184,25 +186,27 @@ public class CardapioMainActivity extends AppCompatActivity
 
         @Override
         public int getCount() {
-            return 7;
+            return 8;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "PIZZAS";
+                    return "PROMOÇÕES";
                 case 1:
-                    return "SANDUICHES";
+                    return "PIZZAS";
                 case 2:
-                    return "SALGADOS";
+                    return "SANDUICHES";
                 case 3:
-                    return "COMBOS";
+                    return "SALGADOS";
                 case 4:
-                    return "AÇAI";
+                    return "COMBOS";
                 case 5:
-                    return "VITAMINAS";
+                    return "AÇAI";
                 case 6:
+                    return "VITAMINAS";
+                case 7:
                     return "SUCOS";
             }
 
