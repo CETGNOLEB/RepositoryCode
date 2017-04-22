@@ -52,6 +52,10 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private Button finalizarPedido;
     private RadioGroup opcaoDePagamento;
 
+    //Dialogs
+    AlertDialog dialogPedidoEnviado;
+    AlertDialog.Builder mBilder;
+
     private double totaldoPedido; //parâmetro recebido
 
     //ESCOLHER FORMA DE PAGAMENTO
@@ -70,6 +74,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finalizar_pedido);
         database.keepSynced(true);
+
+        mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_enviar_pedido);
         mToolbar.setTitle("Finalizar Pedido");
@@ -92,26 +98,32 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.println(Log.ERROR, "NUMERO: ", numerodopedido);
 
-                AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this);
-                View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_pedido_finalizado, null);
-
-                Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_entendi_dialog_pedido_enviado);
-                bt_ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(FinalizarPedidoActivity.this, CardapioMainActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-                });
+                View layoutDialog = createDialog();
 
                 mBilder.setView(layoutDialog);
-                AlertDialog dialogPedidoEnviado = mBilder.create();
+                dialogPedidoEnviado = mBilder.create();
                 dialogPedidoEnviado.show();
 
             }
         });
 
+    }
+
+    private View createDialog() {
+        mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this);
+        View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_pedido_finalizado, null);
+
+        Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_entendi_dialog_pedido_enviado);
+        bt_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(FinalizarPedidoActivity.this, CardapioMainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        return layoutDialog;
     }
 
     @Override
@@ -122,6 +134,12 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         startActivity(intent);
 
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 
     @Override
@@ -192,7 +210,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> list = new ArrayList<String>();
+                ArrayList<String> list = new ArrayList<>();
 
                 try {
                     for (DataSnapshot pedido : dataSnapshot.getChildren()) {

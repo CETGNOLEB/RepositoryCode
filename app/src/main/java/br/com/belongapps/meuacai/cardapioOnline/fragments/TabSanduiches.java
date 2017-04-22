@@ -86,6 +86,8 @@ public class TabSanduiches extends Fragment {
 
             @Override
             protected void populateViewHolder(TabSanduiches.SanduichesViewHolder viewHolder, final ItemCardapio model, int position) {
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitario(model.getValor_unit());
@@ -118,7 +120,6 @@ public class TabSanduiches extends Fragment {
 
         mSanduicheList.setAdapter(firebaseRecyclerAdapter);
 
-        closeProgressBar();
     }
 
     public static class SanduichesViewHolder extends RecyclerView.ViewHolder {

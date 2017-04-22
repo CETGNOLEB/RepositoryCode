@@ -30,7 +30,7 @@ public class Pedido {
         /*Pedido*/
         result.put("data", data);
         result.put("numero_pedido", numero_pedido);
-        result.put("staus", status);
+        result.put("status", status);
         result.put("entrega_retirada", entrega_retirada);
         //lista
 

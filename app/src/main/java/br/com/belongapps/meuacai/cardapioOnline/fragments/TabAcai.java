@@ -84,6 +84,8 @@ public class TabAcai extends Fragment {
 
             @Override
             protected void populateViewHolder(TabAcai.AcaiViewHolder viewHolder, final ItemCardapio model, int position) {
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitario(model.getValor_unit());
@@ -113,7 +115,6 @@ public class TabAcai extends Fragment {
 
         mAcaiList.setAdapter(firebaseRecyclerAdapter);
 
-        closeProgressBar();
     }
 
     public static class AcaiViewHolder extends RecyclerView.ViewHolder {

@@ -85,6 +85,8 @@ public class TabSucos extends Fragment {
 
             @Override
             protected void populateViewHolder(SucosViewHolder viewHolder, final ItemCardapio model, int position) {
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitario(model.getValor_unit());
@@ -115,7 +117,6 @@ public class TabSucos extends Fragment {
 
         mSucosList.setAdapter(firebaseRecyclerAdapter);
 
-        closeProgressBar();
     }
 
     public static class SucosViewHolder extends RecyclerView.ViewHolder {

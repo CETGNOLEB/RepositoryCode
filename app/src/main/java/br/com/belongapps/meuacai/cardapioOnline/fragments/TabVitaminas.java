@@ -79,6 +79,8 @@ public class TabVitaminas extends Fragment {
 
             @Override
             protected void populateViewHolder(VitaminasViewHolder viewHolder, final ItemCardapio model, int position) {
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitario(model.getValor_unit());
@@ -106,7 +108,6 @@ public class TabVitaminas extends Fragment {
 
         mVitaminasList.setAdapter(firebaseRecyclerAdapter);
 
-        closeProgressBar();
     }
 
     public static class VitaminasViewHolder extends RecyclerView.ViewHolder {

@@ -85,6 +85,8 @@ public class TabPizzas extends Fragment {
 
             @Override
             protected void populateViewHolder(TamPizzaViewHolder viewHolder, final TamPizza model, int position) {
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
                 viewHolder.setNome(model.getNome());
                 viewHolder.setApartirDe(model.getApartir_de());
                 viewHolder.setImagem(getContext(), model.getRef_img());
@@ -130,7 +132,6 @@ public class TabPizzas extends Fragment {
 
         mTamPizzaList.setAdapter(firebaseRecyclerAdapter);
 
-        closeProgressBar();
     }
 
     public static class TamPizzaViewHolder extends RecyclerView.ViewHolder {

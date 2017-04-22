@@ -89,6 +89,8 @@ public class TabPromocoes extends Fragment {
 
             @Override
             protected void populateViewHolder(ItemPromoViewHolder viewHolder, final ItemCardapio model, int position) {
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitario(model.getValor_unit());
@@ -115,11 +117,11 @@ public class TabPromocoes extends Fragment {
                 });
             }
 
+
         };
 
         mItemPromoList.setAdapter(firebaseRecyclerAdapter);
 
-        closeProgressBar();
     }
 
     public static class ItemPromoViewHolder extends RecyclerView.ViewHolder {

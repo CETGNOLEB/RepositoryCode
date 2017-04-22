@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -167,9 +169,20 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
             qtdItem.setText(String.valueOf(quantidadeProduto));
         }
 
-        public void setImagem(Context context, String url) {
-            ImageView imgProduto = (ImageView) mView.findViewById(R.id.img_item_carrinho);
-            Picasso.with(context).load(url).into(imgProduto);
+        public void setImagem(final Context context, final String url) {
+            final ImageView imgProduto = (ImageView) mView.findViewById(R.id.img_item_carrinho);
+
+            Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(imgProduto, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+                    Picasso.with(context).load(url).into(imgProduto);
+                }
+            });
         }
 
         public void diminuirQuantidadeDoItem(double valorUni){

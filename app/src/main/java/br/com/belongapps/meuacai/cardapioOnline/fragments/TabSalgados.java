@@ -86,6 +86,8 @@ public class TabSalgados extends Fragment {
 
             @Override
             protected void populateViewHolder(TabSalgados.SalgadoViewHolder viewHolder, final ItemCardapio model, int position) {
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitario(model.getValor_unit());
@@ -116,7 +118,6 @@ public class TabSalgados extends Fragment {
 
         mSalgadoList.setAdapter(firebaseRecyclerAdapter);
 
-        closeProgressBar();
     }
 
     public static class SalgadoViewHolder extends RecyclerView.ViewHolder {
