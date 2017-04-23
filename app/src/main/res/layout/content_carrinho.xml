@@ -18,10 +18,21 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/text_valor_pedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total: R$ 10,00"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"/>
+
     <RelativeLayout
+        android:layout_below="@+id/text_valor_pedido"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="10dp">
+        android:paddingTop="5dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/itens_carrinho"

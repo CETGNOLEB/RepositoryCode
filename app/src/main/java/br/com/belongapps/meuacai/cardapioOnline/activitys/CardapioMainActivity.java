@@ -16,13 +16,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.util.List;
 
 import br.com.belongapps.meuacai.R;
+import br.com.belongapps.meuacai.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabBebidas;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabPizzas;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabPromocoes;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabSucos;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabVitaminas;
+import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.meuacai.gerencial.activities.EnderecosActivity;
 import br.com.belongapps.meuacai.helpAbout.activities.AjudaActivity;
 import br.com.belongapps.meuacai.helpAbout.activities.SobreActivity;
@@ -47,6 +52,8 @@ public class CardapioMainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF")); //Cor do Titulo da Tela
         setSupportActionBar(toolbar);
+
+        setIconCarrinho();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -81,23 +88,49 @@ public class CardapioMainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_item_cardapio, menu);
+
+        MenuItem menuItem = menu.getItem(0);
+
+        //buscar tamanho da lista do carrinho
+        CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
+        List<ItemPedido> itens_pedido = crud.getAllItens();
+        int size = itens_pedido.size();
+
+        //Alterar icon
+        if(size == 1){
+            menuItem.setIcon(R.drawable.ic_cart_one);
+        } else if(size == 2){
+            menuItem.setIcon(R.drawable.ic_cart_two);
+        } else if(size == 3){
+            menuItem.setIcon(R.drawable.ic_cart_three);
+        } else if(size == 4){
+            menuItem.setIcon(R.drawable.ic_cart_four);
+        } else if(size == 5){
+            menuItem.setIcon(R.drawable.ic_cart_five);
+        } else if(size == 6){
+            menuItem.setIcon(R.drawable.ic_cart_six);
+        } else if(size == 7){
+            menuItem.setIcon(R.drawable.ic_cart_seven);
+        } else if(size == 8){
+            menuItem.setIcon(R.drawable.ic_cart_eight);
+        } else if(size == 9){
+            menuItem.setIcon(R.drawable.ic_cart_nine);
+        } else {
+            menuItem.setIcon(R.drawable.ic_action_cart);
+        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_carrinho) {
 
-            /*Intent i = new Intent(CardapioMainActivity.this, CarrinhoActivity.class);
-            startActivity(i);*/
+            Intent i = new Intent(CardapioMainActivity.this, CarrinhoActivity.class);
+            startActivity(i);
 
             return true;
         }
@@ -220,5 +253,9 @@ public class CardapioMainActivity extends AppCompatActivity
 
             return null;
         }
+    }
+
+    public void setIconCarrinho(){
+
     }
 }

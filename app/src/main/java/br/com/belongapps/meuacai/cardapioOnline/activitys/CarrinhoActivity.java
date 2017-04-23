@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.belongapps.meuacai.R;
 import br.com.belongapps.meuacai.cardapioOnline.adapters.ItemCarrinhoAdapter;
@@ -32,18 +34,12 @@ public class CarrinhoActivity extends AppCompatActivity {
     private List<ItemPedido> itens_pedido;
 
     private Toolbar mToolbar;
+    private TextView textTotal;
     private Button continuarComprando;
     private Button confirmarPedido;
 
-    //Controle Quantidade
-    private ImageButton diminuirQuantidade;
-    private ImageButton aumentarQuantidade;
-
-    //Parametros Recebidos
-    ItemPedido itemPedido;
-
     //TOTAL
-    private double totalProduto;
+    private double totalCarrinho;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +50,24 @@ public class CarrinhoActivity extends AppCompatActivity {
         CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
         itens_pedido = crud.getAllItens();
 
+        totalCarrinho = calcularValorTotal();
+
+        textTotal = (TextView) findViewById(R.id.text_valor_pedido);
+        textTotal.setText("Total: R$ " +  String.format(Locale.US, "%.2f", totalCarrinho).replace(".", ","));
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar_carrinho);
         mToolbar.setTitle("Meu Carrinho");
+        setSupportActionBar(mToolbar);
 
         mRecyclerViewItemCarrinho = (RecyclerView) findViewById(R.id.itens_carrinho);
         mRecyclerViewItemCarrinho.setHasFixedSize(true);
         mRecyclerViewItemCarrinho.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ItemCarrinhoAdapter(itens_pedido, this);
+        adapter = new ItemCarrinhoAdapter(itens_pedido, this, totalCarrinho, textTotal);
         mRecyclerViewItemCarrinho.setAdapter(adapter);
 
         continuarComprando = (Button) findViewById(R.id.bt_continuar_comprando);
         confirmarPedido = (Button) findViewById(R.id.bt_realizar_pedido);
-
 
         /*EVENTO BOTOES*/
         continuarComprando.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +83,6 @@ public class CarrinhoActivity extends AppCompatActivity {
         confirmarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final double totalPedido = calcularValorTotal();
 
                 AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
                 View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_entrega, null);
@@ -94,7 +94,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
-                        intent.putExtra("totalPedido", totalPedido);
+                        intent.putExtra("totalPedido", totalCarrinho);
                         startActivity(intent);
 
                     }
@@ -104,7 +104,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
-                        intent.putExtra("totalPedido", totalPedido);
+                        intent.putExtra("totalPedido", totalCarrinho);
                         startActivity(intent);
                     }
                 });

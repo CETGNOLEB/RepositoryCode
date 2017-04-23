@@ -3,6 +3,7 @@ package br.com.belongapps.meuacai.cardapioOnline.adapters;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -25,14 +28,18 @@ import br.com.belongapps.meuacai.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
 
 
-public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapter.ViewHolder>{
+public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapter.ViewHolder> {
 
     private static List<ItemPedido> itensPedido;
     private Context context;
+    private Double valorTotal;
+    public TextView totalPedido;
 
-    public ItemCarrinhoAdapter(List<ItemPedido> itensPedido, Context context) {
+    public ItemCarrinhoAdapter(List<ItemPedido> itensPedido, Context context, Double totalCarrinho, TextView textTotal) {
         this.itensPedido = itensPedido;
         this.context = context;
+        this.valorTotal = totalCarrinho;
+        this.totalPedido = textTotal;
     }
 
     @Override
@@ -45,6 +52,7 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
         final ItemPedido itemPedido = itensPedido.get(position);
 
         holder.setNome(itemPedido.getNome());
@@ -57,14 +65,22 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
         holder.aumentarQuantidade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.aumentarQuantidadeDoItem(itemPedido.getValor_unit());
+                double vtotal = holder.aumentarQuantidadeDoItem(itemPedido.getValor_unit());
+
+                itensPedido.get(position).setValor_total(vtotal);
+
+                updateValorPedido();
+
             }
         });
 
         holder.diminuirQuantidade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.diminuirQuantidadeDoItem(itemPedido.getValor_unit());
+                double vtotal = holder.diminuirQuantidadeDoItem(itemPedido.getValor_unit());
+
+                itensPedido.get(position).setValor_total(vtotal);
+                updateValorPedido();
             }
         });
 
@@ -99,6 +115,9 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
 
                         itensPedido.remove(itemPedido);
                         notifyDataSetChanged();
+
+                        updateValorPedido();
+
                         dialogConfirmExcItem.dismiss();
 
                         Toast.makeText(context, "Item removido!", Toast.LENGTH_SHORT).show();
@@ -109,12 +128,22 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
 
     }
 
+    public void updateValorPedido(){
+        double valorTotalPedido = 0.0;
+        for (ItemPedido item : itensPedido) {
+            Log.println(Log.ERROR, "Valor Total: ", "" + item.getValor_total());
+            valorTotalPedido += item.getValor_total();
+        }
+
+        totalPedido.setText("Total: R$ " + String.format(Locale.US, "%.2f", valorTotalPedido).replace(".", ","));
+    }
+
     @Override
     public int getItemCount() {
         return itensPedido.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imgProduto;
         public ImageButton diminuirQuantidade;
@@ -150,19 +179,19 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
 
         public void setDescricao(String descricao) {
 
-            TextView  descProduto = (TextView) mView.findViewById(R.id.desc_item_carrinho);
+            TextView descProduto = (TextView) mView.findViewById(R.id.desc_item_carrinho);
             descProduto.setText(descricao);
         }
 
         public void setValorUnitario(double valorUnit) {
 
-            TextView  valorUnitProduto = (TextView) mView.findViewById(R.id.valor_unit_item_carrinho);
-            valorUnitProduto.setText(" R$ " +  String.format(Locale.US, "%.2f", valorUnit).replace(".", ","));
+            TextView valorUnitProduto = (TextView) mView.findViewById(R.id.valor_unit_item_carrinho);
+            valorUnitProduto.setText(" R$ " + String.format(Locale.US, "%.2f", valorUnit).replace(".", ","));
 
         }
 
         public void setValorTotalProduto(double valorTotal) {
-            valorTotalProduto.setText(" R$ " +  String.format(Locale.US, "%.2f", valorTotal).replace(".", ","));
+            valorTotalProduto.setText(" R$ " + String.format(Locale.US, "%.2f", valorTotal).replace(".", ","));
         }
 
         public void setQuantidadeProduto(int quantidadeProduto) {
@@ -185,7 +214,7 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
             });
         }
 
-        public void diminuirQuantidadeDoItem(double valorUni){
+        public double diminuirQuantidadeDoItem(double valorUni) {
             int qtd = Integer.valueOf(qtdItem.getText().toString());
             qtd--;
             qtdItem.setText(String.valueOf(qtd));
@@ -194,9 +223,11 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
 
             valorTotal = qtd * valorUni;
             setValorTotalProduto(valorTotal);
+
+            return valorTotal;
         }
 
-        public void aumentarQuantidadeDoItem(double valorUni){
+        public double aumentarQuantidadeDoItem(double valorUni) {
             int qtd = Integer.valueOf(qtdItem.getText().toString());
             qtd++;
 
@@ -205,11 +236,9 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
             double valorTotal;
             valorTotal = qtd * valorUni;
             setValorTotalProduto(valorTotal);
+
+            return valorTotal;
         }
 
-    }
-
-    public static List<ItemPedido> getItensPedido(){
-        return itensPedido;
     }
 }
