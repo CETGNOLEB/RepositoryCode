@@ -30,10 +30,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import br.com.belongapps.meuacai.R;
-import br.com.belongapps.meuacai.cardapioOnline.activitys.CardapioMainActivity;
 import br.com.belongapps.meuacai.cardapioOnline.activitys.EscolherPizzaActivity;
-import br.com.belongapps.meuacai.cardapioOnline.activitys.EscolherRecheioActivity;
-import br.com.belongapps.meuacai.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.meuacai.cardapioOnline.model.TamPizza;
 
 public class TabPizzas extends Fragment {
@@ -46,7 +43,7 @@ public class TabPizzas extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab1_pizzas, container, false);
+        View rootView = inflater.inflate(R.layout.tab_pizzas, container, false);
 
         return rootView;
     }

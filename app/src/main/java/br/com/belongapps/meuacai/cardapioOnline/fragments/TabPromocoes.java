@@ -45,7 +45,7 @@ public class TabPromocoes extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab1_promocoes, container, false);
+        View rootView = inflater.inflate(R.layout.tab_promocoes, container, false);
 
         return rootView;
     }

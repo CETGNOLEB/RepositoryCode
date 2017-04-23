@@ -8,13 +8,13 @@ public class ItemCardapio {
     private String ref_img;
     private double valor_unit;
     private double preco_promocional;
-    private long qtd_recheios;
+    private int qtd_recheios;
     private String status_item;
 
     private String categoria_id;
 
 
-    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, long qtd_recheios, String status_item, String categoria_id) {
+    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, String status_item, String categoria_id) {
         this.nome = nome;
         this.descricao = descricao;
         this.ref_img = ref_img;
@@ -53,11 +53,11 @@ public class ItemCardapio {
         this.ref_img = ref_img;
     }
 
-    public long getQtd_recheios() {
+    public int getQtd_recheios() {
         return qtd_recheios;
     }
 
-    public void setQtd_recheios(long qtd_recheios) {
+    public void setQtd_recheios(int qtd_recheios) {
         this.qtd_recheios = qtd_recheios;
     }
 

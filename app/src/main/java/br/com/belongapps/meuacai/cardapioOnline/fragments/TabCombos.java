@@ -14,7 +14,7 @@ public class TabCombos extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab4_combos, container, false);
+        View rootView = inflater.inflate(R.layout.tab_combos, container, false);
 
         return rootView;
     }

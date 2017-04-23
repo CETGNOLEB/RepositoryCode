@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-
 import java.util.Locale;
 
 import br.com.belongapps.meuacai.R;
@@ -32,9 +32,10 @@ import br.com.belongapps.meuacai.cardapioOnline.activitys.DetalhesdoItemActivity
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
 
-public class TabSalgados extends Fragment {
 
-    private RecyclerView mSalgadoList;
+public class TabBebidas extends Fragment {
+
+    private RecyclerView mBebidaList;
     private DatabaseReference mDatabaseReference;
 
     private ProgressBar mProgressBar;
@@ -44,7 +45,7 @@ public class TabSalgados extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab_salgados, container, false);
+        View rootView = inflater.inflate(R.layout.tab_bebidas, container, false);
 
         return rootView;
     }
@@ -61,38 +62,36 @@ public class TabSalgados extends Fragment {
 
         itemPedido = new ItemPedido();
 
-        mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_escolher_salgados);
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("6");
+        mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_escolher_bebida);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("3");
         mDatabaseReference.keepSynced(true);
 
-        mSalgadoList = (RecyclerView) getView().findViewById(R.id.list_salgados);
-        mSalgadoList.setHasFixedSize(true);
-        mSalgadoList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBebidaList = (RecyclerView) getView().findViewById(R.id.list_bebidas);
+        mBebidaList.setHasFixedSize(true);
+        mBebidaList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         openProgressBar();
 
-
-        final FirebaseRecyclerAdapter<ItemCardapio, TabSalgados.SalgadoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<ItemCardapio, SalgadoViewHolder>(
-                ItemCardapio.class, R.layout.card_salgados, TabSalgados.SalgadoViewHolder.class, mDatabaseReference
+        final FirebaseRecyclerAdapter<ItemCardapio, TabBebidas.SanduichesViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<ItemCardapio, TabBebidas.SanduichesViewHolder>(
+                ItemCardapio.class, R.layout.card_bebida, TabBebidas.SanduichesViewHolder.class, mDatabaseReference
         ) {
 
             @Override
-            public void onBindViewHolder(final TabSalgados.SalgadoViewHolder viewHolder, final int position) {
+            public void onBindViewHolder(final TabBebidas.SanduichesViewHolder viewHolder, final int position) {
                 super.onBindViewHolder(viewHolder, position);
 
-                YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_salgado);
+                YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_bebida);
             }
 
             @Override
-            protected void populateViewHolder(TabSalgados.SalgadoViewHolder viewHolder, final ItemCardapio model, int position) {
+            protected void populateViewHolder(TabBebidas.SanduichesViewHolder viewHolder, final ItemCardapio model, int position) {
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
                 viewHolder.setNome(model.getNome());
-                viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitario(model.getValor_unit());
                 viewHolder.setImagem(getContext(), model.getRef_img());
 
-               viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -101,10 +100,12 @@ public class TabSalgados extends Fragment {
                         itemPedido.setRef_img(model.getRef_img());
                         itemPedido.setValor_unit(model.getValor_unit());
 
+                        Log.println(Log.ERROR, "VALOR: " , String.valueOf(model.getValor_unit()));
+
                         Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
 
                         intent.putExtra("ItemPedido", itemPedido);
-                        intent.putExtra("TelaAnterior", "TabSalgados");
+                        intent.putExtra("TelaAnterior", "TabBebidas");
                         startActivity(intent);
 
                         getActivity().finish();
@@ -115,45 +116,39 @@ public class TabSalgados extends Fragment {
 
         };
 
-        mSalgadoList.setAdapter(firebaseRecyclerAdapter);
+        mBebidaList.setAdapter(firebaseRecyclerAdapter);
 
     }
 
-    public static class SalgadoViewHolder extends RecyclerView.ViewHolder {
+    public static class SanduichesViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
-        CardView card_salgado;
+        CardView card_bebida;
 
-        public SalgadoViewHolder(final View itemView) {
+        public SanduichesViewHolder(final View itemView) {
             super(itemView);
 
             mView = itemView;
-            card_salgado = (CardView) mView.findViewById(R.id.card_salgado);
+            card_bebida = (CardView) mView.findViewById(R.id.card_bebida);
 
         }
 
         public void setNome(String nome) {
 
-            TextView item_nome = (TextView) mView.findViewById(R.id.item_nome_salgado);
+            TextView item_nome = (TextView) mView.findViewById(R.id.item_nome_bebida);
             item_nome.setText(nome);
 
         }
 
-        public void setDescricao(String descricao) {
-
-            TextView item_descricao = (TextView) mView.findViewById(R.id.item_desc_salgado);
-            item_descricao.setText(descricao);
-        }
-
         public void setValorUnitario(double valor_unit) {
 
-            TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_salgado);
+            TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_bebida);
             item_valor_unit.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
 
         }
 
         public void setImagem(final Context context, final String url) {
-            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_salgado);
+            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_bebida);
 
             Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(item_ref_image, new Callback() {
                 @Override

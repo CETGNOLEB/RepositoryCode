@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import java.util.Locale;
 
 import br.com.belongapps.meuacai.R;
+import br.com.belongapps.meuacai.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
 
 public class DetalhesdoItemActivity extends AppCompatActivity {
@@ -88,13 +89,19 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
+
                 observacao = observacaoDetalheProduto.getText().toString();
                 itemPedido.setObservacao(observacao);
                 itemPedido.setQuantidade(quantidade);
 
+                Double totalProduto = calcularValorToralDoItem(itemPedido.getQuantidade(), itemPedido.getValor_unit());
+                itemPedido.setValor_total(totalProduto); //Seta o total no pedido
+
                 Intent intent = new Intent(DetalhesdoItemActivity.this, CarrinhoActivity.class);
-                //Enviar Parâmetros
-                intent.putExtra("ItemPedido", itemPedido);
+
+                //Salvar Item no Carrinho
+                Log.println(Log.ERROR, "RESULT: " , crud.salvarItem(itemPedido));
 
                 startActivity(intent);
                 finish();
@@ -222,5 +229,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         } else {
             addAoCarrinhoOuEscMetade2.setText("Adicionar ao Carrinho");
         }
+    }
+
+    public double calcularValorToralDoItem(int quantidade, double valorProduto){
+        return quantidade * valorProduto;
     }
 }

@@ -29,7 +29,6 @@ import java.util.Locale;
 
 import br.com.belongapps.meuacai.R;
 import br.com.belongapps.meuacai.cardapioOnline.activitys.DetalhesdoItemActivity;
-import br.com.belongapps.meuacai.cardapioOnline.activitys.EscolherRecheioActivity;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
 
@@ -46,7 +45,7 @@ public class TabSanduiches extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab2_sanduiches, container, false);
+        View rootView = inflater.inflate(R.layout.tab_sanduiches, container, false);
 
         return rootView;
     }

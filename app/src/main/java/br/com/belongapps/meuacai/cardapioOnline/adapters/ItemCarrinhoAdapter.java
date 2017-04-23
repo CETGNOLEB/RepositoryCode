@@ -1,8 +1,6 @@
 package br.com.belongapps.meuacai.cardapioOnline.adapters;
 
-import android.app.LauncherActivity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,14 +21,13 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.belongapps.meuacai.R;
-import br.com.belongapps.meuacai.cardapioOnline.activitys.CarrinhoActivity;
-import br.com.belongapps.meuacai.cardapioOnline.activitys.FinalizarPedidoActivity;
+import br.com.belongapps.meuacai.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
 
 
 public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapter.ViewHolder>{
 
-    private List<ItemPedido> itensPedido;
+    private static List<ItemPedido> itensPedido;
     private Context context;
 
     public ItemCarrinhoAdapter(List<ItemPedido> itensPedido, Context context) {
@@ -47,7 +44,7 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final ItemPedido itemPedido = itensPedido.get(position);
 
         holder.setNome(itemPedido.getNome());
@@ -97,6 +94,9 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
                 btConfirmar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        CarrinhoDAO dao = new CarrinhoDAO(context);
+                        dao.deletarItem(position, itensPedido);
+
                         itensPedido.remove(itemPedido);
                         notifyDataSetChanged();
                         dialogConfirmExcItem.dismiss();
@@ -207,5 +207,9 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
             setValorTotalProduto(valorTotal);
         }
 
+    }
+
+    public static List<ItemPedido> getItensPedido(){
+        return itensPedido;
     }
 }

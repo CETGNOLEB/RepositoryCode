@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import br.com.belongapps.meuacai.R;
+import br.com.belongapps.meuacai.cardapioOnline.fragments.TabBebidas;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabPizzas;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabPromocoes;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabSucos;
@@ -179,6 +180,11 @@ public class CardapioMainActivity extends AppCompatActivity
                     TabSucos tabSucos = new TabSucos();
                     return tabSucos;
 
+                case 8:
+
+                    TabBebidas tabBebidas = new TabBebidas();
+                    return tabBebidas;
+
                 default:
                     return null;
             }
@@ -186,7 +192,7 @@ public class CardapioMainActivity extends AppCompatActivity
 
         @Override
         public int getCount() {
-            return 8;
+            return 9;
         }
 
         @Override
@@ -208,6 +214,8 @@ public class CardapioMainActivity extends AppCompatActivity
                     return "VITAMINAS";
                 case 7:
                     return "SUCOS";
+                case 8:
+                    return "BEBIDAS";
             }
 
             return null;
