@@ -2,18 +2,15 @@ package br.com.belongapps.meuacai.cardapioOnline.model;
 
 
 public class Pagamento {
+
     private double valorTotal;
     private String formaPagamento;
-    private double trocoPedido;
-    private double valorDinheiro;
-    private double valorCartao;
+    private String descricaoPagemento;
 
-    public Pagamento(double valorTotal, String formaPagamento, double trocoPedido, double valorDinheiro, double valorCartao) {
+    public Pagamento(double valorTotal, String formaPagamento, String descricaoPagamento) {
         this.valorTotal = valorTotal;
         this.formaPagamento = formaPagamento;
-        this.trocoPedido = trocoPedido;
-        this.valorDinheiro = valorDinheiro;
-        this.valorCartao = valorCartao;
+        this.descricaoPagemento = descricaoPagamento;
     }
 
     public Pagamento(){
@@ -36,27 +33,11 @@ public class Pagamento {
         this.formaPagamento = formaPagamento;
     }
 
-    public double getTrocoPedido() {
-        return trocoPedido;
+    public String getDescricaoPagemento() {
+        return descricaoPagemento;
     }
 
-    public void setTrocoPedido(double trocoPedido) {
-        this.trocoPedido = trocoPedido;
-    }
-
-    public double getValorDinheiro() {
-        return valorDinheiro;
-    }
-
-    public void setValorDinheiro(double valorDinheiro) {
-        this.valorDinheiro = valorDinheiro;
-    }
-
-    public double getValorCartao() {
-        return valorCartao;
-    }
-
-    public void setValorCartao(double valorCartao) {
-        this.valorCartao = valorCartao;
+    public void setDescricaoPagemento(String descricaoPagemento) {
+        this.descricaoPagemento = descricaoPagemento;
     }
 }

@@ -4,6 +4,8 @@ package br.com.belongapps.meuacai.cardapioOnline.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Map;
+
 public class ItemPedido implements Parcelable{
 
     private String nome;
@@ -81,16 +83,23 @@ public class ItemPedido implements Parcelable{
         dest.writeString(descricao);
         dest.writeString(observacao);
         dest.writeString(ref_img);
-
         dest.writeDouble(valor_unit);
-        dest.writeInt(quantidade);
 
+        dest.writeInt(quantidade);
         dest.writeDouble(valor_total);
 
         //PARA PIZZAS
-
+        dest.writeString(nomeMetade2);
+        dest.writeString(descMetade2);
+        dest.writeString(obsMetade2);
+        dest.writeString(imgMetade2);
+        dest.writeDouble(valorMetade2);
 
     }
+
+    /*public Map<String, Object> toMap() {
+
+    }*/
 
 
     public String getNome() {

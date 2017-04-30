@@ -60,6 +60,11 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
 
                 holder.setStatus(frmpag.isStatus());
                 holder.setDescForma(frmpag.getDescricao());
+
+                formasdePagamento.get(position).setStatus(frmpag.isStatus());
+                formasdePagamento.get(position).setNome(frmpag.getNome());
+                formasdePagamento.get(position).setDescricao(frmpag.getDescricao());
+
             }
         });
 
@@ -225,6 +230,7 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
             } else {
                 checkForma.setVisibility(View.INVISIBLE);
             }
+
         }
 
     }

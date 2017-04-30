@@ -32,13 +32,11 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
 
     private static List<ItemPedido> itensPedido;
     private Context context;
-    private Double valorTotal;
     public TextView totalPedido;
 
-    public ItemCarrinhoAdapter(List<ItemPedido> itensPedido, Context context, Double totalCarrinho, TextView textTotal) {
+    public ItemCarrinhoAdapter(List<ItemPedido> itensPedido, Context context, TextView textTotal) {
         this.itensPedido = itensPedido;
         this.context = context;
-        this.valorTotal = totalCarrinho;
         this.totalPedido = textTotal;
     }
 
@@ -135,7 +133,11 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
             valorTotalPedido += item.getValor_total();
         }
 
-        totalPedido.setText("Total: R$ " + String.format(Locale.US, "%.2f", valorTotalPedido).replace(".", ","));
+        if(itensPedido.size() == 0){
+            totalPedido.setText("");
+        }else {
+            totalPedido.setText("Total: R$ " + String.format(Locale.US, "%.2f", valorTotalPedido).replace(".", ","));
+        }
     }
 
     @Override

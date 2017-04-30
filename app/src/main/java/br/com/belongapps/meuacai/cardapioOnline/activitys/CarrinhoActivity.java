@@ -25,6 +25,7 @@ import br.com.belongapps.meuacai.R;
 import br.com.belongapps.meuacai.cardapioOnline.adapters.ItemCarrinhoAdapter;
 import br.com.belongapps.meuacai.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.meuacai.cardapioOnline.model.Pedido;
 
 public class CarrinhoActivity extends AppCompatActivity {
 
@@ -53,7 +54,9 @@ public class CarrinhoActivity extends AppCompatActivity {
         totalCarrinho = calcularValorTotal();
 
         textTotal = (TextView) findViewById(R.id.text_valor_pedido);
-        textTotal.setText("Total: R$ " +  String.format(Locale.US, "%.2f", totalCarrinho).replace(".", ","));
+        if (totalCarrinho != 0.0) {
+            textTotal.setText("Total: R$ " + String.format(Locale.US, "%.2f", totalCarrinho).replace(".", ","));
+        }
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_carrinho);
         mToolbar.setTitle("Meu Carrinho");
@@ -63,7 +66,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         mRecyclerViewItemCarrinho.setHasFixedSize(true);
         mRecyclerViewItemCarrinho.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ItemCarrinhoAdapter(itens_pedido, this, totalCarrinho, textTotal);
+        adapter = new ItemCarrinhoAdapter(itens_pedido, this, textTotal);
         mRecyclerViewItemCarrinho.setAdapter(adapter);
 
         continuarComprando = (Button) findViewById(R.id.bt_continuar_comprando);
@@ -95,6 +98,8 @@ public class CarrinhoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
                         intent.putExtra("totalPedido", totalCarrinho);
+                        intent.putExtra("tipoEntrega", 1);
+
                         startActivity(intent);
 
                     }
@@ -105,6 +110,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
                         intent.putExtra("totalPedido", totalCarrinho);
+                        intent.putExtra("tipoEntrega", 0);
                         startActivity(intent);
                     }
                 });

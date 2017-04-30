@@ -1,203 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_escolher_recheio"
+    android:id="@+id/activity_finalizar_pedido"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="?attr/actionBarSize"
-    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.FinalizarPedidoActivity"
+    android:scrollbars="vertical"
+    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.DetalhesdoItemActivity"
     tools:showIn="@layout/activity_finalizar_pedido">
 
-    <ProgressBar
-        android:id="@+id/progressbar_finalizar_pedido"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:id="@+id/layout_resumo_pedido"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/progressbar_finalizar_pedido"
-        android:layout_toEndOf="@+id/progressbar_finalizar_pedido">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="?attr/actionBarSize">
+
+        <ProgressBar
+            android:id="@+id/progressbar_finalizar_pedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/layout_resumo_pedido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F5F5F5"
-            android:paddingLeft="10dp"
-            android:paddingBottom="6dp"
-            android:paddingTop="6dp">
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/progressbar_finalizar_pedido"
+            android:layout_toRightOf="@+id/progressbar_finalizar_pedido"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F5F5F5"
+                android:paddingBottom="6dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Endereço de Entrega"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/border_button"
+                    android:text="Alterar"
+                    android:textColor="@color/colorPrimary" />
+
+            </RelativeLayout>
+
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="4"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Rua: "
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Tabelião Enéias"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Nº: "
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="35"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Bairro: "
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Rodoviária"
+                    android:textSize="18sp" />
+
+            </GridLayout>
+
 
             <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Endereço de Entrega"
+                android:layout_marginTop="15dp"
+                android:background="#F5F5F5"
+                android:paddingBottom="6dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp"
+                android:text="Pagar na entrega com:"
                 android:textSize="20sp" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/border_button"
-                android:layout_alignParentRight="true"
-                android:text="Alterar"
-                android:textColor="@color/colorPrimary" />
 
-        </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/formas_de_pagamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+            </android.support.v7.widget.RecyclerView>
 
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="4"
-            android:orientation="horizontal">
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Cupom de Desconto" />
 
             <TextView
+                android:id="@+id/valor_troco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Rua: "
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:layout_marginTop="20dp"
+                android:text=""
+                android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Tabelião Enéias"
-                android:textSize="18sp" />
+        </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Nº: "
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="35"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:text="Bairro: "
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Rodoviária"
-                android:textSize="18sp" />
-
-        </GridLayout>
-
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/valor_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="#F5F5F5"
-            android:paddingBottom="6dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="6dp"
-            android:text="Pagar na entrega com:"
-            android:textSize="20sp" />
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/formas_de_pagamento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
-
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="Cupom de Desconto" />
-
-        <TextView
-            android:id="@+id/valor_troco"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text=""
-            android:textSize="15sp" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/valor_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/valor_pedido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:text="Valor do Pedido: R$ 9,00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginLeft="10dp"
-            android:text="Taxa de Entrega: R$ 1,00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/valor_total_pedido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_below="@+id/layout_resumo_pedido"
             android:layout_marginBottom="10dp"
-            android:text="Sub Total: R$ 10,00"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/valor_pedido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:text="Valor do Pedido: R$ 9,00"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="10dp"
+                android:text="Taxa de Entrega: R$ 1,00"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/valor_total_pedido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginBottom="10dp"
+                android:text="Sub Total: R$ 10,00"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
 
 
-        <Button
-            android:id="@+id/bt_finalizar_pedido"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/border_button_white"
-            android:text="Finalizar Pedido"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/bt_finalizar_pedido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/border_button_white"
+                android:text="Finalizar Pedido"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </RelativeLayout>
 
-</RelativeLayout>
+</ScrollView>

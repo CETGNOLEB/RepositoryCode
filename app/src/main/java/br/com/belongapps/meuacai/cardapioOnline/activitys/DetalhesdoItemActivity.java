@@ -101,7 +101,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetalhesdoItemActivity.this, CarrinhoActivity.class);
 
                 //Salvar Item no Carrinho
-                Log.println(Log.ERROR, "RESULT: " , crud.salvarItem(itemPedido));
+                Log.println(Log.ERROR, "RESULT: ", crud.salvarItem(itemPedido));
 
                 startActivity(intent);
                 finish();
@@ -120,6 +120,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                /*telaAnterior = getIntent().getStringExtra("TelaAnterior");
+
                 if (telaAnterior.equals("EscolherPizzaActivity")) {
                     Intent intent = new Intent(DetalhesdoItemActivity.this, EscolherPizzaActivity.class);
                     intent.putExtra("tipoPizza", tipoPizza);
@@ -131,11 +133,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                     Intent intent = new Intent(DetalhesdoItemActivity.this, EscolherRecheioActivity.class);
                     startActivity(intent);
                     finish();
-                } else {
+                } else {*/
                     Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
                     startActivity(intent);
                     finish();
-                }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -145,22 +147,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        if (telaAnterior.equals("EscolherPizzaActivity")) {
-            Intent intent = new Intent(DetalhesdoItemActivity.this, EscolherPizzaActivity.class);
-            intent.putExtra("tipoPizza", tipoPizza);
-            intent.putExtra("tamPizza", tamPizza);
-            startActivity(intent);
-
-            finish();
-        } else if (telaAnterior.equals("EscolherRecheioActivity")) {
-            Intent intent = new Intent(DetalhesdoItemActivity.this, EscolherRecheioActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void getParametros() {
@@ -207,7 +196,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         nomeDetalheProduto.setText(itemPedido.getNome());
 
         descDetalheProduto.setText(itemPedido.getDescricao());
-        valorDetalheProduto.setText(" R$ " +  String.format(Locale.US, "%.2f", itemPedido.getValor_unit()).replace(".", ","));
+        valorDetalheProduto.setText(" R$ " + String.format(Locale.US, "%.2f", itemPedido.getValor_unit()).replace(".", ","));
         qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
     }
 
@@ -231,7 +220,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         }
     }
 
-    public double calcularValorToralDoItem(int quantidade, double valorProduto){
+    public double calcularValorToralDoItem(int quantidade, double valorProduto) {
         return quantidade * valorProduto;
     }
 }

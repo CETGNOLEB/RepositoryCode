@@ -27,30 +27,34 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import br.com.belongapps.meuacai.R;
 import br.com.belongapps.meuacai.cardapioOnline.adapters.FormasdePagamentoAdapter;
 import br.com.belongapps.meuacai.cardapioOnline.adapters.ItemCarrinhoAdapter;
+import br.com.belongapps.meuacai.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.meuacai.cardapioOnline.dao.FormardePagamentoDAO;
+import br.com.belongapps.meuacai.cardapioOnline.model.Cliente;
 import br.com.belongapps.meuacai.cardapioOnline.model.FormadePagamento;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.meuacai.cardapioOnline.model.Pagamento;
 import br.com.belongapps.meuacai.cardapioOnline.model.Pedido;
+import br.com.belongapps.meuacai.util.DataUtil;
 
 import static android.content.ContentValues.TAG;
 
 public class FinalizarPedidoActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private List<ItemCardapio> itens_pedido;
 
     //Views
     private TextView txtTotalPedido;
     private TextView txtTotalDosItens;
     private Button finalizarPedido;
-    private RadioGroup opcaoDePagamento;
 
     //Dialogs
     AlertDialog dialogPedidoEnviado;
@@ -62,18 +66,20 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private RecyclerView mRecyclerViewFormasdePagamento;
     private RecyclerView.Adapter adapter;
 
-    private FormadePagamento formadePagamentoSelecionada = new FormadePagamento();
     private List<FormadePagamento> formasDePagamento = FormardePagamentoDAO.getFormasdePagamento();
 
     DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
     String numerodopedido = "";
 
+    private Pedido pedido = new Pedido();
+
+    private ArrayList<ItemPedido> itensdoPedido = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finalizar_pedido);
-        database.keepSynced(true);
 
         mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this);
 
@@ -96,7 +102,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         finalizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.println(Log.ERROR, "NUMERO: ", numerodopedido);
+
+                beforeEnviarPedido();
 
                 View layoutDialog = createDialog();
 
@@ -154,17 +161,17 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void populateView(){
+    public void populateView() {
 
         txtTotalDosItens = (TextView) findViewById(R.id.valor_pedido);
-        txtTotalDosItens.setText("Valor do Pedido: R$ " +  String.format(Locale.US, "%.2f", totaldoPedido).replace(".", ","));
+        txtTotalDosItens.setText("Valor do Pedido: R$ " + String.format(Locale.US, "%.2f", totaldoPedido).replace(".", ","));
 
         txtTotalPedido = (TextView) findViewById(R.id.valor_total_pedido);
         txtTotalPedido.setText("Subtotal: R$ " + String.format(Locale.US, "%.2f", (totaldoPedido + 1)).replace(".", ","));
 
     }
 
-    public void populateFormasdePagamento(){
+    public void populateFormasdePagamento() {
         mRecyclerViewFormasdePagamento = (RecyclerView) findViewById(R.id.formas_de_pagamento);
         mRecyclerViewFormasdePagamento.setHasFixedSize(true);
         mRecyclerViewFormasdePagamento.setLayoutManager(new LinearLayoutManager(this));
@@ -174,21 +181,91 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     }
 
-    private void beforeEnviarPedido(Pedido pedido) {
-        Date dataPedido = new Date();
+    private void beforeEnviarPedido() {
+        Pedido pedido = new Pedido();
 
+        Date data = DataUtil.getCurrenteDate();
+        Date hj = DataUtil.getCurrenteDate();
+        String dataPedido = DataUtil.formatar(data, "dd/MM/yyyy HH:mm");
+        String diaPedido = DataUtil.formatar(data, "ddMMyyyy");
 
+        pedido.setData(dataPedido);
+        pedido.setNumero_pedido(gerarNumeroPedido(numerodopedido));
+        pedido.setStatus(0);
+        pedido.setEntrega_retirada(getIntent().getIntExtra("tipoEntrega", 0));
+        pedido.setItens_pedido(getItensdoPedido());
+
+        //Pegar usuário logado
+        Cliente cliente = new Cliente();
+        cliente.setNomeCliente("Thiago Oliveira");
+
+        //setar apenas se a entrega for delivery
+        if (pedido.getEntrega_retirada() == 1) {
+            cliente.setRuaEndCliente("Tv. Aristides Gonçalves");
+            cliente.setNumeroEndCliente("179");
+            cliente.setBairroEndCliente("Rodoviária");
+            cliente.setComplementoEndCliente("Ap 202");
+        }
+
+        pedido.setCliente(cliente); //Adicionar Cliente ao Pedido
+
+        FormadePagamento formadePagamento = getFormaPagamento();
+
+        Pagamento pagamento = new Pagamento();
+        pagamento.setFormaPagamento(formadePagamento.getNome());
+        pagamento.setValorTotal(totaldoPedido);
+        pagamento.setDescricaoPagemento(formadePagamento.getDescricao());
+
+        pedido.setPagamento(pagamento);
+
+        salvarPedido(pedido,diaPedido);
+
+    }
+
+    private void salvarPedido(Pedido pedido, String hj) {
+        String key = database.child("pedidos").push().getKey();
+        Pedido pedidoAux = pedido;
+        Map<String, Object> pedidoValues = pedidoAux.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/pedidos/" + hj + "/" + key, pedidoValues);
+        childUpdates.put("/clientes/" + 1 + "/pedidos/" + key, key); //pegar id do usuário logado
+
+        database.updateChildren(childUpdates);
+    }
+
+    public FormadePagamento getFormaPagamento() {
+        FormadePagamento fpgm = new FormadePagamento();
+
+        for (FormadePagamento forma :
+                formasDePagamento) {
+            if (forma.isStatus() == true) {
+                fpgm = forma;
+            }
+        }
+
+        return fpgm;
     }
 
     public void updateNumero(List<String> list) {
 
         if (list.isEmpty()) {
-            numerodopedido = "0001";
+            numerodopedido = "0";
 
         } else {
             numerodopedido = list.get(list.size() - 1);
             Log.println(Log.ERROR, "Ultimo Pedido: ", list.get(list.size() - 1));
         }
+
+
+
+    }
+
+    public List<ItemPedido> getItensdoPedido() {
+        List<ItemPedido> itensAux = new ArrayList<>();
+        CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
+        itensAux = crud.getAllItens();
+        return itensAux;
     }
 
     public String gerarNumeroPedido(String numero) {
@@ -196,9 +273,11 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         int intnum = Integer.parseInt(numero);
         intnum++;
 
-        NumberFormat formatter = new DecimalFormat("00000");
+        if (intnum < 10) {
+            NumberFormat formatter = new DecimalFormat("00");
 
-        numero = formatter.format(intnum);
+            numero = formatter.format(intnum);
+        }
 
         return numero;
     }
@@ -221,8 +300,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                     }
 
                     updateNumero(list);
-                } catch (NullPointerException n) {
-                    list.add("0001");
+                } catch (Exception n) {
                     updateNumero(list);
                 }
             }
@@ -236,5 +314,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         };
 
         database.child("pedidos").addValueEventListener(postListener);
+
     }
 }

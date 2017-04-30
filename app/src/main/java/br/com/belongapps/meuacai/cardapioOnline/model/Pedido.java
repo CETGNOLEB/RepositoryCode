@@ -1,5 +1,8 @@
 package br.com.belongapps.meuacai.cardapioOnline.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.HashMap;
@@ -7,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class Pedido {
+public class Pedido{
 
     /*---PEDIDO---*/
     private String data;
@@ -22,7 +25,25 @@ public class Pedido {
     /*---PAGAMENTO---*/
     Pagamento pagamento = new Pagamento();
 
+    public Pedido(String data, String numero_pedido, int status, int entrega_retirada, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento) {
+        this.data = data;
+        this.numero_pedido = numero_pedido;
+        this.status = status;
+        this.entrega_retirada = entrega_retirada;
+        this.itens_pedido = itens_pedido;
+        this.cliente = cliente;
+        this.pagamento = pagamento;
+    }
+
     public Pedido() {
+    }
+
+    protected Pedido(Parcel in) {
+        data = in.readString();
+        numero_pedido = in.readString();
+        status = in.readInt();
+        entrega_retirada = in.readInt();
+        itens_pedido = in.createTypedArrayList(ItemPedido.CREATOR);
     }
 
     public Map<String, Object> toMap() {
@@ -32,7 +53,8 @@ public class Pedido {
         result.put("numero_pedido", numero_pedido);
         result.put("status", status);
         result.put("entrega_retirada", entrega_retirada);
-        //lista
+        //Itens do Pedido
+        result.put("itens_pedido", itens_pedido);
 
         //cliente
         result.put("nome_cliente", cliente.getNomeCliente());
@@ -44,12 +66,11 @@ public class Pedido {
         //pagamento
         result.put("valor_total", pagamento.getValorTotal());
         result.put("forma_pagamento", pagamento.getFormaPagamento());
-        result.put("troco_para", pagamento.getTrocoPedido());
-        result.put("valor_no_cartao", pagamento.getValorCartao());
-        result.put("valor_em_dinheiro", pagamento.getValorDinheiro());
+        result.put("descricao_pagamento", pagamento.getDescricaoPagemento());
 
         return result;
     }
+
 
     public String getData() {
         return data;

@@ -1,7 +1,14 @@
 package br.com.belongapps.meuacai.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URLConnection;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DataUtil {
@@ -19,5 +26,13 @@ public class DataUtil {
         }
 
         return date;
+    }
+
+    public static Date getCurrenteDate() {
+
+        Calendar c = Calendar.getInstance();
+        Date data = c.getTime();
+
+        return data;
     }
 }
