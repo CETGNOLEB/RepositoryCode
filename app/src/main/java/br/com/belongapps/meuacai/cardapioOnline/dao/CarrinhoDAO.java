@@ -15,8 +15,8 @@ import br.com.belongapps.meuacai.util.CriaBanco;
 
 public class CarrinhoDAO {
 
-    private SQLiteDatabase db;
-    private CriaBanco banco;
+    private static SQLiteDatabase db;
+    private static CriaBanco banco;
 
     public CarrinhoDAO(Context context) {
         banco = new CriaBanco(context);
@@ -127,7 +127,7 @@ public class CarrinhoDAO {
         return cursor;
     }
 
-    public void updateItem(String id, ItemPedido item) {
+    public static void updateItem(String id, ItemPedido item) {
         ContentValues valores;
         String where;
 
@@ -140,11 +140,13 @@ public class CarrinhoDAO {
         valores.put(CriaBanco.VALOR_UNIT, item.getValor_unit());
         valores.put(CriaBanco.VALOR_TOTAL, item.getValor_total());
 
+        Log.println(Log.ERROR, "ITEM:", "" + valores.getAsString(CriaBanco.QUANTIDADE));
+
         db.update(CriaBanco.TABELA, valores, where, null);
         db.close();
     }
 
-    public void atualizarItens(List<ItemPedido> itens_pedido) {
+    public static void atualizarItens(List<ItemPedido> itens_pedido) {
         db = banco.getWritableDatabase();
         String selectQuery = "SELECT * FROM itemPedido";
         Cursor cursor = db.rawQuery(selectQuery, null);

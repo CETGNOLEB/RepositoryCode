@@ -4,12 +4,9 @@
     android:id="@+id/activity_escolher_recheio"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
     android:paddingTop="?actionBarSize"
-    tools:showIn="@layout/activity_carrinho"
-    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.CarrinhoActivity">
+    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.CarrinhoActivity"
+    tools:showIn="@layout/activity_carrinho">
 
     <ProgressBar
         android:id="@+id/progressbar_escolher_adicionais"
@@ -18,59 +15,82 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/text_valor_pedido"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:textSize="16sp"
-        android:textColor="@color/colorPrimary"/>
 
-    <RelativeLayout
-        android:layout_below="@+id/text_valor_pedido"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/itens_carrinho"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="5dp">
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_above="@+id/detalhe_cart"
+        android:scrollbars="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/itens_carrinho"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:scrollbars="vertical"
-            android:layout_above="@+id/buttons_tela_carrinho">
+    </android.support.v7.widget.RecyclerView>
 
-        </android.support.v7.widget.RecyclerView>
 
-        <LinearLayout
-            android:id="@+id/buttons_tela_carrinho"
-            android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/detalhe_cart"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#e0dede"
+        android:layout_above="@+id/buttons"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/text_qtd_item"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:text="1 Item"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_total_carrinho"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:text="R$ 50,00"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:id="@+id/bt_realizar_pedido"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
-            android:orientation="vertical">
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:drawableRight="@drawable/icon_right"
+            android:text="FINALIZAR"
+            android:textColor="@android:color/white" />
 
-            <Button
-                android:id="@+id/bt_realizar_pedido"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/border_button_white"
-                android:text="Realizar Pedido"
-                android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/bt_continuar_comprando"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/border_button"
-                android:text="Continuar Comprando"
-                android:textColor="@color/colorPrimary" />
-
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/bt_continuar_comprando"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/bt_proximo_recheios"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/icon_left"
+            android:text=" + Produtos"
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -36,6 +36,8 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private TextView textTotal;
+    private TextView textQtdItem;
+
     private Button continuarComprando;
     private Button confirmarPedido;
 
@@ -53,11 +55,6 @@ public class CarrinhoActivity extends AppCompatActivity {
 
         totalCarrinho = calcularValorTotal();
 
-        textTotal = (TextView) findViewById(R.id.text_valor_pedido);
-        if (totalCarrinho != 0.0) {
-            textTotal.setText("Total: R$ " + String.format(Locale.US, "%.2f", totalCarrinho).replace(".", ","));
-        }
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar_carrinho);
         mToolbar.setTitle("Meu Carrinho");
         setSupportActionBar(mToolbar);
@@ -66,7 +63,18 @@ public class CarrinhoActivity extends AppCompatActivity {
         mRecyclerViewItemCarrinho.setHasFixedSize(true);
         mRecyclerViewItemCarrinho.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ItemCarrinhoAdapter(itens_pedido, this, textTotal);
+        textTotal = (TextView) findViewById(R.id.text_total_carrinho);
+        textTotal.setText("R$ " + String.format(Locale.US, "%.2f", totalCarrinho).replace(".", ","));
+
+        textQtdItem = (TextView) findViewById(R.id.text_qtd_item);
+
+        if (itens_pedido.size() == 1){
+            textQtdItem.setText(itens_pedido.size() + " Item");
+        } else{
+            textQtdItem.setText(itens_pedido.size() + " Itens");
+        }
+
+        adapter = new ItemCarrinhoAdapter(itens_pedido, this, textTotal, textQtdItem);
         mRecyclerViewItemCarrinho.setAdapter(adapter);
 
         continuarComprando = (Button) findViewById(R.id.bt_continuar_comprando);
@@ -76,6 +84,8 @@ public class CarrinhoActivity extends AppCompatActivity {
         continuarComprando.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //atualiza itens do pedido
+                CarrinhoDAO.atualizarItens(itens_pedido);
 
                 Intent intent = new Intent(CarrinhoActivity.this, CardapioMainActivity.class);
                 startActivity(intent);
@@ -86,6 +96,9 @@ public class CarrinhoActivity extends AppCompatActivity {
         confirmarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //atualiza itens do pedido
+                CarrinhoDAO.atualizarItens(itens_pedido);
+
 
                 AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
                 View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_entrega, null);
@@ -96,6 +109,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                 btEntrega.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
                         intent.putExtra("totalPedido", totalCarrinho);
                         intent.putExtra("tipoEntrega", 1);
@@ -108,6 +122,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                 btRetirada.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
                         intent.putExtra("totalPedido", totalCarrinho);
                         intent.putExtra("tipoEntrega", 0);
@@ -122,6 +137,7 @@ public class CarrinhoActivity extends AppCompatActivity {
             }
         });
 
+        Log.println(Log.ERROR, "Entrou:", "no onCreate");
     }
 
     @Override
@@ -147,6 +163,8 @@ public class CarrinhoActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
         }
+
+        Log.println(Log.ERROR, "Entrou:", "no onOptionsItemSelected");
 
         return super.onOptionsItemSelected(item);
     }

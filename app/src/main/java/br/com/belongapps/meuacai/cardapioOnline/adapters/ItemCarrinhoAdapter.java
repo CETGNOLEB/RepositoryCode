@@ -5,6 +5,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,11 +34,13 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
     private static List<ItemPedido> itensPedido;
     private Context context;
     public TextView totalPedido;
+    public TextView txtQtdItens;
 
-    public ItemCarrinhoAdapter(List<ItemPedido> itensPedido, Context context, TextView textTotal) {
+    public ItemCarrinhoAdapter(List<ItemPedido> itensPedido, Context context, TextView textTotal, TextView txtQtdItens) {
         this.itensPedido = itensPedido;
         this.context = context;
         this.totalPedido = textTotal;
+        this.txtQtdItens = txtQtdItens;
     }
 
     @Override
@@ -66,6 +69,7 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
                 double vtotal = holder.aumentarQuantidadeDoItem(itemPedido.getValor_unit());
 
                 itensPedido.get(position).setValor_total(vtotal);
+                itensPedido.get(position).setQuantidade(Integer.parseInt(holder.qtdItem.getText().toString()));
 
                 updateValorPedido();
 
@@ -78,6 +82,8 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
                 double vtotal = holder.diminuirQuantidadeDoItem(itemPedido.getValor_unit());
 
                 itensPedido.get(position).setValor_total(vtotal);
+                itensPedido.get(position).setQuantidade(Integer.parseInt(holder.qtdItem.getText().toString()));
+
                 updateValorPedido();
             }
         });
@@ -115,6 +121,7 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
                         notifyDataSetChanged();
 
                         updateValorPedido();
+                        updateQtdItens();
 
                         dialogConfirmExcItem.dismiss();
 
@@ -127,6 +134,7 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
     }
 
     public void updateValorPedido(){
+
         double valorTotalPedido = 0.0;
         for (ItemPedido item : itensPedido) {
             Log.println(Log.ERROR, "Valor Total: ", "" + item.getValor_total());
@@ -136,7 +144,15 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
         if(itensPedido.size() == 0){
             totalPedido.setText("");
         }else {
-            totalPedido.setText("Total: R$ " + String.format(Locale.US, "%.2f", valorTotalPedido).replace(".", ","));
+            totalPedido.setText("R$ " + String.format(Locale.US, "%.2f", valorTotalPedido).replace(".", ","));
+        }
+    }
+
+    public void updateQtdItens(){
+        if (itensPedido.size() == 1){
+            txtQtdItens.setText(itensPedido.size() + " Item");
+        } else{
+            txtQtdItens.setText(itensPedido.size() + " Itens");
         }
     }
 
@@ -218,7 +234,11 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
 
         public double diminuirQuantidadeDoItem(double valorUni) {
             int qtd = Integer.valueOf(qtdItem.getText().toString());
-            qtd--;
+
+            if (qtd > 1) {
+                qtd--;
+            }
+
             qtdItem.setText(String.valueOf(qtd));
 
             double valorTotal;
