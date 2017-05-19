@@ -10,11 +10,12 @@ public class ItemCardapio {
     private double preco_promocional;
     private int qtd_recheios;
     private String status_item;
+    private boolean status_promocao;
 
     private String categoria_id;
 
 
-    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, String status_item, String categoria_id) {
+    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, String status_item, boolean status_promocao, String categoria_id) {
         this.nome = nome;
         this.descricao = descricao;
         this.ref_img = ref_img;
@@ -22,6 +23,7 @@ public class ItemCardapio {
         this.preco_promocional = preco_promocional;
         this.qtd_recheios = qtd_recheios;
         this.status_item = status_item;
+        this.status_promocao = status_promocao;
         this.categoria_id = categoria_id;
     }
 
@@ -93,5 +95,11 @@ public class ItemCardapio {
         this.categoria_id = categoria_id;
     }
 
+    public boolean isStatus_promocao() {
+        return status_promocao;
+    }
 
+    public void setStatus_promocao(boolean status_promocao) {
+        this.status_promocao = status_promocao;
+    }
 }

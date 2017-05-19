@@ -6,8 +6,6 @@
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
@@ -15,25 +13,42 @@
         android:id="@+id/imageView"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="30dp"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:layout_gravity="center"
         android:background="@drawable/belong" />
 
-    <LinearLayout
+    <!--<RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="80dp">
 
+        <TextView
+            android:id="@+id/txt_nome_usuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:text="Thiago Oliveira"
+            android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/txt_email_usuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_nome_usuario"
+            android:text="Thiago Oliveira"
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"/>
 
-    </LinearLayout>
+    </RelativeLayout>-->
 
-   <!-- <TextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="17dp"
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="10dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Meu Açai"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />-->
+        android:text="Thiago Barbosa de Oliveira"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 </LinearLayout>

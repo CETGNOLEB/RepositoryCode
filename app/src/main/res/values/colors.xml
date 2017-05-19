@@ -9,8 +9,8 @@
 
     <!--OUTRAS CORES-->
     <color name="tabIndication">#FFCB2C</color>
-
     <color name="dialogBackground">#616161</color>
+    <color name="loginBackground">#da252f</color>
 
 
     <!--ALEX-->

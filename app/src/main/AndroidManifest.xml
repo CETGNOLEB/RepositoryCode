@@ -9,13 +9,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".cardapioOnline.activitys.CardapioMainActivity">
+        <activity android:name=".seguranca.activities.LoginActivity" android:theme="@style/Base.LoginTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
-
+        <activity android:name=".cardapioOnline.activitys.CardapioMainActivity"></activity>
         <activity android:name=".cardapioOnline.activitys.EscolherRecheioActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherAdicionalActivity" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemActivity" />
@@ -26,7 +26,6 @@
         <activity android:name=".helpAbout.activities.SobreActivity" />
         <activity android:name=".gerencial.activities.EnderecosActivity" />
         <activity android:name=".helpAbout.activities.AjudaActivity" />
-        <activity android:name=".seguranca.activities.LoginActivity"/>
         <activity android:name=".promocoes.activities.PromocoesActivity" />
         <activity android:name=".promocoes.activities.TelaInicialActivity" >
 

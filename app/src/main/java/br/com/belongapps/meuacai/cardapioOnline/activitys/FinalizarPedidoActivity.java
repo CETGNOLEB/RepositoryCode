@@ -41,6 +41,7 @@ import br.com.belongapps.meuacai.cardapioOnline.model.Cliente;
 import br.com.belongapps.meuacai.cardapioOnline.model.FormadePagamento;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.meuacai.cardapioOnline.model.KeyPedido;
 import br.com.belongapps.meuacai.cardapioOnline.model.Pagamento;
 import br.com.belongapps.meuacai.cardapioOnline.model.Pedido;
 import br.com.belongapps.meuacai.util.DataUtil;
@@ -182,10 +183,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     }
 
     private void beforeEnviarPedido() {
-        Pedido pedido = new Pedido();
+        pedido = new Pedido();
 
         Date data = DataUtil.getCurrenteDate();
-        Date hj = DataUtil.getCurrenteDate();
         String dataPedido = DataUtil.formatar(data, "dd/MM/yyyy HH:mm");
         String diaPedido = DataUtil.formatar(data, "ddMMyyyy");
 
@@ -227,11 +227,22 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         Pedido pedidoAux = pedido;
         Map<String, Object> pedidoValues = pedidoAux.toMap();
 
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/pedidos/" + hj + "/" + key, pedidoValues);
-        childUpdates.put("/clientes/" + 1 + "/pedidos/" + key, key); //pegar id do usuário logado
+        Map<String, Object> childUpdatesPedido = new HashMap<>();
+        childUpdatesPedido.put("/pedidos/" + hj + "/" + key, pedidoValues);
 
-        database.updateChildren(childUpdates);
+        database.updateChildren(childUpdatesPedido);
+
+        //ATUALIZA PEDIDOS DO USUÁRIO LOGADO
+        atualizarPedidosdoCliente(pedido.getCliente(), key);
+    }
+
+    public void atualizarPedidosdoCliente(Cliente cliente, String keyPedido){
+        KeyPedido keyp = new KeyPedido(keyPedido);
+        keyp.setId(keyPedido);
+
+        String key = database.child("clientes").child("1").push().getKey();//pegar id do usuário logado
+
+        database.child("clientes").child("1").child("pedidos").child(key).setValue(keyp);
     }
 
     public FormadePagamento getFormaPagamento() {
@@ -294,6 +305,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 try {
                     for (DataSnapshot pedido : dataSnapshot.getChildren()) {
                         for (DataSnapshot dia : pedido.getChildren()) {
+                            Log.println(Log.ERROR, "data:" , dia.toString());
                             String numpedido = dia.child("numero_pedido").getValue().toString();
                             list.add(numpedido);
                         }

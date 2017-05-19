@@ -1,5 +1,9 @@
 package br.com.belongapps.meuacai.cardapioOnline.model;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Cliente {
 
     private String nomeCliente;
@@ -8,16 +12,27 @@ public class Cliente {
     private String bairroEndCliente;
     private String complementoEndCliente;
 
-    public Cliente(String nomeCliente, String ruaEndCliente, String numeroEndCliente, String bairroEndCliente, String complementoEndCliente) {
+    private List<KeyPedido> keypedidos;
+
+    public Cliente(String nomeCliente, String ruaEndCliente, String numeroEndCliente, String bairroEndCliente, String complementoEndCliente, List<KeyPedido> keypedidos) {
         this.nomeCliente = nomeCliente;
         this.ruaEndCliente = ruaEndCliente;
         this.numeroEndCliente = numeroEndCliente;
         this.bairroEndCliente = bairroEndCliente;
         this.complementoEndCliente = complementoEndCliente;
+        this.keypedidos = keypedidos;
     }
 
     public Cliente() {
 
+    }
+
+    public Map<String, Object> toMapPedidos() {
+        HashMap<String, Object> result = new HashMap<>();
+        /*Pedido*/
+        result.put("pedidos", keypedidos);
+
+        return result;
     }
 
     public String getNomeCliente() {
@@ -58,5 +73,13 @@ public class Cliente {
 
     public void setComplementoEndCliente(String complementoEndCliente) {
         this.complementoEndCliente = complementoEndCliente;
+    }
+
+    public List<KeyPedido> getKeypedidos() {
+        return keypedidos;
+    }
+
+    public void setKeypedidos(List<KeyPedido> keypedidos) {
+        this.keypedidos = keypedidos;
     }
 }
