@@ -42,6 +42,7 @@
     </RelativeLayout>-->
 
     <TextView
+        android:id="@+id/nome_usuario_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="17dp"

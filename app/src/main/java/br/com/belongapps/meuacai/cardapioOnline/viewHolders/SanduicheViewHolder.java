@@ -37,7 +37,7 @@ public class SanduicheViewHolder extends RecyclerView.ViewHolder{
 
     public void setValorUnitario(double valor_unit) {
 
-        TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_sanduiche);
+        TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_promo_sanduiche);
         item_valor_unit.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
 
     }

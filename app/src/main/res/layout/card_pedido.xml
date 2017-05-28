@@ -44,7 +44,7 @@
                 android:text="Descrição do produto do menu." />
 
             <TextView
-                android:id="@+id/item_valor_unit_sanduiche"
+                android:id="@+id/item_valor_promo_pedido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

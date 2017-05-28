@@ -37,7 +37,7 @@ public class SalgadoViewHolder extends RecyclerView.ViewHolder{
 
     public void setValorUnitario(double valor_unit) {
 
-        TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_salgado);
+        TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_promo_salgado);
         item_valor_unit.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
 
     }

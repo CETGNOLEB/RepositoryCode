@@ -2,6 +2,7 @@ package br.com.belongapps.meuacai.cardapioOnline.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -89,29 +90,32 @@ public class TabSalgados extends Fragment {
 
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
-                viewHolder.setValorUnitario(model.getValor_unit());
+                viewHolder.setValorUnitarioEPromocao(model.getValor_unit(), model.isStatus_promocao(), model.getPreco_promocional());
                 viewHolder.setImagem(getContext(), model.getRef_img());
 
-               viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                if (model.getStatus_item().equals("Ativado")) {
 
-                        itemPedido.setNome(model.getNome());
-                        itemPedido.setDescricao(model.getDescricao());
-                        itemPedido.setRef_img(model.getRef_img());
-                        itemPedido.setValor_unit(model.getValor_unit());
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                        Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
+                            itemPedido.setNome(model.getNome());
+                            itemPedido.setDescricao(model.getDescricao());
+                            itemPedido.setRef_img(model.getRef_img());
+                            itemPedido.setValor_unit(model.getValor_unit());
 
-                        intent.putExtra("ItemPedido", itemPedido);
-                        intent.putExtra("TelaAnterior", "TabSalgados");
-                        startActivity(intent);
+                            Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
 
-                        getActivity().finish();
-                    }
-                });
+                            intent.putExtra("ItemPedido", itemPedido);
+                            intent.putExtra("TelaAnterior", "TabSalgados");
+                            startActivity(intent);
+
+                            getActivity().finish();
+                        }
+                    });
+                }
+
             }
-
 
         };
 
@@ -145,10 +149,19 @@ public class TabSalgados extends Fragment {
             item_descricao.setText(descricao);
         }
 
-        public void setValorUnitario(double valor_unit) {
+        public void setValorUnitarioEPromocao(double valor_unit, boolean status_promocao, double valor_promocional) {
 
+            TextView item_valor_promo = (TextView) mView.findViewById(R.id.item_valor_promo_salgado);
             TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_salgado);
-            item_valor_unit.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+
+            if (status_promocao == true){
+                item_valor_promo.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_promocional).replace(".", ","));
+                item_valor_unit.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+                item_valor_unit.setPaintFlags(item_valor_unit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                item_valor_unit.setVisibility(View.VISIBLE);
+            } else{
+                item_valor_promo.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+            }
 
         }
 

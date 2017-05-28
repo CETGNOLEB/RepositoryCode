@@ -17,6 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -38,12 +41,14 @@ import br.com.belongapps.meuacai.cardapioOnline.fragments.TabAcai;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabCombos;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabSalgados;
 import br.com.belongapps.meuacai.cardapioOnline.fragments.TabSanduiches;
+import br.com.belongapps.meuacai.seguranca.activities.LoginActivity;
 
 public class CardapioMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private CardapioMainActivity.SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private TextView nomeusuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,9 @@ public class CardapioMainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF")); //Cor do Titulo da Tela
         setSupportActionBar(toolbar);
+
+        //Exibir nome do usuário
+        nomeusuario = (TextView) findViewById(R.id.nome_usuario_menu);
 
         setIconCarrinho();
 
@@ -161,6 +169,12 @@ public class CardapioMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_ajuda) {
             Intent i = new Intent(CardapioMainActivity.this, AjudaActivity.class);
             startActivity(i);
+        } else if (id == R.id.nav_sair) {
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(CardapioMainActivity.this, LoginActivity.class);
+            startActivity(i);
+
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

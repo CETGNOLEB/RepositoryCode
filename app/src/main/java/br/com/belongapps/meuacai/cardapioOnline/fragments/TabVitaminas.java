@@ -2,6 +2,7 @@ package br.com.belongapps.meuacai.cardapioOnline.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -83,26 +84,28 @@ public class TabVitaminas extends Fragment {
 
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
-                viewHolder.setValorUnitario(model.getValor_unit());
+                viewHolder.setValorUnitarioEPromocao(model.getValor_unit(), model.isStatus_promocao(), model.getPreco_promocional());
                 viewHolder.setImagem(getContext(), model.getRef_img());
 
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
-                        intent.putExtra("NomeProduto", model.getNome());
-                        intent.putExtra("DescProduto", model.getDescricao());
-                        intent.putExtra("ImgProduto", model.getRef_img());
-                        intent.putExtra("ValorProduto", model.getValor_unit());
+                if (model.getStatus_item().equals("Ativado")) {
 
-                        intent.putExtra("TelaAnterior", "TabVitaminas");
-                        startActivity(intent);
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
+                            intent.putExtra("NomeProduto", model.getNome());
+                            intent.putExtra("DescProduto", model.getDescricao());
+                            intent.putExtra("ImgProduto", model.getRef_img());
+                            intent.putExtra("ValorProduto", model.getValor_unit());
 
-                        getActivity().finish();
-                    }
-                });
+                            intent.putExtra("TelaAnterior", "TabVitaminas");
+                            startActivity(intent);
+
+                            getActivity().finish();
+                        }
+                    });
+                }
             }
-
 
         };
 
@@ -136,10 +139,19 @@ public class TabVitaminas extends Fragment {
             item_descricao.setText(descricao);
         }
 
-        public void setValorUnitario(double valor_unit) {
+        public void setValorUnitarioEPromocao(double valor_unit, boolean status_promocao, double valor_promocional) {
 
+            TextView item_valor_promo = (TextView) mView.findViewById(R.id.item_valor_promo_vitamina);
             TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_vitamina);
-            item_valor_unit.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+
+            if (status_promocao == true){
+                item_valor_promo.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_promocional).replace(".", ","));
+                item_valor_unit.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+                item_valor_unit.setPaintFlags(item_valor_unit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                item_valor_unit.setVisibility(View.VISIBLE);
+            } else{
+                item_valor_promo.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+            }
 
         }
 
