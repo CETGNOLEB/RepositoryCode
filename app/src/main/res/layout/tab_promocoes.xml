@@ -4,6 +4,16 @@
     android:layout_height="match_parent"
     tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.CardapioMainActivity">
 
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:progressTint="@color/colorPrimary"
+        android:visibility="gone"
+        android:theme="@style/MyProgressbarColor"
+        android:id="@+id/progressbar_promocoes" />
+
     <TextView
         android:id="@+id/textTabItemPromo"
         android:layout_width="match_parent"

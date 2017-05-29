@@ -1,5 +1,6 @@
 package br.com.belongapps.meuacai.seguranca.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editEmail;
     EditText editSenha;
     Button btEntrar;
+    ProgressDialog mProgressDialog;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -34,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+
+        mProgressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
 
         editEmail = (EditText) findViewById(R.id.input_email);
         editSenha = (EditText) findViewById(R.id.input_senha);
@@ -67,17 +71,23 @@ public class LoginActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) { //verifica se os campos estão vazios
             Toast.makeText(LoginActivity.this, "Informe seu email e senha!", Toast.LENGTH_SHORT).show();
         } else {
+
+            mProgressDialog.setMessage("Entrando...");
+            mProgressDialog.show();
+
             mAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (!task.isSuccessful()) {
 
+                        mProgressDialog.dismiss();
+
                         Toast.makeText(LoginActivity.this, "Usuário não encontrado!", Toast.LENGTH_SHORT).show();
 
                     }
-
                 }
             });
+
         }
 
     }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.belongapps.meuacai.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.meuacai.cardapioOnline.model.Pedido;
 import br.com.belongapps.meuacai.util.CriaBanco;
 
 public class CarrinhoDAO {
@@ -161,7 +162,7 @@ public class CarrinhoDAO {
         }
     }
 
-    public void deletarItem(int position, List<ItemPedido> itens) {
+    public void deletarItem(int position) {
         db = banco.getWritableDatabase();
         String selectQuery = "SELECT * FROM itemPedido";
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -176,5 +177,24 @@ public class CarrinhoDAO {
         db.delete(CriaBanco.TABELA, where, null);
         db.close();
     }
+
+    public void deleteAll(List<ItemPedido> itensPedido) {
+
+        db = banco.getWritableDatabase();
+        String selectQuery = "SELECT * FROM itemPedido";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        for (int i = 0; i < itensPedido.size(); i++) {
+            cursor.moveToPosition(i);
+            String codigo = cursor.getString(cursor.getColumnIndexOrThrow("_id"));
+
+            String where = CriaBanco.ID + " = " + codigo;
+            db = banco.getReadableDatabase();
+            db.delete(CriaBanco.TABELA, where, null);
+        }
+
+        db.close();
+    }
+
 
 }

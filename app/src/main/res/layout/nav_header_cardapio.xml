@@ -11,10 +11,10 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="80dp"
+        android:layout_width="110dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:background="@drawable/belong" />
+        android:background="@drawable/log_kisabor" />
 
     <!--<RelativeLayout
         android:layout_width="match_parent"

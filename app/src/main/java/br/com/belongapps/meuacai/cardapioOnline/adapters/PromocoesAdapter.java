@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,10 +35,14 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
 
     private static List<ItemCardapio> itensemPromocao;
     private Context context;
+    private ProgressBar mProgressBar;
 
-    public PromocoesAdapter(List<ItemCardapio> itensPedido, Context context) {
+    public PromocoesAdapter(List<ItemCardapio> itensPedido, Context context, ProgressBar progressBar) {
         this.itensemPromocao = itensPedido;
         this.context = context;
+        this.mProgressBar = progressBar;
+
+        openProgressBar();
     }
 
     @Override
@@ -50,7 +55,7 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
-
+        closeProgressBar();
         final ItemCardapio item = itensemPromocao.get(position);
 
         viewHolder.setNome(item.getNome());
@@ -139,5 +144,13 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
             });
         }
 
+    }
+
+    private void openProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void closeProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
     }
 }

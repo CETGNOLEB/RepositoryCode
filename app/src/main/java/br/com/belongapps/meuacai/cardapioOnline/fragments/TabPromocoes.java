@@ -41,6 +41,8 @@ public class TabPromocoes extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_promocoes, container, false);
 
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressbar_promocoes);
+
         itensPromocao = getPromocoes();
 
         Log.println(Log.ERROR, "SIZE LIST:" ,"" + itensPromocao.size());
@@ -49,7 +51,7 @@ public class TabPromocoes extends Fragment {
         mItemPromoList.setHasFixedSize(true);
         mItemPromoList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new PromocoesAdapter(itensPromocao, getContext());
+        adapter = new PromocoesAdapter(itensPromocao, getContext(), mProgressBar);
         mItemPromoList.setAdapter(adapter);
 
         return rootView;
@@ -96,7 +98,7 @@ public class TabPromocoes extends Fragment {
                 } catch (Exception n) {
                 }
 
-                adapter = new PromocoesAdapter(itensPromocao, getContext());
+                adapter = new PromocoesAdapter(itensPromocao, getContext(), mProgressBar);
                 mItemPromoList.setAdapter(adapter);
             }
 
@@ -113,11 +115,4 @@ public class TabPromocoes extends Fragment {
         return list;
     }
 
-    private void openProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void closeProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
 }

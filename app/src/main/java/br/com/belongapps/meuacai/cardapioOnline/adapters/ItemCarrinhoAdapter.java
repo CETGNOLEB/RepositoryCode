@@ -115,7 +115,7 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
                     @Override
                     public void onClick(View v) {
                         CarrinhoDAO dao = new CarrinhoDAO(context);
-                        dao.deletarItem(position, itensPedido);
+                        dao.deletarItem(position);
 
                         itensPedido.remove(itemPedido);
                         notifyDataSetChanged();

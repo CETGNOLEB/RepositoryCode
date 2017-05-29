@@ -227,6 +227,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         Pedido pedidoAux = pedido;
         Map<String, Object> pedidoValues = pedidoAux.toMap();
 
+        Log.println(Log.ERROR, "NODO:" , hj);
+
         Map<String, Object> childUpdatesPedido = new HashMap<>();
         childUpdatesPedido.put("/pedidos/" + hj + "/" + key, pedidoValues);
 
@@ -234,6 +236,10 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         //ATUALIZA PEDIDOS DO USUÁRIO LOGADO
         atualizarPedidosdoCliente(pedido.getCliente(), key);
+
+        //LIMPAR CARRINHO
+        CarrinhoDAO dao = new CarrinhoDAO(this);
+        dao.deleteAll(itensdoPedido);
     }
 
     public void atualizarPedidosdoCliente(Cliente cliente, String keyPedido){
@@ -267,8 +273,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             numerodopedido = list.get(list.size() - 1);
             Log.println(Log.ERROR, "Ultimo Pedido: ", list.get(list.size() - 1));
         }
-
-
 
     }
 
@@ -305,7 +309,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 try {
                     for (DataSnapshot pedido : dataSnapshot.getChildren()) {
                         for (DataSnapshot dia : pedido.getChildren()) {
-                            Log.println(Log.ERROR, "data:" , dia.toString());
                             String numpedido = dia.child("numero_pedido").getValue().toString();
                             list.add(numpedido);
                         }
