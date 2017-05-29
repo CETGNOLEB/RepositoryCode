@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.DetalhesdoItemActivity"
+    tools:context=".cardapioOnline.activitys.DetalhesdoItemActivity"
     tools:showIn="@layout/activity_finalizar_pedido">
 
     <RelativeLayout

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.belongapps.meuacai.posPedido.activities.MeusPedidosActivity">
+    tools:context=".posPedido.activities.MeusPedidosActivity">
 
     <ProgressBar
         android:layout_width="50dp"

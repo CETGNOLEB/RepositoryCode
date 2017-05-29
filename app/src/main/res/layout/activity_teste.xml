@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.TesteActivity">
+    tools:context=".cardapioOnline.activitys.TesteActivity">
 
     <ProgressBar
         android:id="@+id/progressbar_teste"

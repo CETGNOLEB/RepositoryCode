@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="10dp"
-    tools:context="br.com.belongapps.meuacai.promocoes.activities.TelaInicialActivity">
+    tools:context=".promocoes.activities.TelaInicialActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

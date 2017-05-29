@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:showIn="@layout/activity_escolher_pizza"
-    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.EscolherPizzaActivity">
+    tools:context=".cardapioOnline.activitys.EscolherPizzaActivity">
 
     <ProgressBar
         android:id="@+id/progressbar_escolher_pizzas"

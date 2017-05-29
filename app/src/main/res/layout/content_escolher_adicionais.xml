@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:paddingTop="20dp"
     tools:showIn="@layout/activity_escolher_adicional"
-    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.EscolherAdicionalActivity">
+    tools:context=".cardapioOnline.activitys.EscolherAdicionalActivity">
 
     <ProgressBar
         android:id="@+id/progressbar_escolher_adicionais"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:showIn="@layout/activity_escolher_recheio"
-    tools:context="br.com.belongapps.meuacai.cardapioOnline.activitys.EscolherRecheioActivity">
+    tools:context=".cardapioOnline.activitys.EscolherRecheioActivity">
 
     <ProgressBar
         android:id="@+id/progressbar_escolher_recheios"

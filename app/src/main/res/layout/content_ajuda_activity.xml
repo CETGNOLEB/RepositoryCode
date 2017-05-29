@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="20dp"
-    tools:context="br.com.belongapps.meuacai.helpAbout.activities.AjudaActivity"
+    tools:context=".helpAbout.activities.AjudaActivity"
     tools:showIn="@layout/activity_ajuda">
 
     <LinearLayout
