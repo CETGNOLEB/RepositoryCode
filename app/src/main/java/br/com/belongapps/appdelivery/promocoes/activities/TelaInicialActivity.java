@@ -59,4 +59,11 @@ public class TelaInicialActivity extends AppCompatActivity {
 
         );
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        finish();
+    }
 }

@@ -72,7 +72,6 @@ public class TabSalgados extends Fragment {
 
         openProgressBar();
 
-
         final FirebaseRecyclerAdapter<ItemCardapio, TabSalgados.SalgadoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<ItemCardapio, SalgadoViewHolder>(
                 ItemCardapio.class, R.layout.card_salgados, TabSalgados.SalgadoViewHolder.class, mDatabaseReference
         ) {

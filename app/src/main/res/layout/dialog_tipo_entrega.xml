@@ -1,56 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/border_popups"
-    android:padding="10dp"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    tools:context=".cardapioOnline.activitys.CarrinhoActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="24dp"
+        android:text="Como você deseja receber?"
+        android:textColor="#212121"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Como você deseja receber?"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"/>
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:text="Escolha abaixo a forma que deseja receber seu pedido." />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RadioGroup
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp">
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="24dp"
+        android:checkedButton="@+id/radio_delivery"
+        android:orientation="vertical">
 
-
-        <TextView
+        <RadioButton
+            android:id="@+id/radio_delivery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Escolha abaixo a forma que deseja receber seu pedido."
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"/>
-    </LinearLayout>
+            android:onClick="onTipodeEntregaSelected"
+            android:buttonTint="@color/colorPrimary"
+            android:text="Entrega em Domicílio" />
 
-    <Button
-        android:id="@+id/bt_entrega_delivery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/border_button_white"
-        android:text="Entrega em Domicílio"
-        android:textColor="@android:color/white"/>
+        <RadioButton
+            android:id="@+id/radio_retirada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onTipodeEntregaSelected"
+            android:buttonTint="@color/colorPrimary"
+            android:text="Retirar no Estabelecimento" />
 
-    <Button
-        android:id="@+id/bt_retirar_na_loja"
+        <RadioButton
+            android:id="@+id/radio_mesa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onTipodeEntregaSelected"
+            android:buttonTint="@color/colorPrimary"
+            android:text="Retirar no Estabelecimento" />
+    </RadioGroup>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/border_button"
-        android:text="Retirar no Estabelecimento"
-        android:textColor="@color/colorPrimary"/>
+        android:layout_height="36dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/border_bottom_around">
+
+        <Button
+            android:id="@+id/bt_cancel_esc_forma_pagamento"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@+id/bt_confirmar_forma_entrega"
+            android:background="@android:color/transparent"
+            android:text="FECHAR"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/bt_confirmar_forma_entrega"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:background="@android:color/transparent"
+            android:text="CONFIRMAR"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <!-- <Button
+         android:id="@+id/bt_entrega_delivery"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginRight="10dp"
+         android:layout_marginLeft="10dp"
+         android:layout_marginTop="30dp"
+         android:background="@drawable/border_button_white"
+         android:text="Entrega em Domicílio"
+         android:textColor="@android:color/white"/>
+
+     <Button
+         android:id="@+id/bt_retirar_na_loja"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginRight="10dp"
+         android:layout_marginLeft="10dp"
+         android:layout_marginTop="10dp"
+         android:layout_marginBottom="10dp"
+         android:background="@drawable/border_button"
+         android:text="Retirar no Estabelecimento"
+         android:textColor="@color/colorPrimary"/>-->
+
+
 </LinearLayout>

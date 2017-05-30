@@ -12,8 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="?attr/actionBarSize">
 
         <ProgressBar
@@ -28,6 +26,8 @@
             android:id="@+id/card_detalhes_item"
             android:layout_width="match_parent"
             android:layout_height="240dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="5dp">
 
             <LinearLayout
@@ -81,6 +81,8 @@
             android:layout_width="match_parent"
             android:layout_height="110dp"
             android:layout_below="@+id/card_detalhes_item"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp">
 
             <LinearLayout
@@ -93,9 +95,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:focusable="true"
-                    android:focusableInTouchMode="true">
+                    android:focusableInTouchMode="true"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/txt_observacao_produto_detalhe_item"
@@ -132,6 +134,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/card_observacoes_item"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp">
 
             <LinearLayout
@@ -153,7 +157,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="10dp">
 
@@ -204,25 +208,29 @@
 
         </android.support.v7.widget.CardView>
 
-        <RelativeLayout
+        <!--<RelativeLayout
             android:id="@+id/layoutButton"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_below="@+id/card_quantidade_item"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp">-->
 
-            <Button
-                android:id="@+id/bt_add_ao_carrinho_ou_esc_metade2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginBottom="10dp"
-                android:background="@color/colorPrimary"
-                android:text="Adicionar ao Carrinho"
-                android:textColor="@android:color/white" />
+        <Button
+            android:id="@+id/bt_add_ao_carrinho_ou_esc_metade2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_quantidade_item"
+            android:layout_marginTop="15dp"
+            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/border_button_white"
+            android:text="Adicionar ao Carrinho"
+            android:textColor="@android:color/white" />
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
     </RelativeLayout>
 

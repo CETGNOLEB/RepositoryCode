@@ -18,12 +18,9 @@
         android:id="@+id/textTabItemPromo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F5F5F5"
-        android:paddingBottom="6dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="6dp"
-        android:text="Promoções de hoje:"
-        android:textSize="20sp" />
+        android:padding="8dp"
+        android:text="Promoções de hoje"
+        android:textSize="17sp" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_below="@+id/textTabItemPromo"

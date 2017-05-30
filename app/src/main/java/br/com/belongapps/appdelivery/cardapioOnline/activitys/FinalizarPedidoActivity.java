@@ -71,8 +71,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     private Pedido pedido = new Pedido();
 
-    private ArrayList<ItemPedido> itensdoPedido = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

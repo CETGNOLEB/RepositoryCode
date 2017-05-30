@@ -24,7 +24,6 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 
 public class DetalhesdoItemActivity extends AppCompatActivity {
 
-    private ProgressBar mProgressBar;
     private Button addAoCarrinhoOuEscMetade2;
     private Toolbar mToolbar;
 

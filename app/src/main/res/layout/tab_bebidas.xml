@@ -4,13 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".cardapioOnline.activitys.CardapioMainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/list_bebidas">
-
-    </android.support.v7.widget.RecyclerView>
-
     <ProgressBar
         android:layout_width="50dp"
         android:layout_height="wrap_content"
@@ -20,5 +13,23 @@
         android:progressTint="@color/colorPrimary"
         android:theme="@style/MyProgressbarColor"
         android:id="@+id/progressbar_escolher_bebida" />
+
+    <TextView
+        android:id="@+id/textTabBebidas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Escolha a sua"
+        android:textSize="17sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/textTabBebidas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/list_bebidas">
+
+    </android.support.v7.widget.RecyclerView>
+
+
 
 </RelativeLayout>

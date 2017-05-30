@@ -12,7 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,8 @@ public class CarrinhoActivity extends AppCompatActivity {
     private double totalCarrinho;
     private TextView textCarrinhoVazio;
     private TextView descCarrinhoVazio;
+
+    private int tipoEntregaSelecionada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,40 +115,35 @@ public class CarrinhoActivity extends AppCompatActivity {
                 //atualiza itens do pedido
                 CarrinhoDAO.atualizarItens(itens_pedido);
 
-
                 AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
                 View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_entrega, null);
 
-                Button btEntrega = (Button) layoutDialog.findViewById(R.id.bt_entrega_delivery);
-                Button btRetirada = (Button) layoutDialog.findViewById(R.id.bt_retirar_na_loja);
-
-                btEntrega.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
-                        intent.putExtra("totalPedido", totalCarrinho);
-                        intent.putExtra("tipoEntrega", 1);
-
-                        startActivity(intent);
-
-                    }
-                });
-
-                btRetirada.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
-                        intent.putExtra("totalPedido", totalCarrinho);
-                        intent.putExtra("tipoEntrega", 0);
-                        startActivity(intent);
-                    }
-                });
-
                 mBilder.setView(layoutDialog);
-                AlertDialog dialogEscolherFormEntrega = mBilder.create();
+                final AlertDialog dialogEscolherFormEntrega = mBilder.create();
                 dialogEscolherFormEntrega.show();
+
+                Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_cancel_esc_forma_pagamento);
+                Button btConfirm = (Button) layoutDialog.findViewById(R.id.bt_confirmar_forma_entrega);
+
+                btCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogEscolherFormEntrega.dismiss();
+                    }
+                });
+
+                btConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
+                        intent.putExtra("totalPedido", totalCarrinho);
+                        intent.putExtra("tipoEntrega", tipoEntregaSelecionada);
+                        startActivity(intent);
+
+                    }
+                });
+
 
             }
         });
@@ -166,20 +165,6 @@ public class CarrinhoActivity extends AppCompatActivity {
         finish();
     }
 
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(CarrinhoActivity.this, CardapioMainActivity.class);
-                startActivity(intent);
-                finish();
-        }
-
-        Log.println(Log.ERROR, "Entrou:", "no onOptionsItemSelected");
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
     private double calcularValorTotal() {
         double total = 0;
 
@@ -189,6 +174,28 @@ public class CarrinhoActivity extends AppCompatActivity {
 
         return total;
 
+    }
+
+    public void onTipodeEntregaSelected(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch(view.getId()) {
+            case R.id.radio_delivery:
+                if (checked)
+                    tipoEntregaSelecionada = 0;
+                    break;
+            case R.id.radio_retirada:
+                if (checked)
+                    tipoEntregaSelecionada = 1;
+                    break;
+            case R.id.radio_mesa:
+                if (checked)
+                    tipoEntregaSelecionada = 2;
+                    break;
+            default:
+                tipoEntregaSelecionada = 0;
+                break;
+        }
     }
 
 }
