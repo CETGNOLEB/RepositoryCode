@@ -16,6 +16,7 @@ public class Pedido{
     private String numero_pedido;
     private int status;
     private int entrega_retirada;
+    private double valor_total;
     private List<ItemPedido> itens_pedido;
 
     /*---CLIENTE---*/
@@ -24,11 +25,12 @@ public class Pedido{
     /*---PAGAMENTO---*/
     Pagamento pagamento = new Pagamento();
 
-    public Pedido(String data, String numero_pedido, int status, int entrega_retirada, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento) {
+    public Pedido(String data, String numero_pedido, int status, int entrega_retirada, double valor_total, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento) {
         this.data = data;
         this.numero_pedido = numero_pedido;
         this.status = status;
         this.entrega_retirada = entrega_retirada;
+        this.valor_total = valor_total;
         this.itens_pedido = itens_pedido;
         this.cliente = cliente;
         this.pagamento = pagamento;
@@ -42,6 +44,7 @@ public class Pedido{
         numero_pedido = in.readString();
         status = in.readInt();
         entrega_retirada = in.readInt();
+        valor_total = in.readDouble();
         itens_pedido = in.createTypedArrayList(ItemPedido.CREATOR);
     }
 
@@ -101,6 +104,14 @@ public class Pedido{
 
     public void setEntrega_retirada(int entrega_retirada) {
         this.entrega_retirada = entrega_retirada;
+    }
+
+    public double getValor_total() {
+        return valor_total;
+    }
+
+    public void setValor_total(double valor_total) {
+        this.valor_total = valor_total;
     }
 
     public List<ItemPedido> getItens_pedido() {

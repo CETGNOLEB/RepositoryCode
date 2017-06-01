@@ -137,7 +137,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
-                        intent.putExtra("totalPedido", totalCarrinho);
+                        intent.putExtra("totalPedido", Double.parseDouble(textTotal.getText().toString().replace("R$ ", "").replace(",", ".")));
                         intent.putExtra("tipoEntrega", tipoEntregaSelecionada);
                         startActivity(intent);
 

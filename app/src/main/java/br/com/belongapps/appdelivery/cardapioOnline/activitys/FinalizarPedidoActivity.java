@@ -22,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,6 +39,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.KeyPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
 import br.com.belongapps.appdelivery.util.DataUtil;
 
 import static android.content.ContentValues.TAG;
@@ -115,11 +115,22 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this);
         View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_pedido_finalizado, null);
 
-        Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_entendi_dialog_pedido_enviado);
+        Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_ok_pedido_enviado);
+        Button acompanhar = (Button) layoutDialog.findViewById(R.id.bt_acompanhar_pedido_enviado);
+
         bt_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(FinalizarPedidoActivity.this, CardapioMainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        acompanhar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(FinalizarPedidoActivity.this, MeusPedidosActivity.class);
                 startActivity(i);
                 finish();
             }

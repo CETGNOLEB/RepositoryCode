@@ -79,9 +79,7 @@ public class TabPromocoes extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
             }
         };
 
@@ -94,7 +92,6 @@ public class TabPromocoes extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // itensPromocao = getPromocoes();
     }
 
     @Override
@@ -102,11 +99,5 @@ public class TabPromocoes extends Fragment {
         super.onStart();
 
     }
-
-   /* private List<ItemCardapio> getPromocoes(final View rootView) {
-
-
-        return list;
-    }*/
 
 }
