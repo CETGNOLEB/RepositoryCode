@@ -13,6 +13,7 @@ public class Pedido{
 
     /*---PEDIDO---*/
     private String data;
+    private String status_tempo;
     private String numero_pedido;
     private int status;
     private int entrega_retirada;
@@ -25,8 +26,9 @@ public class Pedido{
     /*---PAGAMENTO---*/
     Pagamento pagamento = new Pagamento();
 
-    public Pedido(String data, String numero_pedido, int status, int entrega_retirada, double valor_total, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento) {
+    public Pedido(String data, String status_tempo, String numero_pedido, int status, int entrega_retirada, double valor_total, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento) {
         this.data = data;
+        this.status_tempo = status_tempo;
         this.numero_pedido = numero_pedido;
         this.status = status;
         this.entrega_retirada = entrega_retirada;
@@ -41,6 +43,7 @@ public class Pedido{
 
     protected Pedido(Parcel in) {
         data = in.readString();
+        status_tempo = in.readString();
         numero_pedido = in.readString();
         status = in.readInt();
         entrega_retirada = in.readInt();
@@ -52,6 +55,7 @@ public class Pedido{
         HashMap<String, Object> result = new HashMap<>();
         /*Pedido*/
         result.put("data", data);
+        result.put("status_tempo", status_tempo);
         result.put("numero_pedido", numero_pedido);
         result.put("status", status);
         result.put("entrega_retirada", entrega_retirada);
@@ -80,6 +84,14 @@ public class Pedido{
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getStatus_tempo() {
+        return status_tempo;
+    }
+
+    public void setStatus_tempo(String status_tempo) {
+        this.status_tempo = status_tempo;
     }
 
     public String getNumero_pedido() {

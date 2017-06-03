@@ -195,6 +195,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         String diaPedido = DataUtil.formatar(data, "ddMMyyyy");
 
         pedido.setData(dataPedido);
+        pedido.setStatus_tempo("n" + DataUtil.formatar(data, "HH:mm"));
         pedido.setNumero_pedido(gerarNumeroPedido(numerodopedido));
         pedido.setStatus(0);
         pedido.setEntrega_retirada(getIntent().getIntExtra("tipoEntrega", 0));
@@ -205,7 +206,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         cliente.setNomeCliente("Thiago Oliveira");
 
         //setar apenas se a entrega for delivery
-        if (pedido.getEntrega_retirada() == 1) {
+        if (pedido.getEntrega_retirada() == 0) {
             cliente.setRuaEndCliente("Tv. Aristides Gonçalves");
             cliente.setNumeroEndCliente("179");
             cliente.setBairroEndCliente("Rodoviária");

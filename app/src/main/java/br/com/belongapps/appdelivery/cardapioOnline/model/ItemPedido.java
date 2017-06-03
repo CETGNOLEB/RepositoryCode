@@ -55,6 +55,11 @@ public class ItemPedido implements Parcelable{
         valor_total = in.readDouble();
 
         //PARA PIZZAS
+        nomeMetade2 = in.readString();
+        descMetade2 = in.readString();
+        obsMetade2 = in.readString();
+        imgMetade2 = in.readString();
+        valorMetade2 = in.readDouble();
 
     }
 

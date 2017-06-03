@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +27,8 @@ import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActi
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherRecheioActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
+import br.com.belongapps.appdelivery.util.DataUtil;
 
 
 public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealizadosAdapter.ViewHolder> {
@@ -59,25 +64,40 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
         viewHolder.setHora(getHora(pedido.getData()));
         viewHolder.setTipoEntrega(pedido.getEntrega_retirada());
         viewHolder.setValorPedido(pedido.getValor_total());
-        viewHolder.setImagemStatus(pedido.getStatus());
-        viewHolder.setStatus(pedido.getStatus());
+        viewHolder.setImagemStatus(pedido.getStatus(), pedido.getEntrega_retirada());
+        viewHolder.setStatus(pedido.getStatus(), pedido.getEntrega_retirada());
 
-        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.detalhesPedidoRealizado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(context, AcompanharPedidoActivity.class);
+                intent.putExtra("NumeroPedido", pedido.getNumero_pedido());
+                intent.putExtra("DataPedido", getData(pedido.getData()));
+                intent.putExtra("HoraPedido", getHora(pedido.getData()));
+                intent.putExtra("ValorPedido", pedido.getValor_total());
+                intent.putExtra("StatusPedido", pedido.getStatus());
+                intent.putExtra("TipoEntrega", pedido.getEntrega_retirada());
+                intent.putExtra("StatusTempo", pedido.getStatus_tempo());
 
+                ArrayList<ItemPedido> itensdoPedido = new ArrayList<>();
+                for (ItemPedido pedidoaux: pedido.getItens_pedido() ) {
+                    itensdoPedido.add(pedidoaux);
+                }
+
+                intent.putParcelableArrayListExtra("ItensPedido", itensdoPedido);
+                context.startActivity(intent);
             }
         });
 
     }
 
     private String getData(String data) {
-        String retorno = data.substring(0,10);
+        String retorno = data.substring(0, 10);
         return retorno;
     }
 
     private String getHora(String data) {
-        String retorno = data.trim().substring(10,data.length());
+        String retorno = data.trim().substring(10, data.length());
         return retorno;
     }
 
@@ -90,13 +110,14 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
 
         View mView;
         CardView card_pedido_realizado;
+        TextView detalhesPedidoRealizado;
 
         public ViewHolder(final View itemView) {
             super(itemView);
 
             mView = itemView;
             card_pedido_realizado = (CardView) mView.findViewById(R.id.card_pedido_realizado);
-
+            detalhesPedidoRealizado = (TextView) mView.findViewById(R.id.detalhes_pedido_realizado);
         }
 
         public void setNumerodoPedido(String numero) {
@@ -119,43 +140,66 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
 
         public void setTipoEntrega(int tipoEntrega) {
             TextView tipoEntregaPedido = (TextView) mView.findViewById(R.id.entrega_pedido_realizado);
-            if (tipoEntrega == 0){
+            if (tipoEntrega == 0) {
                 tipoEntregaPedido.setText("Entrega em Domicílio");
-            } else if(tipoEntrega == 1){
+            } else if (tipoEntrega == 1) {
                 tipoEntregaPedido.setText("Retirar no Estabelecimento");
-            } else{
+            } else {
                 tipoEntregaPedido.setText("Consumir no Estabelecimento");
             }
         }
 
-        public void setValorPedido(double valor){
+        public void setValorPedido(double valor) {
             TextView valorPedido = (TextView) mView.findViewById(R.id.valor_pedido_realizado);
-            valorPedido.setText("Valor Total: R$ " +  String.format(Locale.US, "%.2f", valor).replace(".", ","));
+            valorPedido.setText("Valor Total: R$ " + String.format(Locale.US, "%.2f", valor).replace(".", ","));
         }
 
-        public void setStatus(int status) {
+        public void setStatus(int status, int tipoEntrega) {
             TextView statusPedido = (TextView) mView.findViewById(R.id.status_pedido_realizado);
 
-            if (status == 0){
+            if (status == 0) {
                 statusPedido.setText("ENVIADO");
-            } else if(status == 1){
+            } else if (status == 1) {
                 statusPedido.setText("EM PRODUÇÃO");
-            } else if (status == 2){
+            } else if (status == 2) {
+                if (tipoEntrega == 1) {
+                    statusPedido.setText("PRONTO P/ RETIRADA");
+                }
+
+                if (tipoEntrega == 2) {
+                    statusPedido.setText("PRONTO P/ CONSUMO");
+                }
+            } else if (status == 3) {
+                statusPedido.setText("SAIU DA COZINHA");
+            } else if (status == 4) {
                 statusPedido.setText("SAIU P/ ENTREGA");
-            } else{
-                statusPedido.setText("CANCELADO");
+            } else {
+                statusPedido.setText("ENTREGUE");
             }
+
         }
 
-       public void setImagemStatus(int status) {
+        public void setImagemStatus(int status, int tipoEntrega) {
             ImageView imgPedido = (ImageView) mView.findViewById(R.id.img_pedido_realizado);
 
-            if (status == 0){
+            if (status == 0) {
                 imgPedido.setImageResource(R.drawable.img_pedido_enviado);
-            } else if (status == 1){
+            } else if (status == 1) {
                 imgPedido.setImageResource(R.drawable.img_pedido_em_producao);
-            } else if (status == 2){
+            } else if (status == 2) {
+                if (tipoEntrega == 1) {
+                    imgPedido.setImageResource(R.drawable.img_pedido_em_producao);
+                }
+
+                if (tipoEntrega == 2) {
+                    imgPedido.setImageResource(R.drawable.img_pedido_pronto);
+                }
+            } else if (status == 3) {
+                imgPedido.setImageResource(R.drawable.img_pedido_pronto);
+            } else if (status == 4) {
                 imgPedido.setImageResource(R.drawable.img_pedido_saiu_entrega);
+            } else {
+                imgPedido.setImageResource(R.drawable.ic_check_all);
             }
 
         }

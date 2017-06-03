@@ -102,17 +102,14 @@
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/img_pedido_enviado"/>
 
-           <!-- <Button
+            <TextView
+                android:id="@+id/detalhes_pedido_realizado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:background="@android:color/transparent"
-                android:text="acompanhar"
                 android:layout_alignParentRight="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12sp"
-                android:layout_marginRight="10dp"/>-->
-
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:text="DETALHES"/>
 
         </RelativeLayout>
     </RelativeLayout>

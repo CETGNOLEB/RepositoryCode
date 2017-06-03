@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.belongapps.appdelivery">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:name=".util.FirebaseLearn"
         android:icon="@mipmap/launch_icon_kisabor"

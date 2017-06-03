@@ -10,6 +10,11 @@ public class DataUtil {
         return new SimpleDateFormat(formato).format(data);
     }
 
+    public static String formatarDiaMeseAnoDesc(Date data) {
+        String dataFormatada = formatar(data, "dd") + " de " + formatar(data, "MM").toLowerCase() + " de " + formatar(data, "yyyy");
+        return dataFormatada;
+    }
+
     public static Date createDate(String data) {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         Date date = null;
