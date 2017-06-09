@@ -63,13 +63,19 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private RecyclerView mRecyclerViewFormasdePagamento;
     private RecyclerView.Adapter adapter;
 
-    private List<FormadePagamento> formasDePagamento = FormardePagamentoDAO.getFormasdePagamento();
+    private List<FormadePagamento> formasDePagamento;
 
     DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
     String numerodopedido = "";
 
     private Pedido pedido = new Pedido();
+
+//  STATUS FORMA PAGAMENTO
+    private boolean statusDinheiro = false;
+    private boolean statusCartao = false;
+    private boolean statusDinheiroCartao = false;
+    private List<FormadePagamento> formasDePagamentoaux;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +95,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         //Recebe Valor total do pedido
         Intent i = getIntent();
         totaldoPedido = i.getDoubleExtra("totalPedido", 0);
-
         populateView();
 
         finalizarPedido = (Button) findViewById(R.id.bt_finalizar_pedido);
@@ -178,12 +183,70 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     }
 
     public void populateFormasdePagamento() {
-        mRecyclerViewFormasdePagamento = (RecyclerView) findViewById(R.id.formas_de_pagamento);
-        mRecyclerViewFormasdePagamento.setHasFixedSize(true);
-        mRecyclerViewFormasdePagamento.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new FormasdePagamentoAdapter(formasDePagamento, this);
-        mRecyclerViewFormasdePagamento.setAdapter(adapter);
+        formasDePagamentoaux = new ArrayList<>();
+
+        database.child("configuracoes").child("forma_pagamento").addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot forma : dataSnapshot.getChildren()) {
+                    if (forma.getKey().equals("dinheiro")){
+                        statusDinheiro = forma.getValue(boolean.class);
+                        if (statusDinheiro == true){
+                            FormadePagamento dinheiro = new FormadePagamento();
+                            dinheiro.setCod(1);
+                            dinheiro.setNome("DINHEIRO");
+                            dinheiro.setDescricao("");
+                            dinheiro.setImagem(R.drawable.ic_money);
+                            dinheiro.setStatus(false);
+
+                            formasDePagamentoaux.add(dinheiro);
+                        }
+                    } else if (forma.getKey().equals("cartao")){
+                        statusCartao = forma.getValue(boolean.class);
+                        if (statusCartao == true){
+                            FormadePagamento cartao = new FormadePagamento();
+                            cartao.setCod(2);
+                            cartao.setNome("CARTÃO");
+                            cartao.setDescricao("");
+                            cartao.setImagem(R.drawable.ic_credit_card);
+                            cartao.setStatus(false);
+
+                            formasDePagamentoaux.add(cartao);
+                        }
+                    } else{
+                        statusDinheiroCartao = forma.getValue(boolean.class);
+                        if (statusDinheiroCartao == true){
+                            FormadePagamento dinheiroCartao = new FormadePagamento();
+                            dinheiroCartao.setCod(3);
+                            dinheiroCartao.setNome("DINHEIRO E CARTÃO");
+                            dinheiroCartao.setDescricao("");
+                            dinheiroCartao.setImagem(R.drawable.ic_credit_money);
+                            dinheiroCartao.setStatus(false);
+
+
+                            formasDePagamentoaux.add(dinheiroCartao);
+                        }
+                    }
+                }
+
+                formasDePagamento = new ArrayList<>();
+                formasDePagamento.addAll(formasDePagamentoaux);
+                formasDePagamentoaux = new ArrayList<>();
+
+                Collections.sort(formasDePagamento,new FormadePagamento());
+
+                adapter = new FormasdePagamentoAdapter(formasDePagamento, FinalizarPedidoActivity.this , totaldoPedido);
+                mRecyclerViewFormasdePagamento.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -316,6 +379,14 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        totaldoPedido = getIntent().getDoubleExtra("totalPedido", 0);
+
+        formasDePagamento = new ArrayList<>();
+
+        mRecyclerViewFormasdePagamento = (RecyclerView) findViewById(R.id.formas_de_pagamento);
+        mRecyclerViewFormasdePagamento.setHasFixedSize(true);
+        mRecyclerViewFormasdePagamento.setLayoutManager(new LinearLayoutManager(this));
+
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -344,6 +415,68 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         };
 
         database.child("pedidos").addValueEventListener(postListener);
+
+        database.child("configuracoes").child("forma_pagamento").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot forma : dataSnapshot.getChildren()) {
+                    if (forma.getKey().equals("dinheiro")){
+                        statusDinheiro = forma.getValue(boolean.class);
+                        if (statusDinheiro == true){
+                            FormadePagamento dinheiro = new FormadePagamento();
+                            dinheiro.setNome("DINHEIRO");
+                            dinheiro.setDescricao("");
+                            dinheiro.setImagem(R.drawable.ic_money);
+                            dinheiro.setStatus(false);
+
+                            formasDePagamentoaux.add(dinheiro);
+                        }
+                    }  else if (forma.getKey().equals("cartao")){
+                        statusCartao = forma.getValue(boolean.class);
+                        if (statusCartao == true){
+                            FormadePagamento cartao = new FormadePagamento();
+                            cartao.setCod(2);
+                            cartao.setNome("CARTÃO");
+                            cartao.setDescricao("");
+                            cartao.setImagem(R.drawable.ic_credit_card);
+                            cartao.setStatus(false);
+
+                            formasDePagamentoaux.add(cartao);
+                        }
+                    } else{
+                        statusDinheiroCartao = forma.getValue(boolean.class);
+                        if (statusDinheiroCartao == true){
+                            FormadePagamento dinheiroCartao = new FormadePagamento();
+                            dinheiroCartao.setCod(3);
+                            dinheiroCartao.setNome("DINHEIRO E CARTÃO");
+                            dinheiroCartao.setDescricao("");
+                            dinheiroCartao.setImagem(R.drawable.ic_credit_money);
+                            dinheiroCartao.setStatus(false);
+
+
+                            formasDePagamentoaux.add(dinheiroCartao);
+                        }
+                    }
+
+
+                }
+
+                formasDePagamento = new ArrayList<>();
+                formasDePagamento.addAll(formasDePagamentoaux);
+                formasDePagamentoaux = new ArrayList<>();
+
+                Collections.sort(formasDePagamento,new FormadePagamento());
+
+                adapter = new FormasdePagamentoAdapter(formasDePagamento, FinalizarPedidoActivity.this, totaldoPedido);
+                mRecyclerViewFormasdePagamento.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }

@@ -3,6 +3,7 @@ package br.com.belongapps.appdelivery.cardapioOnline.adapters;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +13,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.FormadePagamento;
-import br.com.belongapps.appdelivery.util.MaskNumberUtil;
+import br.com.belongapps.appdelivery.util.DataUtil;
+import br.com.belongapps.appdelivery.util.SimpleTextListenerUtil;
+import br.com.belongapps.appdelivery.util.StringUtil;
 
 
 public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagamentoAdapter.ViewHolder> {
 
     private List<FormadePagamento> formasdePagamento;
     private Context context;
+    private double totalPedido;
 
-    public FormasdePagamentoAdapter(List<FormadePagamento> formadePagamento, Context context) {
+    Locale mLocale = new Locale("pt", "BR");
+
+    public FormasdePagamentoAdapter(List<FormadePagamento> formadePagamento, Context context, double totalPedido) {
         this.formasdePagamento = formadePagamento;
         this.context = context;
+        this.totalPedido = totalPedido + 1.0;
     }
 
     @Override
@@ -78,35 +86,39 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
         } else if (formadePagamento.getNome().equals("DINHEIRO E CARTÃO")) {
             formadePagamento = openDialogDinheiroeCartao(formadePagamento);
             return formadePagamento;
-        } else {
-            if (formadePagamento.isStatus() == true) {
-                formadePagamento.setStatus(false);
-            } else {
-                formadePagamento.setStatus(true);
-            }
+        } else{
+            ativarFormadePagamento(formadePagamento);
+            return formadePagamento;
         }
 
-        return formadePagamento;
     }
 
-
     public FormadePagamento openDialogDinheiro(final FormadePagamento dinheiro) {
+
+        final String txtTotalPedido = "R$" + String.format(Locale.US, "%.2f", totalPedido).replace(".", ",");
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         AlertDialog.Builder mBilder = new AlertDialog.Builder(context);
 
-        View layoutDialog = inflater.inflate(R.layout.dialog_pag_dinheiro, null);
+        View layoutDialog = inflater.inflate(R.layout.dialog_pgm_dinheiro, null);
 
-        final EditText valorEmDinheiro = (EditText) layoutDialog.findViewById(R.id.valor_do_dinheiro);
+        final EditText valorEmDinheiro = (EditText) layoutDialog.findViewById(R.id.valor_pagamento_dinheiro);
+        final TextView valorPedidoDinheiro = (TextView) layoutDialog.findViewById(R.id.valor_pedido_dinheiro);
+        valorPedidoDinheiro.setText(txtTotalPedido);
 
-        Button bt_cancelar = (Button) layoutDialog.findViewById(R.id.bt_cancel_fpag_dinheiro);
-        Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_confirmar_fpag_dinheiro);
+        final ImageView imgError = (ImageView) layoutDialog.findViewById(R.id.img_error);
+        final TextView valorDinheiroInvalido = (TextView) layoutDialog.findViewById(R.id.valor_dinheiro_invalido);
 
-        valorEmDinheiro.addTextChangedListener(new MaskNumberUtil(valorEmDinheiro));
+        Button bt_cancelar = (Button) layoutDialog.findViewById(R.id.bt_cancel_pag_dinheiro);
+        Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_confirmar_pag_dinheiro);
 
-        if (!dinheiro.getDescricao().equals("")){
-            valorEmDinheiro.setText(dinheiro.getDescricao().replace("Troco para:", "").trim());
+        if (dinheiro.getDescricao().equals("") || dinheiro.getDescricao().equals("Sem Troco")) {
+            valorEmDinheiro.setText(txtTotalPedido);
+        } else {
+            valorEmDinheiro.setText(StringUtil.formatToMoeda(dinheiro.getValorDinheiro()));
         }
+
+        valorEmDinheiro.addTextChangedListener(new SimpleTextListenerUtil(valorEmDinheiro, mLocale));
 
         mBilder.setView(layoutDialog);
         final AlertDialog dialogFormadePagamento = mBilder.create();
@@ -124,11 +136,22 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
             @Override
             public void onClick(View v) {
 
-                dialogFormadePagamento.dismiss();
-                dinheiro.setDescricao("Troco para: " +  valorEmDinheiro.getText().toString());
-                dinheiro.setStatus(true);
+                Double valorInformado = Double.parseDouble(valorEmDinheiro.getText().toString().replace("R$", "").replace(",", ".").trim());
 
-                notifyDataSetChanged();
+                if (valorInformado < totalPedido) {
+                    imgError.setVisibility(View.VISIBLE);
+                    valorDinheiroInvalido.setVisibility(View.VISIBLE);
+                } else {
+                    imgError.setVisibility(View.GONE);
+                    valorDinheiroInvalido.setVisibility(View.GONE);
+
+                    dinheiro.setValorDinheiro(StringUtil.formatMoedaToDouble(valorEmDinheiro.getText().toString()));
+
+                    ativarFormadePagamento(dinheiro);
+                    notifyDataSetChanged();
+
+                    dialogFormadePagamento.dismiss();
+                }
             }
         });
 
@@ -138,19 +161,33 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
 
     public FormadePagamento openDialogDinheiroeCartao(final FormadePagamento dinheiroeCartao) {
 
+        final String txtTotalPedido = StringUtil.formatToMoeda(totalPedido);
+        final String txtMetadeTotalPedido = StringUtil.formatToMoeda(totalPedido / 2);
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         AlertDialog.Builder mBilder = new AlertDialog.Builder(context);
 
-        View layoutDialog = inflater.inflate(R.layout.dialog_pag_dinheiro_e_cartao, null);
+        View layoutDialog = inflater.inflate(R.layout.dialog_pgm_dinheiro_cartao, null);
 
-        final EditText valorComDinheiro = (EditText) layoutDialog.findViewById(R.id.valor_com_dinheiro);
-        final EditText valorComCartao = (EditText) layoutDialog.findViewById(R.id.valor_com_cartao);
+        final TextView valorTotalPedido = (TextView) layoutDialog.findViewById(R.id.valor_pedido_dinheiro_cartao);
+        valorTotalPedido.setText(txtTotalPedido);
 
-        Button bt_cancelar = (Button) layoutDialog.findViewById(R.id.bt_cancel_fpag_dinheiro_e_cartao);
-        Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_confirmar_fpag_dinheiro_e_cartao);
+        final EditText valorComDinheiro = (EditText) layoutDialog.findViewById(R.id.valor_pgm_dinheiro);
+        final EditText valorComCartao = (EditText) layoutDialog.findViewById(R.id.valor_pgm_cartao);
 
-        valorComCartao.addTextChangedListener(new MaskNumberUtil(valorComCartao));
-        valorComDinheiro.addTextChangedListener(new MaskNumberUtil(valorComDinheiro));
+        if (dinheiroeCartao.getDescricao().equals("")) {
+            valorComDinheiro.setText(txtMetadeTotalPedido);
+            valorComCartao.setText(txtMetadeTotalPedido);
+        } else {
+            valorComDinheiro.setText(StringUtil.formatToMoeda(dinheiroeCartao.getValorDinheiro()));
+            valorComCartao.setText(StringUtil.formatToMoeda(dinheiroeCartao.getValorCartao()));
+        }
+
+        Button bt_cancelar = (Button) layoutDialog.findViewById(R.id.bt_cancel_pag_dinheiro_cartao);
+        Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_confirmar_pag_dinheiro_cartao);
+
+        valorComCartao.addTextChangedListener(new SimpleTextListenerUtil(valorComCartao, mLocale));
+        valorComDinheiro.addTextChangedListener(new SimpleTextListenerUtil(valorComDinheiro, mLocale));
 
         mBilder.setView(layoutDialog);
         final AlertDialog dialogFormadePagamento = mBilder.create();
@@ -167,17 +204,32 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
         bt_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogFormadePagamento.dismiss();
-                dinheiroeCartao.setStatus(true);
-                dinheiroeCartao.setDescricao("Dinheiro: " + valorComDinheiro.getText() + " Cartão: " + valorComCartao.getText());
+                dinheiroeCartao.setValorDinheiro(StringUtil.formatMoedaToDouble(valorComDinheiro.getText().toString()));
+                dinheiroeCartao.setValorCartao(StringUtil.formatMoedaToDouble(valorComCartao.getText().toString()));
+
+                ativarFormadePagamento(dinheiroeCartao);
 
                 notifyDataSetChanged();
+                dialogFormadePagamento.dismiss();
             }
         });
 
         return dinheiroeCartao;
     }
 
+    private void ativarFormadePagamento(FormadePagamento forma){
+        for (FormadePagamento fpgm: formasdePagamento) {
+            if (fpgm.getNome().equals(forma.getNome())){
+                fpgm.setStatus(true);
+            } else {
+                fpgm.setStatus(false);
+                fpgm.setValorCartao(null);
+                fpgm.setValorDinheiro(null);
+            }
+        }
+
+        notifyDataSetChanged();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -205,10 +257,15 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
             nomeForma.setText(nome);
         }
 
-        public void setDescForma(String descricao){
+        public void setDescForma(String descricao) {
             descForma.setText(descricao);
 
-            if (!descricao.equals("")){
+            Log.println(Log.ERROR, "setDesc Total Pedido", StringUtil.formatToMoeda(totalPedido));
+            Log.println(Log.ERROR, "setDesc DescForma", descricao);
+
+            if (descricao.replace("Troco para ", "").equals(StringUtil.formatToMoeda(totalPedido))) {
+                descForma.setText("Sem Troco");
+            } else {
                 descForma.setVisibility(View.VISIBLE);
             }
         }
