@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".cardapioOnline.activitys.DetalhesdoItemPizzaMMActivity">
+    tools:context=".cardapioOnline.activitys.DetalhesdoItemPizzaActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_detalhes_pizza_mm"
+            android:id="@+id/toolbar_detalhes_item_pizza"
             android:layout_width="match_parent"
             app:theme="@style/ToolbarColoredBackArrow"
             android:layout_height="?attr/actionBarSize"
@@ -22,6 +22,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_detalhes_pizza_mm"/>
+    <include layout="@layout/content_detalhes_item_pizza"/>
 
 </android.support.design.widget.CoordinatorLayout>

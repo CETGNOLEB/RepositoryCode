@@ -28,12 +28,9 @@
             android:id="@+id/desc_tam_pizza"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F5F5F5"
-            android:paddingBottom="6dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="6dp"
-            android:textSize="20sp"
-            android:text="" />
+            android:padding="8dp"
+            android:text=""
+            android:textSize="17sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list_sabor_pizzas"

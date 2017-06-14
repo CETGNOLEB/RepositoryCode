@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="?attr/actionBarSize"
+    tools:context=".cardapioOnline.activitys.DetalhesdoItemPizzaActivity"
+    tools:showIn="@layout/activity_detalhes_item_pizza">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_detalhes_item_pizza"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_produto_detalhe_item_pizza"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:id="@+id/nome_produto_detalhe_item_pizza"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:text="Nome Produto"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/descricao_produto_detalhe_item_pizza"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:text="Descriçao do Produto" />
+
+
+            <TextView
+                android:id="@+id/valor_produto_detalhe_item_pizza"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="R$ 10,00"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_observacoes_item_pizza"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_below="@+id/card_detalhes_item_pizza"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txt_observacao_produto_detalhe_item_pizza"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Observações:"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_optional"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="(Opcional)" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/observacao_produto_detalhe_item_pizza"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
+                android:hint="Exemplo: sem isto."
+                android:textColorHint="#BDBDBD" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/bt_confirmar_pizza"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/border_button_white"
+        android:text="Confirmar"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

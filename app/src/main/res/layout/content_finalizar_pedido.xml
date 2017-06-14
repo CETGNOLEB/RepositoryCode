@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_finalizar_pedido"
@@ -18,20 +17,20 @@
         android:paddingTop="?attr/actionBarSize">
 
         <ProgressBar
-            android:id="@+id/progressbar_finalizar_pedido"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
-
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:progressTint="@color/colorPrimary"
+            android:visibility="gone"
+            android:theme="@style/MyProgressbarColor"
+            android:id="@+id/progressbar_finalizar_pedido" />
 
         <LinearLayout
             android:id="@+id/layout_resumo_pedido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/progressbar_finalizar_pedido"
-            android:layout_toRightOf="@+id/progressbar_finalizar_pedido"
             android:orientation="vertical">
 
 

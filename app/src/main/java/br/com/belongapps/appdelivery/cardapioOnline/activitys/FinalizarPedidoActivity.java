@@ -1,7 +1,12 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +16,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Handler;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.FormasdePagamentoAdapter;
@@ -39,6 +49,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.KeyPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
 import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
 import br.com.belongapps.appdelivery.util.DataUtil;
 
@@ -67,15 +78,18 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
-    String numerodopedido = "";
+    private String numerodopedido = "";
 
     private Pedido pedido = new Pedido();
 
-//  STATUS FORMA PAGAMENTO
+    //  STATUS FORMA PAGAMENTO
     private boolean statusDinheiro = false;
     private boolean statusCartao = false;
     private boolean statusDinheiroCartao = false;
     private List<FormadePagamento> formasDePagamentoaux;
+
+    private ProgressDialog dialog;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +101,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_enviar_pedido);
         mToolbar.setTitle("Finalizar Pedido");
 
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_finalizar_pedido);
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -95,7 +111,10 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         //Recebe Valor total do pedido
         Intent i = getIntent();
         totaldoPedido = i.getDoubleExtra("totalPedido", 0);
+
         populateView();
+
+        // mProgressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
 
         finalizarPedido = (Button) findViewById(R.id.bt_finalizar_pedido);
 
@@ -103,17 +122,73 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                beforeEnviarPedido();
+                boolean podeEnviar = false;
 
-                View layoutDialog = createDialog();
+                for (FormadePagamento fpgm : formasDePagamento) {
+                    if (fpgm.isStatus()) {
+                        podeEnviar = true;
+                    }
+                }
 
-                mBilder.setView(layoutDialog);
-                dialogPedidoEnviado = mBilder.create();
-                dialogPedidoEnviado.show();
+                if (podeEnviar) {
+
+                    beforeEnviarPedido();
+
+                    new exibirDialogdeEnvio().execute((Void[]) null);
+
+                } else {
+
+                    AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this, R.style.MyDialogTheme);
+                    View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_selecionar_fpgm, null);
+
+                    mBilder.setView(layoutDialog);
+                    final AlertDialog dialogEscolhaFormPag = mBilder.create();
+                    dialogEscolhaFormPag.show();
+
+                    Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_entendi_finalizar);
+
+                    btCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogEscolhaFormPag.dismiss();
+                        }
+                    });
+                }
 
             }
         });
 
+    }
+
+    private class exibirDialogdeEnvio extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            dialog = ProgressDialog.show(FinalizarPedidoActivity.this, "Aguarde", "Estamos enviando seu pedido !!", false, true);
+            dialog.setCancelable(false);
+            dialog.setProgressStyle(R.style.AppCompatAlertDialogStyle);
+        }
+
+        protected Void doInBackground(Void... param) {
+            try {
+                Thread.currentThread();
+                Thread.sleep(6000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void param) {
+            dialog.dismiss();
+
+            View layoutDialog = createDialog();
+            mBilder.setView(layoutDialog);
+            dialogPedidoEnviado = mBilder.create();
+            dialogPedidoEnviado.show();
+        }
     }
 
     private View createDialog() {
@@ -135,9 +210,21 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         acompanhar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(FinalizarPedidoActivity.this, MeusPedidosActivity.class);
+                Intent i = new Intent(FinalizarPedidoActivity.this, AcompanharPedidoActivity.class);
+                i.putExtra("NumeroPedido", pedido.getNumero_pedido());
+                //i.putExtra("DataPedido", DataUtil.pedido.getData());
+
                 startActivity(i);
                 finish();
+
+                /*numeroPedido = intent.getStringExtra("NumeroPedido");
+                dataPedido = intent.getStringExtra("DataPedido");
+                horaPedido = intent.getStringExtra("HoraPedido");
+                valorPedido = intent.getDoubleExtra("ValorPedido", 0.0);
+                statusPedido = intent.getIntExtra("StatusPedido", 0);
+                tipoEntrega = intent.getIntExtra("TipoEntrega", 0);
+                statusTempo = intent.getStringExtra("StatusTempo");
+                itensdoPedido = intent.getParcelableArrayListExtra("ItensPedido");*/
             }
         });
 
@@ -191,9 +278,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot forma : dataSnapshot.getChildren()) {
-                    if (forma.getKey().equals("dinheiro")){
+                    if (forma.getKey().equals("dinheiro")) {
                         statusDinheiro = forma.getValue(boolean.class);
-                        if (statusDinheiro == true){
+                        if (statusDinheiro == true) {
                             FormadePagamento dinheiro = new FormadePagamento();
                             dinheiro.setCod(1);
                             dinheiro.setNome("DINHEIRO");
@@ -203,9 +290,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
                             formasDePagamentoaux.add(dinheiro);
                         }
-                    } else if (forma.getKey().equals("cartao")){
+                    } else if (forma.getKey().equals("cartao")) {
                         statusCartao = forma.getValue(boolean.class);
-                        if (statusCartao == true){
+                        if (statusCartao == true) {
                             FormadePagamento cartao = new FormadePagamento();
                             cartao.setCod(2);
                             cartao.setNome("CARTÃO");
@@ -215,9 +302,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
                             formasDePagamentoaux.add(cartao);
                         }
-                    } else{
+                    } else {
                         statusDinheiroCartao = forma.getValue(boolean.class);
-                        if (statusDinheiroCartao == true){
+                        if (statusDinheiroCartao == true) {
                             FormadePagamento dinheiroCartao = new FormadePagamento();
                             dinheiroCartao.setCod(3);
                             dinheiroCartao.setNome("DINHEIRO E CARTÃO");
@@ -235,9 +322,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 formasDePagamento.addAll(formasDePagamentoaux);
                 formasDePagamentoaux = new ArrayList<>();
 
-                Collections.sort(formasDePagamento,new FormadePagamento());
+                Collections.sort(formasDePagamento, new FormadePagamento());
 
-                adapter = new FormasdePagamentoAdapter(formasDePagamento, FinalizarPedidoActivity.this , totaldoPedido);
+                adapter = new FormasdePagamentoAdapter(formasDePagamento, FinalizarPedidoActivity.this, totaldoPedido);
                 mRecyclerViewFormasdePagamento.setAdapter(adapter);
 
             }
@@ -287,7 +374,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         pedido.setPagamento(pagamento);
 
-        salvarPedido(pedido,diaPedido);
+        salvarPedido(pedido, diaPedido);
 
     }
 
@@ -296,7 +383,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         Pedido pedidoAux = pedido;
         Map<String, Object> pedidoValues = pedidoAux.toMap();
 
-        Log.println(Log.ERROR, "NODO:" , hj);
+        Log.println(Log.ERROR, "NODO:", hj);
 
         Map<String, Object> childUpdatesPedido = new HashMap<>();
         childUpdatesPedido.put("/pedidos/" + hj + "/" + key, pedidoValues);
@@ -311,7 +398,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         dao.deleteAll();
     }
 
-    public void atualizarPedidosdoCliente(Cliente cliente, String keyPedido){
+    public void atualizarPedidosdoCliente(Cliente cliente, String keyPedido) {
         KeyPedido keyp = new KeyPedido(keyPedido);
         keyp.setId(keyPedido);
 
@@ -357,7 +444,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public String gerarNumeroPedido(String numero) {
 
-        Log.println(Log.ERROR, "PEDIDO ANTERIOR:" , numero);
+        Log.println(Log.ERROR, "PEDIDO ANTERIOR:", numero);
 
         int intnum = Integer.parseInt(numero);
         intnum++;
@@ -366,11 +453,11 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             NumberFormat formatter = new DecimalFormat("00");
 
             numero = formatter.format(intnum);
-        } else{
+        } else {
             numero = String.valueOf(intnum);
         }
 
-        Log.println(Log.ERROR, "NUMERO DO PEDIDO:" , numero);
+        Log.println(Log.ERROR, "NUMERO DO PEDIDO:", numero);
 
         return numero;
     }
@@ -421,9 +508,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot forma : dataSnapshot.getChildren()) {
-                    if (forma.getKey().equals("dinheiro")){
+                    if (forma.getKey().equals("dinheiro")) {
                         statusDinheiro = forma.getValue(boolean.class);
-                        if (statusDinheiro == true){
+                        if (statusDinheiro == true) {
                             FormadePagamento dinheiro = new FormadePagamento();
                             dinheiro.setNome("DINHEIRO");
                             dinheiro.setDescricao("");
@@ -432,9 +519,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
                             formasDePagamentoaux.add(dinheiro);
                         }
-                    }  else if (forma.getKey().equals("cartao")){
+                    } else if (forma.getKey().equals("cartao")) {
                         statusCartao = forma.getValue(boolean.class);
-                        if (statusCartao == true){
+                        if (statusCartao == true) {
                             FormadePagamento cartao = new FormadePagamento();
                             cartao.setCod(2);
                             cartao.setNome("CARTÃO");
@@ -444,9 +531,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
                             formasDePagamentoaux.add(cartao);
                         }
-                    } else{
+                    } else {
                         statusDinheiroCartao = forma.getValue(boolean.class);
-                        if (statusDinheiroCartao == true){
+                        if (statusDinheiroCartao == true) {
                             FormadePagamento dinheiroCartao = new FormadePagamento();
                             dinheiroCartao.setCod(3);
                             dinheiroCartao.setNome("DINHEIRO E CARTÃO");
@@ -466,7 +553,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 formasDePagamento.addAll(formasDePagamentoaux);
                 formasDePagamentoaux = new ArrayList<>();
 
-                Collections.sort(formasDePagamento,new FormadePagamento());
+                Collections.sort(formasDePagamento, new FormadePagamento());
 
                 adapter = new FormasdePagamentoAdapter(formasDePagamento, FinalizarPedidoActivity.this, totaldoPedido);
                 mRecyclerViewFormasdePagamento.setAdapter(adapter);

@@ -17,10 +17,8 @@ import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.FormadePagamento;
-import br.com.belongapps.appdelivery.util.DataUtil;
 import br.com.belongapps.appdelivery.util.SimpleTextListenerUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
-
 
 public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagamentoAdapter.ViewHolder> {
 

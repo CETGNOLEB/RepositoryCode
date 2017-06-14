@@ -24,7 +24,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 
 public class DetalhesdoItemActivity extends AppCompatActivity {
 
-    private Button addAoCarrinhoOuEscMetade2;
+    private Button addAoCarrinho;
     private Toolbar mToolbar;
 
     //Parâmetros
@@ -54,12 +54,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         getParametros(); //Setar parametros recebidos
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_detalhes_item);
-        setTitleToolbar();
+        mToolbar.setTitle("Detalhes do Produto");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initViews();
-        setTextButtonAddAoCarrinho();
 
         pupulateViewDetalhes();
 
@@ -84,7 +83,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
         /*---*/
 
-        addAoCarrinhoOuEscMetade2.setOnClickListener(new View.OnClickListener() {
+        addAoCarrinho.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -119,23 +118,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                /*telaAnterior = getIntent().getStringExtra("TelaAnterior");
-
-                if (telaAnterior.equals("EscolherPizzaActivity")) {
-                    Intent intent = new Intent(DetalhesdoItemActivity.this, EscolherPizzaActivity.class);
-                    intent.putExtra("tipoPizza", tipoPizza);
-                    intent.putExtra("tamPizza", tamPizza);
-                    startActivity(intent);
-
-                    finish();
-                } else if (telaAnterior.equals("EscolherRecheioActivity")) {
-                    Intent intent = new Intent(DetalhesdoItemActivity.this, EscolherRecheioActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {*/
-                    Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
-                    startActivity(intent);
-                    finish();
+                Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
+                startActivity(intent);
+                finish();
 
         }
 
@@ -174,7 +159,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         //Botoes
         btDiminuirQtd = (Button) findViewById(R.id.bt_diminuir_qtd_item_detalhe_produto);
         btAumentarQtd = (Button) findViewById(R.id.bt_aumentar_qtd_item_detalhe_produto);
-        addAoCarrinhoOuEscMetade2 = (Button) findViewById(R.id.bt_add_ao_carrinho_ou_esc_metade2);
+        addAoCarrinho = (Button) findViewById(R.id.bt_add_ao_carrinho);
     }
 
     public void pupulateViewDetalhes() {
@@ -197,26 +182,6 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         descDetalheProduto.setText(itemPedido.getDescricao());
         valorDetalheProduto.setText(" R$ " + String.format(Locale.US, "%.2f", itemPedido.getValor_unit()).replace(".", ","));
         qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
-    }
-
-    public void setTitleToolbar() {
-        if (tipoPizza != null) {
-            if (!tipoPizza.equals("Inteira")) {
-                mToolbar.setTitle("Primeira Metade");
-            }
-        } else {
-            mToolbar.setTitle("Detalhes do Produto");
-        }
-    }
-
-    public void setTextButtonAddAoCarrinho() {
-        if (tipoPizza != null) {
-            if (!tipoPizza.equals("Inteira")) {
-                addAoCarrinhoOuEscMetade2.setText("Confirmar");
-            }
-        } else {
-            addAoCarrinhoOuEscMetade2.setText("Adicionar ao Carrinho");
-        }
     }
 
     public double calcularValorToralDoItem(int quantidade, double valorProduto) {

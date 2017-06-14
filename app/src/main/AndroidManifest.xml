@@ -17,26 +17,34 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
+
+        //Módulo Cardapio Online
         <activity android:name=".cardapioOnline.activitys.CardapioMainActivity"></activity>
         <activity android:name=".cardapioOnline.activitys.EscolherRecheioActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherAdicionalActivity" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity" />
+        <activity android:name=".cardapioOnline.activitys.DetalhesdoItemPizzaActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity2" />
+        <activity android:name=".cardapioOnline.activitys.DetalhesdoItemPizzaMMActivity" />
         <activity android:name=".cardapioOnline.activitys.CarrinhoActivity" />
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoActivity" />
-        <activity android:name=".helpAbout.activities.SobreActivity" />
-        <activity android:name=".gerencial.activities.EnderecosActivity" />
-        <activity android:name=".helpAbout.activities.AjudaActivity" />
-        <activity android:name=".promocoes.activities.PromocoesActivity" />
-        <activity android:name=".promocoes.activities.TelaInicialActivity" >
 
+        //Módulo Cardapio Online
+        <activity android:name=".helpAbout.activities.SobreActivity" />
+        <activity android:name=".helpAbout.activities.AjudaActivity" />
+
+        //Módulo gerencial do cliente
+        <activity android:name=".gerencial.activities.EnderecosActivity" />
+
+        //Módulo Banner Promocionais
+        <activity android:name=".promocoes.activities.TelaInicialActivity" >
         </activity>
+
+        //Módulo Pós Pedido
         <activity android:name=".posPedido.activities.MeusPedidosActivity"/>
         <activity android:name=".posPedido.activities.AcompanharPedidoActivity" />
-        <activity android:name=".cardapioOnline.activitys.TesteActivity">
 
-        </activity>
 
     </application>
 

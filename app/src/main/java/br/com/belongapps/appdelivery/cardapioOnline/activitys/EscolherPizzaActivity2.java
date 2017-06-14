@@ -18,12 +18,15 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
+import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 
 public class EscolherPizzaActivity2 extends AppCompatActivity {
 
@@ -36,27 +39,37 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
     //Parametros
     //-- A receber
     private String paramTamPizza;
+    private String paramTipoPizza;
+    private ItemPedido itemPedido;
 
     //-- A enviar
     private String telaAnterior;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escolher_pizza2);
 
-        paramTamPizza = getIntent().getStringExtra("tamPizza");
+        getParametros();
+        initViews();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_escolher_pizzas2);
-        mToolbar.setTitle("Pizza " + paramTamPizza);
+        mToolbar.setTitle(paramTamPizza);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tamPizza = (TextView) findViewById(R.id.desc_tam_pizza2);
-        tamPizza.setText("Escolha o sabor da segunda metade:");
+    }
 
+    private void getParametros() {
+        paramTamPizza = getIntent().getStringExtra("TamPizza");
+        paramTipoPizza = getIntent().getStringExtra("TipoPizza");
+        itemPedido = getIntent().getParcelableExtra("ItemPedido");
+    }
+
+    private void initViews() {
+        tamPizza = (TextView) findViewById(R.id.desc_tam_pizza2);
+        tamPizza.setText("Escolha o sabor da segunda metade");
     }
 
     @Override
@@ -90,11 +103,17 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //Segunda Metade
+                        itemPedido.setNomeMetade2(model.getNome());
+                        itemPedido.setDescMetade2(model.getDescricao());
+                        itemPedido.setImgMetade2(model.getRef_img());
+                        itemPedido.setValorMetade2(model.getValor_unit() / 2);
 
-
-                        Intent i = new Intent(EscolherPizzaActivity2.this, DetalhesdoItemActivity.class);
+                        Intent i = new Intent(EscolherPizzaActivity2.this, DetalhesdoItemPizzaActivity.class);
                         i.putExtra("TelaAnterior", "EscolherPizzaActivity2");
-
+                        i.putExtra("ItemPedido", itemPedido);
+                        i.putExtra("TamPizza", paramTamPizza);
+                        i.putExtra("TipoPizza", paramTipoPizza);
 
                         startActivity(i);
                         finish();
@@ -139,13 +158,24 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
         public void setValor_unit(double valor_unit) {
 
             TextView apartir_de = (TextView) mView.findViewById(R.id.valor_unit_sabor_pizza);
-            apartir_de.setText(" R$ " +  String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+            apartir_de.setText("R$ " + String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
 
         }
 
-        public void setImagem(Context context, String url) {
-            ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_sabor_pizza);
-            Picasso.with(context).load(url).into(item_ref_image);
+        public void setImagem(final Context context, final String url) {
+            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_sabor_pizza);
+
+            Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(item_ref_image, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+                    Picasso.with(context).load(url).into(item_ref_image);
+                }
+            });
         }
 
     }
@@ -154,8 +184,13 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(EscolherPizzaActivity2.this, CardapioMainActivity.class);
+                Intent intent = new Intent(EscolherPizzaActivity2.this, DetalhesdoItemPizzaActivity.class);
+                intent.putExtra("TipoPizza", paramTipoPizza);
+                intent.putExtra("TamPizza", paramTamPizza);
+                intent.putExtra("ItemPedido", itemPedido);
+
                 startActivity(intent);
+
                 finish();
         }
 
@@ -166,7 +201,11 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent intent = new Intent(EscolherPizzaActivity2.this, CardapioMainActivity.class);
+        Intent intent = new Intent(EscolherPizzaActivity2.this, DetalhesdoItemPizzaActivity.class);
+        intent.putExtra("TipoPizza", paramTipoPizza);
+        intent.putExtra("TamPizza", paramTamPizza);
+        intent.putExtra("ItemPedido", itemPedido);
+
         startActivity(intent);
 
         finish();

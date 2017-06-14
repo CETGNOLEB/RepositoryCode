@@ -19,6 +19,8 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -31,7 +33,6 @@ public class EscolherPizzaActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    private ProgressBar mProgressBar;
     private RecyclerView mListViewPizzas;
 
     private DatabaseReference mDatabaseReference;
@@ -53,7 +54,7 @@ public class EscolherPizzaActivity extends AppCompatActivity {
         paramTipoPizza = i.getStringExtra("tipoPizza");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_escolher_pizzas);
-        mToolbar.setTitle(paramTamPizza + " (" + paramTipoPizza + ")");
+        mToolbar.setTitle(paramTamPizza);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -104,20 +105,12 @@ public class EscolherPizzaActivity extends AppCompatActivity {
 
                         if (paramTipoPizza.equals("Inteira")) {
 
-                            itemPedido.setNome(model.getNome());
+                            itemPedido.setNome("Pizza " + model.getNome());
                             itemPedido.setDescricao(model.getDescricao());
                             itemPedido.setRef_img(model.getRef_img());
-                            itemPedido.setValor_unit(model.getValor_unit());
+                            itemPedido.setValor_unit(model.getValor_unit() / 2);
 
                             Intent intent = new Intent(EscolherPizzaActivity.this, DetalhesdoItemActivity.class);
-
-                           /* i.putExtra("TelaAnterior", "EscolherPizzaActivity");
-                            i.putExtra("TamPizza" , paramTamPizza);
-                            i.putExtra("TipoPizza", paramTipoPizza);
-
-                            i.putExtra("ItemPedido" , itemPedido);
-
-                            startActivity(i);*/
 
                             intent.putExtra("ItemPedido", itemPedido);
                             intent.putExtra("TelaAnterior", "TabPizzas");
@@ -125,20 +118,15 @@ public class EscolherPizzaActivity extends AppCompatActivity {
 
                             finish();
                         } else {
-                            //metade1
 
-                            itemPedido.setNome(model.getNome());
+                            itemPedido.setNome("Pizza " + model.getNome());
                             itemPedido.setDescricao(model.getDescricao());
                             itemPedido.setRef_img(model.getRef_img());
-                            itemPedido.setValor_unit(model.getValor_unit());
+                            itemPedido.setValor_unit(model.getValor_unit() / 2);
 
-                            Intent i = new Intent(EscolherPizzaActivity.this, DetalhesdoItemActivity.class);
-
-                            //enviar parâmetros
-                           // i.putExtra("TelaAnterior", "EscolherPizzaActivity");
+                            Intent i = new Intent(EscolherPizzaActivity.this, DetalhesdoItemPizzaActivity.class);
                             i.putExtra("TipoPizza", paramTipoPizza);
                             i.putExtra("TamPizza" , paramTamPizza);
-
                             i.putExtra("ItemPedido" , itemPedido);
 
                             startActivity(i);
@@ -188,9 +176,20 @@ public class EscolherPizzaActivity extends AppCompatActivity {
 
         }
 
-        public void setImagem(Context context, String url) {
-            ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_sabor_pizza);
-            Picasso.with(context).load(url).into(item_ref_image);
+        public void setImagem(final Context context, final String url) {
+            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_sabor_pizza);
+
+            Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(item_ref_image, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+                    Picasso.with(context).load(url).into(item_ref_image);
+                }
+            });
         }
 
     }
