@@ -14,8 +14,16 @@ public class ItemCardapio {
 
     private String categoria_id;
 
+    //PARA PIZZAS
+    private double promo_pizza_p;
+    private double promo_pizza_m;
+    private double promo_pizza_g;
+    private double valor_pizza_p;
+    private double valor_pizza_m;
+    private double valor_pizza_g;
 
-    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, String status_item, boolean status_promocao, String categoria_id) {
+
+    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, String status_item, boolean status_promocao, String categoria_id, double promo_pizza_p, double promo_pizza_m, double promo_pizza_g, double valor_pizza_p, double valor_pizza_m, double valor_pizza_g) {
         this.nome = nome;
         this.descricao = descricao;
         this.ref_img = ref_img;
@@ -25,9 +33,17 @@ public class ItemCardapio {
         this.status_item = status_item;
         this.status_promocao = status_promocao;
         this.categoria_id = categoria_id;
+
+        //PARA PIZZAS
+        this.promo_pizza_p = promo_pizza_p;
+        this.promo_pizza_m = promo_pizza_m;
+        this.promo_pizza_g = promo_pizza_g;
+        this.valor_pizza_p = valor_pizza_p;
+        this.valor_pizza_m = valor_pizza_m;
+        this.valor_pizza_g = valor_pizza_g;
     }
 
-    public ItemCardapio(){
+    public ItemCardapio() {
 
     }
 
@@ -101,5 +117,53 @@ public class ItemCardapio {
 
     public void setStatus_promocao(boolean status_promocao) {
         this.status_promocao = status_promocao;
+    }
+
+    public double getPromo_pizza_p() {
+        return promo_pizza_p;
+    }
+
+    public void setPromo_pizza_p(double promo_pizza_p) {
+        this.promo_pizza_p = promo_pizza_p;
+    }
+
+    public double getPromo_pizza_m() {
+        return promo_pizza_m;
+    }
+
+    public void setPromo_pizza_m(double promo_pizza_m) {
+        this.promo_pizza_m = promo_pizza_m;
+    }
+
+    public double getPromo_pizza_g() {
+        return promo_pizza_g;
+    }
+
+    public void setPromo_pizza_g(double promo_pizza_g) {
+        this.promo_pizza_g = promo_pizza_g;
+    }
+
+    public double getValor_pizza_p() {
+        return valor_pizza_p;
+    }
+
+    public void setValor_pizza_p(double valor_pizza_p) {
+        this.valor_pizza_p = valor_pizza_p;
+    }
+
+    public double getValor_pizza_m() {
+        return valor_pizza_m;
+    }
+
+    public void setValor_pizza_m(double valor_pizza_m) {
+        this.valor_pizza_m = valor_pizza_m;
+    }
+
+    public double getValor_pizza_g() {
+        return valor_pizza_g;
+    }
+
+    public void setValor_pizza_g(double valor_pizza_g) {
+        this.valor_pizza_g = valor_pizza_g;
     }
 }

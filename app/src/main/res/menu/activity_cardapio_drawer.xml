@@ -44,10 +44,10 @@
         android:id="@+id/itens3"
         android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/nav_ajuda"
-            android:icon="@drawable/ic_help"
-            android:title="Ajuda" />
+        <!-- <item
+         android:id="@+id/nav_ajuda"
+         android:icon="@drawable/ic_help"
+         android:title="Ajuda" />-->
 
         <item
             android:id="@+id/nav_sair"

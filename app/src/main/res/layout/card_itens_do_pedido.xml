@@ -8,12 +8,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="70dp">
 
         <ImageView
             android:id="@+id/item_img"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
@@ -29,21 +29,33 @@
 
             <TextView
                 android:id="@+id/item_nome"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="Açai 300ml"
-                android:layout_marginTop="17dp"
+                android:layout_toLeftOf="@+id/item_qtd"
+                android:layout_centerVertical="true"
                 android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/item_qtd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/item_valor"
+                android:text="2 x"
+                android:textSize="17sp"
+                android:textColor="@color/colorPrimary"/>
 
             <TextView
                 android:id="@+id/item_valor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="4dp"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:text="R$ 8,00"
-                android:layout_marginTop="17dp"
                 android:textSize="17sp"
                 android:textColor="@color/colorPrimary"/>
 

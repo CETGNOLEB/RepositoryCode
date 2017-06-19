@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_escolher_recheio"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:showIn="@layout/activity_escolher_pizza2"
-    tools:context=".cardapioOnline.activitys.EscolherPizzaActivity2">
+    tools:showIn="@layout/activity_escolher_pizza3"
+    tools:context=".cardapioOnline.activitys.EscolherPizzaActivity3">
 
     <ProgressBar
-        android:id="@+id/progressbar_escolher_sabor_2_pizza"
+        android:id="@+id/progressbar_escolher_sabor_3_pizza"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -17,22 +16,22 @@
         android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/layout_list_pizzas2"
+        android:id="@+id/layout_list_pizzas3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/desc_tam_pizza2"
+            android:id="@+id/desc_tam_pizza3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="Escolha o segundo sabor"
+            android:text="Escolha o terceiro sabor"
             android:textSize="17sp" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_sabor_pizzas2"
+            android:id="@+id/list_sabor_pizzas3"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

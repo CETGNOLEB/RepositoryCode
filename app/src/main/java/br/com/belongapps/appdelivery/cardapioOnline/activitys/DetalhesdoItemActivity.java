@@ -62,7 +62,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
         pupulateViewDetalhes();
 
-        /*Evento dos Botoes*/
+        /*Eventos dos Botoes de Quantidade*/
         btDiminuirQtd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

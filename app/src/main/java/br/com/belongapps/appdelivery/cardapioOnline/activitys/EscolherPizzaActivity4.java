@@ -1,35 +1,23 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.PizzaAdapter;
@@ -38,7 +26,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 
 import static android.content.ContentValues.TAG;
 
-public class EscolherPizzaActivity2 extends AppCompatActivity {
+public class EscolherPizzaActivity4 extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private RecyclerView mListViewPizzas;
@@ -60,13 +48,13 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_escolher_pizza2);
+        setContentView(R.layout.activity_escolher_pizza4);
 
         getParametros();
         initViews();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_escolher_pizzas2);
-        mToolbar.setTitle(getTamanho() + getStage());
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_escolher_pizzas4);
+        mToolbar.setTitle(getTamanho() + " (4/4)");
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,8 +69,8 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
     }
 
     private void initViews() {
-        tamPizza = (TextView) findViewById(R.id.desc_tam_pizza2);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_escolher_sabor_2_pizza);
+        tamPizza = (TextView) findViewById(R.id.desc_tam_pizza4);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_escolher_sabor_4_pizza);
     }
 
     public String getTamanho(){
@@ -99,25 +87,11 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
         return retorno;
     }
 
-    public String getStage(){
-        String retorno = "";
-
-        if (paramTipoPizza.equals("Metade-Metade")){
-            retorno += " (2/2)";
-        } else if(paramTipoPizza.equals("Três Sabores")){
-            retorno += " (2/3)";
-        } else if(paramTipoPizza.equals("Quatro Sabores")) {
-            retorno += " (2/4)";
-        }
-
-        return retorno;
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_escolher_sabor_2_pizza);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_escolher_sabor_4_pizza);
 
         paramTamPizza = getIntent().getIntExtra("TamPizza", 0);
         paramTipoPizza = getIntent().getStringExtra("TipoPizza");
@@ -127,7 +101,7 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio");
         mDatabaseReference.keepSynced(true);
 
-        mListViewPizzas = (RecyclerView) findViewById(R.id.list_sabor_pizzas2);
+        mListViewPizzas = (RecyclerView) findViewById(R.id.list_sabor_pizzas4);
         mListViewPizzas.setHasFixedSize(true);
         mListViewPizzas.setLayoutManager(new LinearLayoutManager(this));
 
@@ -163,8 +137,8 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
                 pizzas.addAll(pizzasAux);
                 pizzasAux = new ArrayList<>();
 
-                countMetades = 2;
-                adapter = new PizzaAdapter(pizzas, itemPedido, EscolherPizzaActivity2.this, mProgressBar, paramTamPizza, paramTipoPizza, countMetades);
+                countMetades = 4;
+                adapter = new PizzaAdapter(pizzas, itemPedido, EscolherPizzaActivity4.this, mProgressBar, paramTamPizza, paramTipoPizza, countMetades);
                 mListViewPizzas.setAdapter(adapter);
             }
 

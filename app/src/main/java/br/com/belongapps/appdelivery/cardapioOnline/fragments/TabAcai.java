@@ -85,12 +85,13 @@ public class TabAcai extends Fragment {
 
             @Override
             protected void populateViewHolder(TabAcai.AcaiViewHolder viewHolder, final ItemCardapio model, int position) {
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                closeProgressBar();
 
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitarioEPromocao(model.getValor_unit(), model.isStatus_promocao(), model.getPreco_promocional());
                 viewHolder.setImagem(getContext(), model.getRef_img());
+                viewHolder.setStatus(model.getStatus_item());
 
                 if (model.getStatus_item().equals("Ativado")) {
 
@@ -182,6 +183,15 @@ public class TabAcai extends Fragment {
                     Picasso.with(context).load(url).into(item_ref_image);
                 }
             });
+        }
+
+        public void setStatus(String status) {
+            TextView item_status = (TextView) mView.findViewById(R.id.status_acai);
+
+            if (!status.equals("Ativado")){
+                item_status.setVisibility(View.VISIBLE);
+            }
+
         }
 
     }

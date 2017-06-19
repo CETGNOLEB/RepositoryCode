@@ -164,9 +164,9 @@ public class CardapioMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_sobre) {
             Intent i = new Intent(CardapioMainActivity.this, SobreActivity.class);
             startActivity(i);
-        } else if (id == R.id.nav_ajuda) {
+       /* } else if (id == R.id.nav_ajuda) {
             Intent i = new Intent(CardapioMainActivity.this, AjudaActivity.class);
-            startActivity(i);
+            startActivity(i);*/
         } else if (id == R.id.nav_sair) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(CardapioMainActivity.this, LoginActivity.class);

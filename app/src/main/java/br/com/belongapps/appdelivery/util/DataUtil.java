@@ -34,4 +34,14 @@ public class DataUtil {
 
         return data;
     }
+
+    public static  String getDataPedido(String data) {
+        String retorno = data.substring(0, 10);
+        return retorno;
+    }
+
+    public static  String getHoraPedido(String data) {
+        String retorno = data.trim().substring(10, data.length());
+        return retorno;
+    }
 }

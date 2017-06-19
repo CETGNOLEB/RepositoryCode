@@ -166,9 +166,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            dialog = ProgressDialog.show(FinalizarPedidoActivity.this, "Aguarde", "Estamos enviando seu pedido !!", false, true);
-            dialog.setCancelable(false);
-            dialog.setProgressStyle(R.style.AppCompatAlertDialogStyle);
+            dialog = new ProgressDialog(FinalizarPedidoActivity.this, R.style.AppCompatAlertDialogStyle);
+            dialog.setMessage("Estamos enviando seu pedido!!");
+            dialog.show();
         }
 
         protected Void doInBackground(Void... param) {
@@ -212,19 +212,22 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(FinalizarPedidoActivity.this, AcompanharPedidoActivity.class);
                 i.putExtra("NumeroPedido", pedido.getNumero_pedido());
-                //i.putExtra("DataPedido", DataUtil.pedido.getData());
+                i.putExtra("DataPedido", DataUtil.getDataPedido(pedido.getData()));
+                i.putExtra("HoraPedido", DataUtil.getHoraPedido(pedido.getData()));
+                i.putExtra("ValorPedido", totaldoPedido);
+                i.putExtra("StatusPedido", pedido.getStatus());
+                i.putExtra("TipoEntrega", pedido.getEntrega_retirada());
+                i.putExtra("StatusTempo", pedido.getStatus_tempo());
+
+                ArrayList<ItemPedido> itens = new ArrayList<>();
+                for (ItemPedido item: pedido.getItens_pedido()) {
+                    itens.add(item);
+                }
+                i.putParcelableArrayListExtra("ItensPedido" , itens);
 
                 startActivity(i);
                 finish();
 
-                /*numeroPedido = intent.getStringExtra("NumeroPedido");
-                dataPedido = intent.getStringExtra("DataPedido");
-                horaPedido = intent.getStringExtra("HoraPedido");
-                valorPedido = intent.getDoubleExtra("ValorPedido", 0.0);
-                statusPedido = intent.getIntExtra("StatusPedido", 0);
-                tipoEntrega = intent.getIntExtra("TipoEntrega", 0);
-                statusTempo = intent.getStringExtra("StatusTempo");
-                itensdoPedido = intent.getParcelableArrayListExtra("ItensPedido");*/
             }
         });
 
@@ -436,7 +439,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     }
 
     public List<ItemPedido> getItensdoPedido() {
-        List<ItemPedido> itensAux = new ArrayList<>();
+        List<ItemPedido> itensAux;
         CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
         itensAux = crud.getAllItens();
         return itensAux;

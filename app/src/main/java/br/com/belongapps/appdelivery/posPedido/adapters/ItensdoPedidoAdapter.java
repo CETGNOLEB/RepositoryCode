@@ -49,6 +49,7 @@ public class ItensdoPedidoAdapter extends RecyclerView.Adapter<ItensdoPedidoAdap
 
         viewHolder.setNomeItem(item.getNome());
         viewHolder.setImagem(context, item.getRef_img());
+        viewHolder.setQtdItem(item.getQuantidade());
         viewHolder.setValorItem(item.getValor_unit());
 
     }
@@ -75,6 +76,11 @@ public class ItensdoPedidoAdapter extends RecyclerView.Adapter<ItensdoPedidoAdap
             TextView nomePedido = (TextView) mView.findViewById(R.id.item_nome);
             nomePedido.setText(nome);
 
+        }
+
+        public void setQtdItem(int qtdItem){
+            TextView qtd = (TextView) mView.findViewById(R.id.item_qtd);
+            qtd.setText(qtdItem + " x");
         }
 
         public void setValorItem(double valor_unit) {
