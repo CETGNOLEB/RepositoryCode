@@ -16,6 +16,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -27,26 +33,29 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 
 public class CarrinhoActivity extends AppCompatActivity {
 
+    /*FIREBASE*/
+    private DatabaseReference mDatabaseReference;
+
+    /*LISTAGEM*/
     private RecyclerView mRecyclerViewItemCarrinho;
     private RecyclerView.Adapter adapter;
-
     private List<ItemPedido> itens_pedido;
-
+    /*VIEWS*/
     private Toolbar mToolbar;
     private TextView textTotal;
     private TextView textQtdItem;
-
     private Button continuarComprando;
     private Button confirmarPedido;
-
     private ImageView imgCardEmpty;
-
     //TOTAL
     private double totalCarrinho;
     private TextView textCarrinhoVazio;
     private TextView descCarrinhoVazio;
-
-    private int tipoEntregaSelecionada;
+    /*TIPO DE RECEBIMENTO*/
+    private int tipoEntregaSelecionada = 5;
+    private boolean statusEstabelecimento = true;
+    private boolean statusDelivery = true;
+    RadioButton radioDelivery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +78,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         textCarrinhoVazio = (TextView) findViewById(R.id.text_carrinho_vazio);
         descCarrinhoVazio = (TextView) findViewById(R.id.desc_carrinho_vazio);
 
-        if (itens_pedido.size() == 0){
+        if (itens_pedido.size() == 0) {
             imgCardEmpty.setVisibility(View.VISIBLE);
             textCarrinhoVazio.setVisibility(View.VISIBLE);
             descCarrinhoVazio.setVisibility(View.VISIBLE);
@@ -84,9 +93,9 @@ public class CarrinhoActivity extends AppCompatActivity {
 
         textQtdItem = (TextView) findViewById(R.id.text_qtd_item);
 
-        if (itens_pedido.size() == 1){
+        if (itens_pedido.size() == 1) {
             textQtdItem.setText(itens_pedido.size() + " Item");
-        } else{
+        } else {
             textQtdItem.setText(itens_pedido.size() + " Itens");
         }
 
@@ -122,6 +131,12 @@ public class CarrinhoActivity extends AppCompatActivity {
                 final AlertDialog dialogEscolherFormEntrega = mBilder.create();
                 dialogEscolherFormEntrega.show();
 
+                radioDelivery = (RadioButton) layoutDialog.findViewById(R.id.radio_delivery);
+
+                if (statusDelivery == false) {
+                    radioDelivery.setEnabled(false);
+                }
+
                 Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_cancel_esc_forma_pagamento);
                 Button btConfirm = (Button) layoutDialog.findViewById(R.id.bt_confirmar_forma_entrega);
 
@@ -136,10 +151,14 @@ public class CarrinhoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
-                        intent.putExtra("totalPedido", Double.parseDouble(textTotal.getText().toString().replace("R$ ", "").replace(",", ".")));
-                        intent.putExtra("tipoEntrega", tipoEntregaSelecionada);
-                        startActivity(intent);
+                        if (tipoEntregaSelecionada == 5) {
+                            Toast.makeText(CarrinhoActivity.this, "Selecione uma forma de recebimento.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
+                            intent.putExtra("totalPedido", Double.parseDouble(textTotal.getText().toString().replace("R$ ", "").replace(",", ".")));
+                            intent.putExtra("tipoEntrega", tipoEntregaSelecionada);
+                            startActivity(intent);
+                        }
 
                     }
                 });
@@ -153,6 +172,35 @@ public class CarrinhoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_entrega, null);
+        radioDelivery = (RadioButton) layoutDialog.findViewById(R.id.radio_delivery);
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+        mDatabaseReference.child("configuracoes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Boolean status = Boolean.parseBoolean(dataSnapshot.child("status_delivery").child("status").getValue().toString());
+                statusDelivery = status;
+
+                if (statusDelivery == false) {
+                    radioDelivery.setEnabled(false);
+                } else{
+                    radioDelivery.setEnabled(true);
+                }
+
+                Boolean statusEstab = Boolean.parseBoolean(dataSnapshot.child("status_estabelecimento").child("status").getValue().toString());
+                statusEstabelecimento = statusEstab;
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -179,21 +227,21 @@ public class CarrinhoActivity extends AppCompatActivity {
     public void onTipodeEntregaSelected(View view) {
         boolean checked = ((RadioButton) view).isChecked();
 
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.radio_delivery:
                 if (checked)
                     tipoEntregaSelecionada = 0;
-                    break;
+                break;
             case R.id.radio_retirada:
                 if (checked)
                     tipoEntregaSelecionada = 1;
-                    break;
+                break;
             case R.id.radio_mesa:
                 if (checked)
                     tipoEntregaSelecionada = 2;
-                    break;
+                break;
             default:
-                tipoEntregaSelecionada = 0;
+                tipoEntregaSelecionada = 5;
                 break;
         }
     }

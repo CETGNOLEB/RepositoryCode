@@ -3,11 +3,13 @@ package br.com.belongapps.appdelivery.cardapioOnline.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,12 +33,15 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
     private static List<ItemCardapio> itensemPromocao;
     private Context context;
     private ProgressBar mProgressBar;
+    private boolean statusDelivery;
+    private boolean statusEstabelecimento;
 
-    public PromocoesAdapter(List<ItemCardapio> itensPedido, Context context, ProgressBar progressBar) {
+    public PromocoesAdapter(List<ItemCardapio> itensPedido, Context context, ProgressBar progressBar, boolean statusDelivery, boolean statusEstabelecimento) {
         this.itensemPromocao = itensPedido;
         this.context = context;
         this.mProgressBar = progressBar;
-
+        this.statusDelivery = statusDelivery;
+        this.statusEstabelecimento = statusEstabelecimento;
         openProgressBar();
     }
 
@@ -63,41 +68,96 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
             @Override
             public void onClick(View v) {
 
-                ItemPedido itemPedido = new ItemPedido();
+                if (statusEstabelecimento == false) {
 
-                itemPedido.setNome(item.getNome());
-                itemPedido.setRef_img(item.getRef_img());
-                itemPedido.setDescricao(item.getDescricao());
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                if (item.isStatus_promocao() == true){
-                    itemPedido.setValor_unit(item.getPreco_promocional());
-                } else{
-                    itemPedido.setValor_unit(item.getValor_unit());
+                    AlertDialog.Builder mBilder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
+                    View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
+
+                    Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
+
+                    mBilder.setView(layoutDialog);
+                    final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
+                    dialogEstabelecimentoFechado.show();
+
+                    btEntendi.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogEstabelecimentoFechado.dismiss();
+                        }
+                    });
+
+
+                } else if (statusDelivery == false){
+
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                    AlertDialog.Builder mBilder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
+                    View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
+
+                    Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
+                    Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
+
+                    mBilder.setView(layoutDialog);
+                    final AlertDialog dialogDeliveryFechado = mBilder.create();
+                    dialogDeliveryFechado.show();
+
+                    btVoltar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogDeliveryFechado.dismiss();
+                        }
+                    });
+
+                    btContinuar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialogDeliveryFechado.dismiss();
+                            selecionarItem(item);
+                        }
+                    });
+
+                } else {
+                    selecionarItem(item);
                 }
-
-
-                if (item.getCategoria_id().equals("1")){
-                    Intent intent = new Intent(context, EscolherRecheioActivity.class);
-                    intent.putExtra("ItemPedido", itemPedido);
-                    intent.putExtra("qtd_recheios_item_cardapio", item.getQtd_recheios());
-                    context.startActivity(intent);
-                } else{
-
-                    Intent intent = new Intent(context, DetalhesdoItemActivity.class);
-
-                    intent.putExtra("ItemPedido", itemPedido);
-                    intent.putExtra("TelaAnterior", "TabPromocoes");
-                    context.startActivity(intent);
-
-                }
-
-
-
-
             }
         });
 
+
     }
+
+    public void selecionarItem(ItemCardapio item){
+
+        ItemPedido itemPedido = new ItemPedido();
+
+        itemPedido.setNome(item.getNome());
+        itemPedido.setRef_img(item.getRef_img());
+        itemPedido.setDescricao(item.getDescricao());
+
+        if (item.isStatus_promocao() == true) {
+            itemPedido.setValor_unit(item.getPreco_promocional());
+        } else {
+            itemPedido.setValor_unit(item.getValor_unit());
+        }
+
+
+        if (item.getCategoria_id().equals("1")) {
+            Intent intent = new Intent(context, EscolherRecheioActivity.class);
+            intent.putExtra("ItemPedido", itemPedido);
+            intent.putExtra("qtd_recheios_item_cardapio", item.getQtd_recheios());
+            context.startActivity(intent);
+        } else {
+
+            Intent intent = new Intent(context, DetalhesdoItemActivity.class);
+
+            intent.putExtra("ItemPedido", itemPedido);
+            intent.putExtra("TelaAnterior", "TabPromocoes");
+            context.startActivity(intent);
+
+        }
+    }
+
 
     @Override
     public int getItemCount() {

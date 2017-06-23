@@ -33,7 +33,6 @@
         android:paddingTop="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="24dp"
-        android:checkedButton="@+id/radio_delivery"
         android:orientation="vertical">
 
         <RadioButton

@@ -3,23 +3,35 @@ package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
@@ -30,10 +42,12 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabPromocoes;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSucos;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabVitaminas;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
 import br.com.belongapps.appdelivery.helpAbout.activities.AjudaActivity;
 import br.com.belongapps.appdelivery.helpAbout.activities.SobreActivity;
 import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
+import br.com.belongapps.appdelivery.posPedido.adapters.PedidosRealizadosAdapter;
 import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabAcai;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabCombos;
@@ -41,12 +55,20 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSalgados;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSanduiches;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 
+import static android.content.ContentValues.TAG;
+
 public class CardapioMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private CardapioMainActivity.SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private TextView nomeusuario;
+    private CoordinatorLayout layout;
+
+    private Boolean statusEstabelecimento = true;
+
+    private DatabaseReference mDatabaseReference;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +78,10 @@ public class CardapioMainActivity extends AppCompatActivity
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF")); //Cor do Titulo da Tela
         setSupportActionBar(toolbar);
 
+        layout = (CoordinatorLayout) findViewById(R.id.main_content);
+
         //Exibir nome do usuário
         nomeusuario = (TextView) findViewById(R.id.nome_usuario_menu);
-
-        setIconCarrinho();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -77,6 +99,7 @@ public class CardapioMainActivity extends AppCompatActivity
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
     }
 
     @Override
@@ -104,23 +127,23 @@ public class CardapioMainActivity extends AppCompatActivity
         int size = itens_pedido.size();
 
         //Alterar icon
-        if(size == 1){
+        if (size == 1) {
             menuItem.setIcon(R.drawable.ic_cart_one);
-        } else if(size == 2){
+        } else if (size == 2) {
             menuItem.setIcon(R.drawable.ic_cart_two);
-        } else if(size == 3){
+        } else if (size == 3) {
             menuItem.setIcon(R.drawable.ic_cart_three);
-        } else if(size == 4){
+        } else if (size == 4) {
             menuItem.setIcon(R.drawable.ic_cart_four);
-        } else if(size == 5){
+        } else if (size == 5) {
             menuItem.setIcon(R.drawable.ic_cart_five);
-        } else if(size == 6){
+        } else if (size == 6) {
             menuItem.setIcon(R.drawable.ic_cart_six);
-        } else if(size == 7){
+        } else if (size == 7) {
             menuItem.setIcon(R.drawable.ic_cart_seven);
-        } else if(size == 8){
+        } else if (size == 8) {
             menuItem.setIcon(R.drawable.ic_cart_eight);
-        } else if(size == 9){
+        } else if (size == 9) {
             menuItem.setIcon(R.drawable.ic_cart_nine);
         } else {
             menuItem.setIcon(R.drawable.ic_action_cart);
@@ -267,7 +290,40 @@ public class CardapioMainActivity extends AppCompatActivity
         }
     }
 
-    public void setIconCarrinho(){
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+        mDatabaseReference.child("configuracoes").child("status_estabelecimento").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Boolean status = Boolean.parseBoolean(dataSnapshot.child("status").getValue().toString());
+                statusEstabelecimento = status;
+
+                snackbar = Snackbar
+                        .make(layout, "Desculpe, nosso estabelecimento está fechado!", 4000)
+                        .setAction("Action", null);
+
+                if(statusEstabelecimento == true){
+                    snackbar.dismiss();
+                } else{
+
+                    View snackView = snackbar.getView();
+                    snackView.setBackgroundColor(ContextCompat.getColor(CardapioMainActivity.this, R.color.colorPrimary));
+                    snackbar.show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
+
 }
