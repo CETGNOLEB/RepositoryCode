@@ -11,14 +11,20 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".seguranca.activities.LoginActivity"
-            android:theme="@style/Base.LoginTheme"></activity>
+            android:theme="@style/Base.LoginTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         //Módulo Cardapio Online
         <activity android:name=".cardapioOnline.activitys.CardapioMainActivity">
 
-             <intent-filter>
+             <!--<intent-filter>
              <action android:name="android.intent.action.MAIN" />
              <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+             </intent-filter>-->
         </activity>
         <activity android:name=".cardapioOnline.activitys.EscolherRecheioActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherAdicionalActivity" />
@@ -29,11 +35,6 @@
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity3" />
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity4" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemPizzaMMActivity">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
         </activity>
         <activity android:name=".cardapioOnline.activitys.CarrinhoActivity" />
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoActivity" />

@@ -22,8 +22,16 @@ public class ItemCardapio {
     private double valor_pizza_m;
     private double valor_pizza_g;
 
+    /*PARA SANDUICHES*/
+    private double promo_pao_arabe;
+    private double promo_pao_bola;
+    private double valor_pao_arabe;
+    private double valor_pao_bola;
 
-    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, String status_item, boolean status_promocao, String categoria_id, double promo_pizza_p, double promo_pizza_m, double promo_pizza_g, double valor_pizza_p, double valor_pizza_m, double valor_pizza_g) {
+    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, String status_item, boolean status_promocao, String categoria_id,
+                        double promo_pizza_p, double promo_pizza_m, double promo_pizza_g, double valor_pizza_p, double valor_pizza_m, double valor_pizza_g,
+                        double promo_pao_arabe, double promo_pao_bola, double valor_pao_arabe, double valor_pao_bola) {
+
         this.nome = nome;
         this.descricao = descricao;
         this.ref_img = ref_img;
@@ -41,6 +49,12 @@ public class ItemCardapio {
         this.valor_pizza_p = valor_pizza_p;
         this.valor_pizza_m = valor_pizza_m;
         this.valor_pizza_g = valor_pizza_g;
+
+        //PARA SANDUICHES
+        this.promo_pao_arabe = promo_pao_arabe;
+        this.promo_pao_bola = promo_pao_bola;
+        this.valor_pao_arabe = valor_pao_arabe;
+        this.valor_pao_bola = valor_pao_bola;
     }
 
     public ItemCardapio() {
@@ -165,5 +179,37 @@ public class ItemCardapio {
 
     public void setValor_pizza_g(double valor_pizza_g) {
         this.valor_pizza_g = valor_pizza_g;
+    }
+
+    public double getPromo_pao_arabe() {
+        return promo_pao_arabe;
+    }
+
+    public void setPromo_pao_arabe(double promo_pao_arabe) {
+        this.promo_pao_arabe = promo_pao_arabe;
+    }
+
+    public double getPromo_pao_bola() {
+        return promo_pao_bola;
+    }
+
+    public void setPromo_pao_bola(double promo_pao_bola) {
+        this.promo_pao_bola = promo_pao_bola;
+    }
+
+    public double getValor_pao_arabe() {
+        return valor_pao_arabe;
+    }
+
+    public void setValor_pao_arabe(double valor_pao_arabe) {
+        this.valor_pao_arabe = valor_pao_arabe;
+    }
+
+    public double getValor_pao_bola() {
+        return valor_pao_bola;
+    }
+
+    public void setValor_pao_bola(double valor_pao_bola) {
+        this.valor_pao_bola = valor_pao_bola;
     }
 }

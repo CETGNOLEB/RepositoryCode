@@ -53,7 +53,6 @@ public class CarrinhoActivity extends AppCompatActivity {
     private TextView descCarrinhoVazio;
     /*TIPO DE RECEBIMENTO*/
     private int tipoEntregaSelecionada = 5;
-    private boolean statusEstabelecimento = true;
     private boolean statusDelivery = true;
     RadioButton radioDelivery;
 
@@ -134,7 +133,9 @@ public class CarrinhoActivity extends AppCompatActivity {
                 radioDelivery = (RadioButton) layoutDialog.findViewById(R.id.radio_delivery);
 
                 if (statusDelivery == false) {
-                    radioDelivery.setEnabled(false);
+                    radioDelivery.setVisibility(View.GONE);
+                } else{
+                    radioDelivery.setVisibility(View.VISIBLE);
                 }
 
                 Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_cancel_esc_forma_pagamento);
@@ -186,13 +187,10 @@ public class CarrinhoActivity extends AppCompatActivity {
                 statusDelivery = status;
 
                 if (statusDelivery == false) {
-                    radioDelivery.setEnabled(false);
+                    radioDelivery.setVisibility(View.GONE);
                 } else{
-                    radioDelivery.setEnabled(true);
+                    radioDelivery.setVisibility(View.VISIBLE);
                 }
-
-                Boolean statusEstab = Boolean.parseBoolean(dataSnapshot.child("status_estabelecimento").child("status").getValue().toString());
-                statusEstabelecimento = statusEstab;
 
             }
 

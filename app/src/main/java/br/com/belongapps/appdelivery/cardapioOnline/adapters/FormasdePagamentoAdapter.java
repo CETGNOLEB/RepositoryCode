@@ -258,9 +258,6 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
         public void setDescForma(String descricao) {
             descForma.setText(descricao);
 
-            Log.println(Log.ERROR, "setDesc Total Pedido", StringUtil.formatToMoeda(totalPedido));
-            Log.println(Log.ERROR, "setDesc DescForma", descricao);
-
             if (descricao.replace("Troco para ", "").equals(StringUtil.formatToMoeda(totalPedido))) {
                 descForma.setText("Sem Troco");
             } else {

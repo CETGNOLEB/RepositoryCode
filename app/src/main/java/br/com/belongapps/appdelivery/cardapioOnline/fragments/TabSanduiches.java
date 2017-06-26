@@ -111,14 +111,13 @@ public class TabSanduiches extends Fragment {
 
             @Override
             protected void populateViewHolder(TabSanduiches.SanduichesViewHolder viewHolder, final ItemCardapio model, int position) {
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                closeProgressBar();
 
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
-                viewHolder.setValorUnitarioEPromocao(model.getValor_unit(), model.isStatus_promocao(), model.getPreco_promocional());
+                viewHolder.setValorUnitarioEPromocao(model.getValor_pao_bola(), model.isStatus_promocao(), model.getPromo_pao_bola());
                 viewHolder.setImagem(getContext(), model.getRef_img());
                 viewHolder.setStatus(model.getStatus_item());
-
 
                 if (model.getStatus_item().equals("Ativado")) {
 
@@ -197,14 +196,15 @@ public class TabSanduiches extends Fragment {
             itemPedido.setRef_img(model.getRef_img());
 
             if (model.isStatus_promocao() == true) {
-                itemPedido.setValor_unit(model.getPreco_promocional());
+                itemPedido.setValor_unit(model.getPromo_pao_bola());
             } else {
-                itemPedido.setValor_unit(model.getValor_unit());
+                itemPedido.setValor_unit(model.getValor_pao_bola());
             }
 
             Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
 
             intent.putExtra("ItemPedido", itemPedido);
+            intent.putExtra("Categoria" , "Sanduiche");
             intent.putExtra("TelaAnterior", "TabSanduiches");
             startActivity(intent);
 

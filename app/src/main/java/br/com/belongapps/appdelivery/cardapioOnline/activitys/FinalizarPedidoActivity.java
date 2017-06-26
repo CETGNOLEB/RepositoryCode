@@ -482,6 +482,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Integer> list = new ArrayList<>();
 
+                Log.println(Log.ERROR, "NUMBERMETODY", "Entrou no metodo!");
+
                 try {
                     for (DataSnapshot pedido : dataSnapshot.getChildren()) {
                         for (DataSnapshot dia : pedido.getChildren()) {

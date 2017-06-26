@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
-    android:gravity="bottom"
     android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="110dp"
-        android:layout_height="80dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_gravity="center"
-        android:background="@drawable/log_kisabor" />
+        android:layout_marginTop="30dp"
+        android:background="@drawable/logo_rits" />
 
     <!--<RelativeLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
 
     </RelativeLayout>-->
 
-    <TextView
+    <!--<TextView
         android:id="@+id/nome_usuario_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,6 +50,6 @@
         android:layout_marginLeft="10dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Thiago Barbosa de Oliveira"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />-->
 
 </LinearLayout>

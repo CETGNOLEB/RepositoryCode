@@ -81,7 +81,7 @@ public class CardapioMainActivity extends AppCompatActivity
         layout = (CoordinatorLayout) findViewById(R.id.main_content);
 
         //Exibir nome do usuário
-        nomeusuario = (TextView) findViewById(R.id.nome_usuario_menu);
+        /*nomeusuario = (TextView) findViewById(R.id.nome_usuario_menu)*/;
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

@@ -3,6 +3,7 @@ package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     String telaAnterior = "";
     String tamPizza = "";
     String tipoPizza = "";
+    String categoria = "";
 
     //Views
     ImageView imgDetalheProduto;
@@ -45,6 +47,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     TextView qtdProdutoDetalheProduto;
     Button btAumentarQtd;
     Button btDiminuirQtd;
+    CardView cardTipoPaoItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
         telaAnterior = getIntent().getStringExtra("TelaAnterior");
         itemPedido = getIntent().getExtras().getParcelable("ItemPedido");
+        categoria = getIntent().getStringExtra("Categoria");
 
         //Pizzas
         tamPizza = getIntent().getStringExtra("TamPizza");
@@ -160,6 +164,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         btDiminuirQtd = (Button) findViewById(R.id.bt_diminuir_qtd_item_detalhe_produto);
         btAumentarQtd = (Button) findViewById(R.id.bt_aumentar_qtd_item_detalhe_produto);
         addAoCarrinho = (Button) findViewById(R.id.bt_add_ao_carrinho);
+
+        cardTipoPaoItem = (CardView) findViewById(R.id.card_tipo_pao_item);
     }
 
     public void pupulateViewDetalhes() {
@@ -182,6 +188,12 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         descDetalheProduto.setText(itemPedido.getDescricao());
         valorDetalheProduto.setText(" R$ " + String.format(Locale.US, "%.2f", itemPedido.getValor_unit()).replace(".", ","));
         qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
+
+        if (categoria != null){
+            if (categoria.equals("Sanduiche")) {
+                cardTipoPaoItem.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public double calcularValorToralDoItem(int quantidade, double valorProduto) {
