@@ -35,9 +35,12 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
     ImageView imgCarrinhoVazio;
     public TextView textCarrinhoVazio;
     public TextView descCarrinhoVazio;
+    Button btFinalizar;
+    Button btCardEmpty;
 
     public ItemCarrinhoAdapter(List<ItemPedido> itensPedido,Context context, TextView textTotal, TextView txtQtdItens,
-                               ImageView imgCarrinhoVazio, TextView textCarrinhoVazio, TextView descCarrinhoVazio) {
+                               ImageView imgCarrinhoVazio, TextView textCarrinhoVazio, TextView descCarrinhoVazio,
+                               Button btFinalizar, Button btCardEmpty) {
         this.itensPedido = itensPedido;
         this.context = context;
         this.totalPedido = textTotal;
@@ -45,6 +48,8 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
         this.imgCarrinhoVazio = imgCarrinhoVazio;
         this.textCarrinhoVazio = textCarrinhoVazio;
         this.descCarrinhoVazio = descCarrinhoVazio;
+        this.btFinalizar = btFinalizar;
+        this.btCardEmpty = btCardEmpty;
     }
 
     @Override
@@ -204,9 +209,13 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
         }
 
         public void setDescricao(String descricao) {
-
             TextView descProduto = (TextView) mView.findViewById(R.id.desc_item_carrinho);
-            descProduto.setText(descricao);
+            if (descricao != null){
+                descProduto.setText(descricao);
+            } else{
+                descProduto.setVisibility(View.GONE);
+            }
+
         }
 
         public void setValorUnitario(double valorUnit) {
@@ -276,5 +285,7 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
         imgCarrinhoVazio.setVisibility(View.VISIBLE);
         textCarrinhoVazio.setVisibility(View.VISIBLE);
         descCarrinhoVazio.setVisibility(View.VISIBLE);
+        btCardEmpty.setVisibility(View.VISIBLE);
+        btFinalizar.setVisibility(View.GONE);
     }
 }

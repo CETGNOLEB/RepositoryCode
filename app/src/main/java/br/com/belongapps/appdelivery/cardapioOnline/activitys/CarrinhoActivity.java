@@ -1,5 +1,6 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +49,7 @@ public class CarrinhoActivity extends AppCompatActivity {
     private Button continuarComprando;
     private Button confirmarPedido;
     private ImageView imgCardEmpty;
+    private Button btCardEmpty;
     //TOTAL
     private double totalCarrinho;
     private TextView textCarrinhoVazio;
@@ -54,6 +57,7 @@ public class CarrinhoActivity extends AppCompatActivity {
     /*TIPO DE RECEBIMENTO*/
     private int tipoEntregaSelecionada = 5;
     private boolean statusDelivery = true;
+    private boolean statusEstabelecimento = true;
     RadioButton radioDelivery;
 
     @Override
@@ -76,11 +80,15 @@ public class CarrinhoActivity extends AppCompatActivity {
         imgCardEmpty = (ImageView) findViewById(R.id.img_carrinho_vazio);
         textCarrinhoVazio = (TextView) findViewById(R.id.text_carrinho_vazio);
         descCarrinhoVazio = (TextView) findViewById(R.id.desc_carrinho_vazio);
+        confirmarPedido = (Button) findViewById(R.id.bt_realizar_pedido);
+        btCardEmpty = (Button) findViewById(R.id.bt_card_empty);
 
         if (itens_pedido.size() == 0) {
             imgCardEmpty.setVisibility(View.VISIBLE);
             textCarrinhoVazio.setVisibility(View.VISIBLE);
             descCarrinhoVazio.setVisibility(View.VISIBLE);
+            btCardEmpty.setVisibility(View.VISIBLE);
+            confirmarPedido.setVisibility(View.GONE);
         }
 
         mRecyclerViewItemCarrinho = (RecyclerView) findViewById(R.id.itens_carrinho);
@@ -98,13 +106,21 @@ public class CarrinhoActivity extends AppCompatActivity {
             textQtdItem.setText(itens_pedido.size() + " Itens");
         }
 
-        adapter = new ItemCarrinhoAdapter(itens_pedido, this, textTotal, textQtdItem, imgCardEmpty, textCarrinhoVazio, descCarrinhoVazio);
+        adapter = new ItemCarrinhoAdapter(itens_pedido, this, textTotal, textQtdItem, imgCardEmpty, textCarrinhoVazio, descCarrinhoVazio, confirmarPedido, btCardEmpty);
         mRecyclerViewItemCarrinho.setAdapter(adapter);
 
         continuarComprando = (Button) findViewById(R.id.bt_continuar_comprando);
-        confirmarPedido = (Button) findViewById(R.id.bt_realizar_pedido);
 
         /*EVENTO BOTOES*/
+        btCardEmpty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CarrinhoActivity.this, CardapioMainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         continuarComprando.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,51 +136,83 @@ public class CarrinhoActivity extends AppCompatActivity {
         confirmarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //atualiza itens do pedido
-                CarrinhoDAO.atualizarItens(itens_pedido);
 
-                AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
-                View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_entrega, null);
+                if (statusEstabelecimento == false){
 
-                mBilder.setView(layoutDialog);
-                final AlertDialog dialogEscolherFormEntrega = mBilder.create();
-                dialogEscolherFormEntrega.show();
+                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                radioDelivery = (RadioButton) layoutDialog.findViewById(R.id.radio_delivery);
+                    AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
+                    View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
 
-                if (statusDelivery == false) {
-                    radioDelivery.setVisibility(View.GONE);
-                } else{
-                    radioDelivery.setVisibility(View.VISIBLE);
-                }
+                    Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
 
-                Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_cancel_esc_forma_pagamento);
-                Button btConfirm = (Button) layoutDialog.findViewById(R.id.bt_confirmar_forma_entrega);
+                    mBilder.setView(layoutDialog);
+                    final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
+                    dialogEstabelecimentoFechado.show();
 
-                btCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogEscolherFormEntrega.dismiss();
-                    }
-                });
-
-                btConfirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (tipoEntregaSelecionada == 5) {
-                            Toast.makeText(CarrinhoActivity.this, "Selecione uma forma de recebimento.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
-                            intent.putExtra("totalPedido", Double.parseDouble(textTotal.getText().toString().replace("R$ ", "").replace(",", ".")));
-                            intent.putExtra("tipoEntrega", tipoEntregaSelecionada);
-                            startActivity(intent);
+                    btEntendi.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogEstabelecimentoFechado.dismiss();
                         }
+                    });
 
+                }else {
+
+                    //atualiza itens do pedido
+                    CarrinhoDAO.atualizarItens(itens_pedido);
+
+                    AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
+                    View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_entrega, null);
+
+                    mBilder.setView(layoutDialog);
+                    final AlertDialog dialogEscolherFormEntrega = mBilder.create();
+                    dialogEscolherFormEntrega.show();
+
+                    radioDelivery = (RadioButton) layoutDialog.findViewById(R.id.radio_delivery);
+
+                    if (statusDelivery == false) {
+                        radioDelivery.setVisibility(View.GONE);
+                    } else {
+                        radioDelivery.setVisibility(View.VISIBLE);
                     }
-                });
 
+                    Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_cancel_esc_forma_pagamento);
+                    Button btConfirm = (Button) layoutDialog.findViewById(R.id.bt_confirmar_forma_entrega);
 
+                    btCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogEscolherFormEntrega.dismiss();
+                        }
+                    });
+
+                    btConfirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (tipoEntregaSelecionada == 5) {
+                                Toast.makeText(CarrinhoActivity.this, "Selecione uma forma de recebimento.", Toast.LENGTH_SHORT).show();
+                            } else {
+
+                                if (tipoEntregaSelecionada == 0) {
+                                    Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoActivity.class);
+                                    intent.putExtra("totalPedido", Double.parseDouble(textTotal.getText().toString().replace("R$ ", "").replace(",", ".")));
+                                    intent.putExtra("tipoEntrega", tipoEntregaSelecionada);
+                                    startActivity(intent);
+                                } else{
+
+                                    Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoRetiradaActivity.class);
+                                    intent.putExtra("totalPedido", Double.parseDouble(textTotal.getText().toString().replace("R$ ", "").replace(",", ".")));
+                                    intent.putExtra("tipoEntrega", tipoEntregaSelecionada);
+                                    startActivity(intent);
+                                }
+                            }
+
+                        }
+                    });
+
+                }
             }
         });
 
@@ -185,6 +233,9 @@ public class CarrinhoActivity extends AppCompatActivity {
 
                 Boolean status = Boolean.parseBoolean(dataSnapshot.child("status_delivery").child("status").getValue().toString());
                 statusDelivery = status;
+
+                Boolean statusEstab = Boolean.parseBoolean(dataSnapshot.child("status_estabelecimento").child("status").getValue().toString());
+                statusEstabelecimento = statusEstab;
 
                 if (statusDelivery == false) {
                     radioDelivery.setVisibility(View.GONE);

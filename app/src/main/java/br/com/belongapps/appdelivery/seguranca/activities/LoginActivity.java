@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
 import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -48,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Intent i = new Intent(LoginActivity.this, TelaInicialActivity.class);
+                    Intent i = new Intent(LoginActivity.this, CardapioMainActivity.class);
                     startActivity(i);
                     finish();
                 }

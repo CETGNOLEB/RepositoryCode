@@ -158,6 +158,14 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         imgDetalheProduto = (ImageView) findViewById(R.id.img_produto_detalhe_item);
         valorDetalheProduto = (TextView) findViewById(R.id.valor_produto_detalhe_item);
         observacaoDetalheProduto = (TextView) findViewById(R.id.observacao_produto_detalhe_item);
+
+        observacaoDetalheProduto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                observacaoDetalheProduto.requestFocus();
+            }
+        });
+
         qtdProdutoDetalheProduto = (TextView) findViewById(R.id.txt_qtd_item_delathe_produto);
 
         //Botoes
@@ -185,7 +193,12 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         //nome, descricao e valor
         nomeDetalheProduto.setText(itemPedido.getNome());
 
-        descDetalheProduto.setText(itemPedido.getDescricao());
+        if (itemPedido.getDescricao() != null){ // Ocultar campo descrição se em branco
+            descDetalheProduto.setText(itemPedido.getDescricao());
+        } else{
+            descDetalheProduto.setVisibility(View.GONE);
+        }
+
         valorDetalheProduto.setText(" R$ " + String.format(Locale.US, "%.2f", itemPedido.getValor_unit()).replace(".", ","));
         qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
 

@@ -30,7 +30,6 @@ import br.com.belongapps.appdelivery.promocoes.model.Promocao;
 
 public class TelaInicialActivity extends AppCompatActivity {
     private Button btFazerPedido, btMeusPedidos;
-    private ImageView img_promo1;
 
     private List<Promocao> promocoes;
     private List<Promocao> promocoesAux;
@@ -86,7 +85,7 @@ public class TelaInicialActivity extends AppCompatActivity {
         finish();
     }
 
-    public class TempodeExibicaoPromo extends TimerTask{
+    public class TempodeExibicaoPromo extends TimerTask {
 
         @Override
         public void run() {
@@ -94,9 +93,9 @@ public class TelaInicialActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    if (viewPager.getCurrentItem() == 0){
+                    if (viewPager.getCurrentItem() == 0) {
                         viewPager.setCurrentItem(1);
-                    } else if(viewPager.getCurrentItem() == 1){
+                    } else if (viewPager.getCurrentItem() == 1) {
                         viewPager.setCurrentItem(2);
                     } else {
                         viewPager.setCurrentItem(0);
@@ -111,20 +110,22 @@ public class TelaInicialActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+       /* promocoes = new ArrayList<>();*/
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         promocoesAux = new ArrayList<>();
 
         mDatabaseReference.child("promocoes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot promo: dataSnapshot.getChildren()) {
+                for (DataSnapshot promo : dataSnapshot.getChildren()) {
                     Promocao promocao = promo.getValue(Promocao.class);
                     promocoesAux.add(promocao);
                 }
 
                 promocoes = new ArrayList<>();
+
                 promocoes.addAll(promocoesAux);
-                promocoesAux = new ArrayList<>();
 
                 viewPager = (ViewPager) findViewById(R.id.slider_promo);
                 promoDots = (LinearLayout) findViewById(R.id.promo_dots);
@@ -132,43 +133,53 @@ public class TelaInicialActivity extends AppCompatActivity {
                 ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(TelaInicialActivity.this, promocoes);
                 viewPager.setAdapter(viewPagerAdapter);
 
-                promoCount = viewPagerAdapter.getCount();
+                promoCount = promocoesAux.size();
                 dots = new ImageView[promoCount];
 
-                for (int i = 0; i < promoCount; i++){
+                promocoesAux = new ArrayList<>();
+
+                promoDots.removeAllViews();
+
+                for (int i = 0; i < promoCount; i++) {
                     dots[i] = new ImageView(TelaInicialActivity.this);
-                    dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_nonactive_dot ));
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_nonactive_dot));
 
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(8,0,8,0);
+                    params.setMargins(8, 0, 8, 0);
 
                     promoDots.addView(dots[i], params);
                 }
 
-                dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_active_dot));
-                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (dots != null) {
 
-                    }
+                    dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_active_dot));
+                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                        @Override
+                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                    @Override
-                    public void onPageSelected(int position) {
-                        for (int i = 0; i < promoCount; i++){
-                            dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_nonactive_dot));
                         }
 
-                        dots[position].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_active_dot));
-                    }
+                        @Override
+                        public void onPageSelected(int position) {
+                            for (int i = 0; i < promoCount; i++) {
+                                dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_nonactive_dot));
+                            }
 
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
+                            dots[position].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_active_dot));
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onPageScrollStateChanged(int state) {
+
+                        }
+                    });
+
+
+                }
 
                 Timer timer = new Timer();
                 timer.scheduleAtFixedRate(new TempodeExibicaoPromo(), 2000, 4000);
+
             }
 
             @Override

@@ -12,8 +12,10 @@
         android:id="@+id/activity_detalhes_do_item_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -132,24 +134,24 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/button_editar_metade1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="EDITAR"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="12sp" />
-
-                        <TextView
                             android:id="@+id/valor_metade1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="4dp"
                             android:paddingBottom="4dp"
                             android:text="R$ 12,00"
                             android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/button_editar_metade1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="4dp"
+                            android:text="EDITAR"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp" />
 
                     </RelativeLayout>
 
@@ -242,24 +244,24 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/button_editar_metade2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="EDITAR"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="12sp" />
-
-                        <TextView
                             android:id="@+id/valor_metade2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="4dp"
                             android:paddingBottom="4dp"
                             android:text="R$ 12,00"
                             android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/button_editar_metade2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="4dp"
+                            android:text="EDITAR"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp" />
 
                     </RelativeLayout>
 
@@ -283,7 +285,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="6dp"
                     android:text="SABOR 03:"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -353,24 +356,24 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/button_editar_metade3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="EDITAR"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="12sp" />
-
-                        <TextView
                             android:id="@+id/valor_metade3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="4dp"
                             android:paddingBottom="4dp"
                             android:text="R$ 12,00"
                             android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/button_editar_metade3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="4dp"
+                            android:text="EDITAR"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp" />
 
                     </RelativeLayout>
 
@@ -394,7 +397,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="6dp"
                     android:text="SABOR 04:"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
@@ -464,24 +468,24 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/button_editar_metade4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="EDITAR"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="12sp" />
-
-                        <TextView
                             android:id="@+id/valor_metade4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="4dp"
                             android:paddingBottom="4dp"
                             android:text="R$ 12,00"
                             android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/button_editar_metade4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="4dp"
+                            android:text="EDITAR"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp" />
 
                     </RelativeLayout>
 
@@ -490,13 +494,65 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_quantidade_pizza"
+                android:id="@+id/card_observacoes_pizza"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="110dp"
                 android:layout_below="@+id/card_sabor4"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txt_observacao_produto_detalhe_pizza"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Observações:"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txt_optional"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="5dp"
+                            android:text="(Opcional)" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/observacao_produto_detalhe_pizza"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:focusable="true"
+                        android:hint="Exemplo: sem isto."
+                        android:textColorHint="#BDBDBD" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_quantidade_pizza"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card_observacoes_pizza"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="55dp"
                 android:layout_marginTop="10dp">
 
                 <LinearLayout
@@ -593,16 +649,14 @@
             android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/valor_total_pedido_pizza"
+            android:id="@+id/bt_cancelar_pedido_pizza"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            android:padding="1dp"
-            android:text="R$ 10,00"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:paddingLeft="5dp"
+            android:drawableLeft="@drawable/ic_action_cancel" />
 
     </RelativeLayout>
 

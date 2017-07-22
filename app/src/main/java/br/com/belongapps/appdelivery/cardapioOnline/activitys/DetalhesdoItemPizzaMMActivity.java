@@ -1,11 +1,15 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -59,13 +63,21 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
     private ImageView imgMetade4;
     private TextView nomeMetade4, descMetade4, obsMetade4, valorMetade4;
 
+    //Observação
+    private TextView observacaoProdutoDetalhePizza;
+
     private TextView qtdPizza;
     private Button btAumentarQtd;
     private Button btDiminuirQtd;
 
-    private TextView subTotal;
+    //BUTTONS
+    private TextView buttonEditarMetade1;
+    private TextView buttonEditarMetade2;
+    private TextView buttonEditarMetade3;
+    private TextView buttonEditarMetade4;
 
-    Button btAdicionarAoCarrinho;
+    private Button btAdicionarAoCarrinho;
+    private TextView btCancelarPedidoPizza;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +119,9 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
                 CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
 
                 itemPedido.setQuantidade(quantidade);
+                itemPedido.setObservacao(observacaoProdutoDetalhePizza.getText().toString());
 
-                if (tipoPizza.equals("Metade-Metade")){
+                if (tipoPizza.equals("Metade-Metade")) {
                     itemPedido.setValor_unit(itemPedido.getValor_unit() + itemPedido.getValorMetade2()); // Valor das Metades
                     itemPedido.setDescricao(itemPedido.getNome() + " + " + itemPedido.getNomeMetade2());
                 }
@@ -137,6 +150,102 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
             }
         });
 
+        // BOTOES DE EDICAO
+        buttonEditarMetade1 = (TextView) findViewById(R.id.button_editar_metade1);
+        buttonEditarMetade1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(DetalhesdoItemPizzaMMActivity.this, EditarPizzaActivity.class);
+                i.putExtra("ItemPedido", itemPedido);
+                i.putExtra("TamPizza", tamPizza);
+                i.putExtra("TipoPizza", tipoPizza);
+                i.putExtra("Metade", "01");
+                startActivity(i);
+                finish();
+            }
+        });
+
+        buttonEditarMetade2 = (TextView) findViewById(R.id.button_editar_metade2);
+        buttonEditarMetade2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(DetalhesdoItemPizzaMMActivity.this, EditarPizzaActivity.class);
+                i.putExtra("ItemPedido", itemPedido);
+                i.putExtra("TamPizza", tamPizza);
+                i.putExtra("TipoPizza", tipoPizza);
+                i.putExtra("Metade", "02");
+                startActivity(i);
+                finish();
+            }
+        });
+
+        buttonEditarMetade3 = (TextView) findViewById(R.id.button_editar_metade3);
+        buttonEditarMetade3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(DetalhesdoItemPizzaMMActivity.this, EditarPizzaActivity.class);
+                i.putExtra("ItemPedido", itemPedido);
+                i.putExtra("TamPizza", tamPizza);
+                i.putExtra("TipoPizza", tipoPizza);
+                i.putExtra("Metade", "03");
+                startActivity(i);
+                finish();
+            }
+        });
+
+        buttonEditarMetade4 = (TextView) findViewById(R.id.button_editar_metade4);
+        buttonEditarMetade4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(DetalhesdoItemPizzaMMActivity.this, EditarPizzaActivity.class);
+                i.putExtra("ItemPedido", itemPedido);
+                i.putExtra("TamPizza", tamPizza);
+                i.putExtra("TipoPizza", tipoPizza);
+                i.putExtra("Metade", "04");
+                startActivity(i);
+                finish();
+            }
+        });
+
+        //Cancelar Montagem da Pizza
+        btCancelarPedidoPizza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                AlertDialog.Builder mBilder = new AlertDialog.Builder(DetalhesdoItemPizzaMMActivity.this, R.style.MyDialogTheme);
+                View layoutDialog = inflater.inflate(R.layout.dialog_cancel_pedido_pizza, null);
+
+                Button btOK = (Button) layoutDialog.findViewById(R.id.bt_ok_cancelar_pedido_pizza);
+                Button btFechar = (Button) layoutDialog.findViewById(R.id.bt_cancel_cancelar_pedido_pizza);
+
+                mBilder.setView(layoutDialog);
+                final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
+                dialogEstabelecimentoFechado.show();
+
+                btOK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogEstabelecimentoFechado.dismiss();
+
+                        Intent i = new Intent(DetalhesdoItemPizzaMMActivity.this, CardapioMainActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+
+                btFechar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogEstabelecimentoFechado.dismiss();
+                    }
+                });
+
+
+            }
+        });
+
     }
 
     @Override
@@ -152,9 +261,20 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetalhesdoItemPizzaMMActivity.this, CardapioMainActivity.class);
                 startActivity(intent);
                 finish();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detalhe_pizza, menu);
+
+        MenuItem item = menu.getItem(0);
+        item.setTitle(getValorPedido());
+
+        return true;
     }
 
     @Override
@@ -192,16 +312,26 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
         obsMetade2 = (TextView) findViewById(R.id.obs_metade2);
         valorMetade2 = (TextView) findViewById(R.id.valor_metade2);
 
+        //Observacao
+        observacaoProdutoDetalhePizza = (TextView) findViewById(R.id.observacao_produto_detalhe_pizza);
+        observacaoProdutoDetalhePizza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                observacaoProdutoDetalhePizza.requestFocus();
+            }
+        });
+
+        //Observacao
+        btCancelarPedidoPizza = (TextView) findViewById(R.id.bt_cancelar_pedido_pizza);
+
         //Quantidade
         btDiminuirQtd = (Button) findViewById(R.id.bt_diminuir_qtd_pizza);
         btAumentarQtd = (Button) findViewById(R.id.bt_aumentar_qtd_pizza);
         qtdPizza = (TextView) findViewById(R.id.txt_qtd_pizza);
 
-        //Sub-Total
-        subTotal = (TextView) findViewById(R.id.valor_total_pedido_pizza);
-
         //Botoes
         btAdicionarAoCarrinho = (Button) findViewById(R.id.bt_adicionar_ao_carrinho_pizza);
+
     }
 
     public void pupulateViewDetalhes() {
@@ -220,6 +350,7 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
                 Picasso.with(DetalhesdoItemPizzaMMActivity.this).load(itemPedido.getRef_img()).into(imgMetade1);
             }
         });
+
         nomeMetade1.setText(itemPedido.getNome());
         descMetade1.setText(itemPedido.getDescricao());
         obsMetade1.setText(itemPedido.getObservacao());
@@ -242,7 +373,7 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
         obsMetade2.setText(itemPedido.getObsMetade2());
         valorMetade2.setText(StringUtil.formatToMoeda(itemPedido.getValorMetade2()));
 
-        subTotal.setText(StringUtil.formatToMoeda(itemPedido.getValor_unit() + itemPedido.getValorMetade2()));
+        //subTotal.setText(StringUtil.formatToMoeda(itemPedido.getValor_unit() + itemPedido.getValorMetade2()));
 
         //Metade 03
         if (tipoPizza.equals("Três Sabores")) {
@@ -265,7 +396,7 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
             obsMetade3.setText(itemPedido.getObsMetade3());
             valorMetade3.setText(StringUtil.formatToMoeda(itemPedido.getValorMetade3()));
 
-            subTotal.setText(StringUtil.formatToMoeda(itemPedido.getValor_unit() + itemPedido.getValorMetade2() + itemPedido.getValorMetade3()));
+            //subTotal.setText(StringUtil.formatToMoeda(itemPedido.getValor_unit() + itemPedido.getValorMetade2() + itemPedido.getValorMetade3()));
         }
 
         //Metade 04
@@ -305,8 +436,8 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
             obsMetade4.setText(itemPedido.getObsMetade4());
             valorMetade4.setText(StringUtil.formatToMoeda(itemPedido.getValorMetade4()));
 
-            subTotal.setText(StringUtil.formatToMoeda(itemPedido.getValor_unit() + itemPedido.getValorMetade2()
-                    + itemPedido.getValorMetade3() + itemPedido.getValorMetade4()));
+            //subTotal.setText(StringUtil.formatToMoeda(itemPedido.getValor_unit() + itemPedido.getValorMetade2()
+            //       + itemPedido.getValorMetade3() + itemPedido.getValorMetade4()));
         }
 
         qtdPizza.setText(String.valueOf(quantidade));
@@ -339,10 +470,10 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
         descMetade4 = (TextView) findViewById(R.id.desc_metade4);
         obsMetade4 = (TextView) findViewById(R.id.obs_metade4);
         valorMetade4 = (TextView) findViewById(R.id.valor_metade4);
-        ;
 
         txtDescMetade4.setVisibility(View.VISIBLE);
         cardSabor4.setVisibility(View.VISIBLE);
+
 
     }
 
@@ -358,6 +489,20 @@ public class DetalhesdoItemPizzaMMActivity extends AppCompatActivity {
         }
 
         return retorno;
+    }
+
+    public String getValorPedido() {
+        tipoPizza = getIntent().getStringExtra("TipoPizza");
+
+        if (tipoPizza.equals("Três Sabores")) {
+           return StringUtil.formatToMoeda(itemPedido.getValor_unit() + itemPedido.getValorMetade2()
+                    + itemPedido.getValorMetade3());
+        } else if (tipoPizza.equals("Quatro Sabores")) {
+            return StringUtil.formatToMoeda(itemPedido.getValor_unit() + itemPedido.getValorMetade2()
+                    + itemPedido.getValorMetade3() + itemPedido.getValorMetade4());
+        } else{
+            return StringUtil.formatToMoeda(itemPedido.getValor_unit() + itemPedido.getValorMetade2());
+        }
     }
 
 }

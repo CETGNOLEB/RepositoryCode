@@ -8,6 +8,7 @@
 
     <!--MINHAS STRINGS-->
     <string name="action_carrinho">Carrinho</string>
+    <string name="detalhe_pizza">Cancelar</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_teste">TesteActivity</string>
     <string name="title_activity_pedidos_realizados">Meus Pedidos</string>

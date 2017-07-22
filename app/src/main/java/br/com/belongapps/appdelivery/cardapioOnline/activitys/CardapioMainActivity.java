@@ -1,5 +1,6 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -108,11 +109,21 @@ public class CardapioMainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent(CardapioMainActivity.this, TelaInicialActivity.class);
-            startActivity(intent);
-            finish();
 
+            Intent  it = new Intent(getApplicationContext(), CardapioMainActivity.class);
+            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            it.putExtra("SAIR", true);
+            startActivity(it);
+            finish();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        if(getIntent().getBooleanExtra("SAIR", false)){
+            finish();
+        }
+        super.onResume();
     }
 
     @Override

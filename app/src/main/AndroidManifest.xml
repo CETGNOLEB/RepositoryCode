@@ -29,22 +29,30 @@
         <activity android:name=".cardapioOnline.activitys.EscolherRecheioActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherAdicionalActivity" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemActivity" />
+
+        //PIZZAS
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemPizzaActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity2" />
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity3" />
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity4" />
-        <activity android:name=".cardapioOnline.activitys.DetalhesdoItemPizzaMMActivity">
-        </activity>
+        <activity android:name=".cardapioOnline.activitys.DetalhesdoItemPizzaMMActivity"/>
+        <activity android:name=".cardapioOnline.activitys.EditarPizzaActivity" />
+
         <activity android:name=".cardapioOnline.activitys.CarrinhoActivity" />
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoActivity" />
+        <activity android:name=".cardapioOnline.activitys.FinalizarPedidoRetiradaActivity" />
+
         //Módulo Sobre/Ajuda
         <activity android:name=".helpAbout.activities.SobreActivity" />
         <activity android:name=".helpAbout.activities.AjudaActivity" />
+
         //Módulo gerencial do cliente
         <activity android:name=".gerencial.activities.EnderecosActivity" />
+
         //Módulo Banner Promocionais
         <activity android:name=".promocoes.activities.TelaInicialActivity"></activity>
+
         //Módulo Pós Pedido
         <activity android:name=".posPedido.activities.MeusPedidosActivity" />
         <activity android:name=".posPedido.activities.AcompanharPedidoActivity" />

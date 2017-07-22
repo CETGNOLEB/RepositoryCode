@@ -101,8 +101,6 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
 
                         if (countMetadesSelecionadas == 2){
 
-                            Log.println(Log.ERROR, "NOME1" , itemPedido.getNome());
-
                             itemPedido.setNomeMetade2(item.getNome());
                             itemPedido.setDescMetade2(item.getDescricao());
                             itemPedido.setImgMetade2(item.getRef_img());
@@ -113,6 +111,8 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
                         } else {
 
@@ -126,6 +126,8 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -136,7 +138,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             itemPedido.setNomeMetade3(item.getNome());
                             itemPedido.setDescMetade3(item.getDescricao());
                             itemPedido.setImgMetade3(item.getRef_img());
-                            itemPedido.setValorMetade3(getValorUnitario(item) / 2);
+                            itemPedido.setValorMetade3(getValorUnitario(item) / 3);
 
                             Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
                             intent.putExtra("TamPizza", tamPizza);
@@ -144,12 +146,14 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
 
+                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+
                         } else if (countMetadesSelecionadas == 1){
 
                             itemPedido.setNome(item.getNome());
                             itemPedido.setDescricao(item.getDescricao());
                             itemPedido.setRef_img(item.getRef_img());
-                            itemPedido.setValor_unit(getValorUnitario(item) / 2);
+                            itemPedido.setValor_unit(getValorUnitario(item) / 3);
 
                             Intent intent = new Intent(context, EscolherPizzaActivity2.class);
                             intent.putExtra("TamPizza", tamPizza);
@@ -157,18 +161,22 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
 
+                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+
                         } else{
 
                             itemPedido.setNomeMetade2(item.getNome());
                             itemPedido.setDescMetade2(item.getDescricao());
                             itemPedido.setImgMetade2(item.getRef_img());
-                            itemPedido.setValorMetade2(getValorUnitario(item) / 2);
+                            itemPedido.setValorMetade2(getValorUnitario(item) / 3);
 
                             Intent intent = new Intent(context, EscolherPizzaActivity3.class);
                             intent.putExtra("TamPizza", tamPizza);
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
                         }
                     } else if (tipoPizza.equals("Quatro Sabores")) {
@@ -178,7 +186,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             itemPedido.setNomeMetade4(item.getNome());
                             itemPedido.setDescMetade4(item.getDescricao());
                             itemPedido.setImgMetade4(item.getRef_img());
-                            itemPedido.setValorMetade4(getValorUnitario(item) / 2);
+                            itemPedido.setValorMetade4(getValorUnitario(item) / 4);
 
                             Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
                             intent.putExtra("TamPizza", tamPizza);
@@ -186,12 +194,14 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
 
+                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+
                         } else if (countMetadesSelecionadas == 1){
 
                             itemPedido.setNome(item.getNome());
                             itemPedido.setDescricao(item.getDescricao());
                             itemPedido.setRef_img(item.getRef_img());
-                            itemPedido.setValor_unit(getValorUnitario(item) / 2);
+                            itemPedido.setValor_unit(getValorUnitario(item) / 4);
 
                             Intent intent = new Intent(context, EscolherPizzaActivity2.class);
                             intent.putExtra("TamPizza", tamPizza);
@@ -199,12 +209,14 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
 
+                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+
                         } else if (countMetadesSelecionadas == 2){
 
                             itemPedido.setNomeMetade2(item.getNome());
                             itemPedido.setDescMetade2(item.getDescricao());
                             itemPedido.setImgMetade2(item.getRef_img());
-                            itemPedido.setValorMetade2(getValorUnitario(item) / 2);
+                            itemPedido.setValorMetade2(getValorUnitario(item) / 4);
 
                             Intent intent = new Intent(context, EscolherPizzaActivity3.class);
                             intent.putExtra("TamPizza", tamPizza);
@@ -212,18 +224,22 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
 
+                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+
                         } else {
 
                             itemPedido.setNomeMetade3(item.getNome());
                             itemPedido.setDescMetade3(item.getDescricao());
                             itemPedido.setImgMetade3(item.getRef_img());
-                            itemPedido.setValorMetade3(getValorUnitario(item) / 2);
+                            itemPedido.setValorMetade3(getValorUnitario(item) / 4);
 
                             Intent intent = new Intent(context, EscolherPizzaActivity4.class);
                             intent.putExtra("TamPizza", tamPizza);
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

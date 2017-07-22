@@ -58,6 +58,20 @@
         android:textSize="16sp"
         android:text="Que tal escolher algo pra comer ?"
         android:visibility="invisible"/>
+    
+    <Button
+        android:id="@+id/bt_card_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginTop="15dp"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:text="+ Produtos"
+        android:textColor="@color/textColorPrimary"
+        android:background="@drawable/border_button_white"
+        android:visibility="invisible"
+        android:layout_below="@+id/desc_carrinho_vazio"
+        android:layout_centerHorizontal="true" />
 
     <RelativeLayout
         android:id="@+id/detalhe_cart"
@@ -93,7 +107,7 @@
 
     <RelativeLayout
         android:id="@+id/buttons"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary">
@@ -108,7 +122,7 @@
             android:background="@android:color/transparent"
             android:drawableRight="@drawable/icon_right"
             android:text="FINALIZAR"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
 
         <Button
             android:id="@+id/bt_continuar_comprando"
