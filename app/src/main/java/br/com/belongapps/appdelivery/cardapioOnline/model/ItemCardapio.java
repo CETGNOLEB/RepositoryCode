@@ -9,7 +9,7 @@ public class ItemCardapio {
     private double valor_unit;
     private double preco_promocional;
     private int qtd_recheios;
-    private String status_item;
+    private int status_item;
     private boolean status_promocao;
 
     private String categoria_id;
@@ -28,7 +28,7 @@ public class ItemCardapio {
     private double valor_pao_arabe;
     private double valor_pao_bola;
 
-    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, String status_item, boolean status_promocao, String categoria_id,
+    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, int status_item, boolean status_promocao, String categoria_id,
                         double promo_pizza_p, double promo_pizza_m, double promo_pizza_g, double valor_pizza_p, double valor_pizza_m, double valor_pizza_g,
                         double promo_pao_arabe, double promo_pao_bola, double valor_pao_arabe, double valor_pao_bola) {
 
@@ -109,11 +109,11 @@ public class ItemCardapio {
         this.preco_promocional = preco_promocional;
     }
 
-    public String getStatus_item() {
+    public int getStatus_item() {
         return status_item;
     }
 
-    public void setStatus_item(String status_item) {
+    public void setStatus_item(int status_item) {
         this.status_item = status_item;
     }
 

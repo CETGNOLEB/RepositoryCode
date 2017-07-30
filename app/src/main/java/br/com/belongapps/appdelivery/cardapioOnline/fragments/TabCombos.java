@@ -88,7 +88,7 @@ public class TabCombos extends Fragment {
         itemPedido = new ItemPedido();
 
         mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_escolher_combo);
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("10");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("11");
 
         mCombosList = (RecyclerView) getView().findViewById(R.id.list_combos);
         mCombosList.setHasFixedSize(true);
@@ -116,7 +116,7 @@ public class TabCombos extends Fragment {
                 viewHolder.setImagem(getContext(), model.getRef_img());
                 viewHolder.setStatus(model.getStatus_item());
 
-                if (model.getStatus_item().equals("Ativado")) {
+                if (model.getStatus_item() == 1) { //Disponível no Cardápio
 
                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -254,10 +254,10 @@ public class TabCombos extends Fragment {
             });
         }
 
-        public void setStatus(String status) {
+        public void setStatus(int status) {
             TextView item_status = (TextView) mView.findViewById(R.id.status_combo);
 
-            if (!status.equals("Ativado")) {
+            if (status == 0) { //Se Indisponível
                 item_status.setVisibility(View.VISIBLE);
             }
 

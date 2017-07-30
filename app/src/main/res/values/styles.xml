@@ -10,7 +10,6 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
-    <item name="android:actionMenuTextColor">@android:color/white</item>
 </style>
 
 <style name="Base.LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -72,8 +71,9 @@
 </style>
 
 <style name="MyEditTextTheme">
-    <item name="colorControlNormal">@color/textColorPrimary</item>
-    <item name="colorControlActivated">@color/textColorPrimary</item>
+    <item name="colorControlNormal">@color/colorPrimary</item>
+    <item name="colorControlActivated">@color/colorPrimary</item>
+    <item name="colorControlHighlight">@color/colorPrimary</item>
 </style>
 
 <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">

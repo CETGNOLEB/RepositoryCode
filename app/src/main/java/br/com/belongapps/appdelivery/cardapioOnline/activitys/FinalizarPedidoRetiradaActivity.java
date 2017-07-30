@@ -68,7 +68,6 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
     private Pedido pedido = new Pedido();
 
     private ProgressDialog dialog;
-    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

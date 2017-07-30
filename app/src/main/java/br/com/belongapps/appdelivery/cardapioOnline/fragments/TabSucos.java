@@ -118,7 +118,7 @@ public class TabSucos extends Fragment {
                 viewHolder.setImagem(getContext(), model.getRef_img());
                 viewHolder.setStatus(model.getStatus_item());
 
-                if (model.getStatus_item().equals("Ativado")) {
+                if (model.getStatus_item() == 1) { //Se Disponível no Cardápio
                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -262,10 +262,10 @@ public class TabSucos extends Fragment {
             });
         }
 
-        public void setStatus(String status) {
+        public void setStatus(int status) {
             TextView item_status = (TextView) mView.findViewById(R.id.status_suco);
 
-            if (!status.equals("Ativado")) {
+            if (status == 0) { //Se Indisponível
                 item_status.setVisibility(View.VISIBLE);
             }
 

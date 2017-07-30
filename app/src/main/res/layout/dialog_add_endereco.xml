@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/border_popups"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/title_dialog_endereco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="10dp"
+        android:text="Cadastrar Endereço"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"/>
+
+    <LinearLayout
+        android:id="@+id/ll_rua_bairoo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_dialog_endereco"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_rua"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5">
+
+            <EditText
+                android:id="@+id/rua_cad_endereco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Rua" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_numero"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+
+            <EditText
+                android:id="@+id/numero_cad_endereco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número"/>
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_bairro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_rua_bairoo"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bairro"
+            android:layout_marginLeft="5dp"
+            android:textSize="15sp"/>
+
+
+        <Spinner
+            android:id="@+id/bairos_spinner"
+            android:layout_weight="1.5"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_complemento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_bairro"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/complemento_cad_endereco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Complemento" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_nome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/til_complemento"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/nome_cad_endereco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nome. Ex: Minha Casa" />
+    </android.support.design.widget.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/til_nome">
+
+        <Button
+            android:id="@+id/bt_fechar_car_endereco"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/bt_cad_endereco"
+            android:background="@android:color/transparent"
+            android:text="FECHAR"
+            android:textColor="@color/textColorSecundary"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/bt_cad_endereco"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:background="@android:color/transparent"
+            android:text="CADASTRAR"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -4,8 +4,9 @@
     <!--KISABOR-->
     <color name="colorPrimary">#BC2026</color>
     <color name="colorPrimaryDark">#85121F</color>
-    <color name="colorAccent">#FFCB2C</color>
+    <color name="colorAccent">#BC2026</color>
     <color name="textColorPrimary">#FFFFFF</color>
+    <color name="textColorSecundary">#8f8f8f</color>
 
     <!--OUTRAS CORES-->
     <color name="tabIndication">#FFCB2C</color>

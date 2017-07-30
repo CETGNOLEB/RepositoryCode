@@ -28,9 +28,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginLeft="5dp">
+                android:layout_marginTop="10dp">
 
                 <RelativeLayout
                     android:id="@+id/rl_tempo"
@@ -39,16 +39,17 @@
 
                     <ImageView
                         android:id="@+id/img_time"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
                         android:src="@drawable/ic_tempo_pronto" />
 
                     <TextView
                         android:id="@+id/tv_desc_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
                         android:layout_toRightOf="@+id/img_time"
                         android:text="Pronto em:"
                         android:textColor="@color/colorPrimary"
@@ -58,8 +59,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
                         android:layout_below="@+id/tv_desc_time"
+                        android:layout_marginLeft="5dp"
                         android:layout_toRightOf="@+id/img_time"
                         android:text="30 Minutos" />
 
@@ -73,8 +74,8 @@
 
                     <ImageView
                         android:id="@+id/img_phone"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_margin="5dp"
                         android:src="@drawable/ic_contact_phone" />
 
@@ -82,8 +83,8 @@
                         android:id="@+id/tv_desc_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
                         android:layout_toRightOf="@+id/img_phone"
                         android:text="Contato:"
                         android:textColor="@color/colorPrimary"
@@ -93,8 +94,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
                         android:layout_below="@+id/tv_desc_phone"
+                        android:layout_marginLeft="5dp"
                         android:layout_toRightOf="@+id/img_phone"
                         android:text="(85) 991181131" />
 
@@ -104,14 +105,14 @@
                     android:id="@+id/rl_endereco"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/rl_phone"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/rl_phone">
 
                     <ImageView
                         android:id="@+id/img_endereco"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_margin="5dp"
                         android:src="@drawable/ic_local_estab" />
 
@@ -130,9 +131,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_desc_endereco"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="10dp"
-                        android:layout_below="@+id/tv_desc_endereco"
                         android:layout_toRightOf="@+id/img_endereco"
                         android:text="Rua Juvêncio Alves de Oliveira, 1638 - Nova Jerusalém" />
 
@@ -149,6 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout_resumo_pedido"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">

@@ -79,7 +79,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
 
         viewHolder.setImagem(context, item.getRef_img());
 
-        if (item.getStatus_item().equals("Ativado")) {
+        if (item.getStatus_item() == 1) {
 
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

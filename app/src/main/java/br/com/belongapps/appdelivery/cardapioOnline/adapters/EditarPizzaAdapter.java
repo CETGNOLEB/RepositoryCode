@@ -78,7 +78,7 @@ public class EditarPizzaAdapter extends RecyclerView.Adapter<EditarPizzaAdapter.
 
         viewHolder.setImagem(context, item.getRef_img());
 
-        if (item.getStatus_item().equals("Ativado")) {
+        if (item.getStatus_item() == 1) { //Se Disponível no Cardápio
 
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

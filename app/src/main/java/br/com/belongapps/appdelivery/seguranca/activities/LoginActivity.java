@@ -34,8 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
+        setContentView(R.layout.activity_login2);
+/*
         mAuth = FirebaseAuth.getInstance();
 
         mProgressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                 startSingIn();
 
             }
-        });
+        });*/
     }
 
     private void startSingIn() {
@@ -97,14 +97,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mAuth.addAuthStateListener(mAuthStateListener);
+        /*mAuth.addAuthStateListener(mAuthStateListener);*/
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthStateListener != null) {
+        /*if (mAuthStateListener != null) {
             mAuth.removeAuthStateListener(mAuthStateListener);
-        }
+        }*/
     }
 }
