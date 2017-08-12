@@ -34,10 +34,15 @@ public class ItemPedido implements Parcelable{
     private String imgMetade4;
     private double valorMetade4;
 
+    //referencia do item no banco
+    private String categoria;
+    private String keyItem;
+
     public ItemPedido(String nome, String descricao, String observacao, String ref_img, double valor_unit, int quantidade, double valor_total,
                       String nomeMetade2, String descMetade2, String obsMetade2, String imgMetade2, double valorMetade2,
                       String nomeMetade3, String descMetade3, String obsMetade3, String imgMetade3, double valorMetade3,
-                      String nomeMetade4, String descMetade4, String obsMetade4, String imgMetade4, double valorMetade4) {
+                      String nomeMetade4, String descMetade4, String obsMetade4, String imgMetade4, double valorMetade4,
+                      String categoria, String keyItem) {
 
         this.nome = nome;
         this.descricao = descricao;
@@ -65,6 +70,9 @@ public class ItemPedido implements Parcelable{
         this.obsMetade4 = obsMetade4;
         this.imgMetade4 = imgMetade4;
         this.valorMetade4 = valorMetade4;
+
+        this.keyItem = keyItem;
+        this.categoria = categoria;
     }
 
     public ItemPedido(){
@@ -101,6 +109,8 @@ public class ItemPedido implements Parcelable{
         imgMetade4 = in.readString();
         valorMetade4 = in.readDouble();
 
+        keyItem = in.readString();
+        categoria = in.readString();
     }
 
     public static final Parcelable.Creator<ItemPedido> CREATOR
@@ -149,6 +159,9 @@ public class ItemPedido implements Parcelable{
         dest.writeString(obsMetade4);
         dest.writeString(imgMetade4);
         dest.writeDouble(valorMetade4);
+
+        dest.writeString(keyItem);
+        dest.writeString(categoria);
     }
 
     public String getNome() {
@@ -327,5 +340,21 @@ public class ItemPedido implements Parcelable{
 
     public void setValorMetade4(double valorMetade4) {
         this.valorMetade4 = valorMetade4;
+    }
+
+    public String getKeyItem() {
+        return keyItem;
+    }
+
+    public void setKeyItem(String keyItem) {
+        this.keyItem = keyItem;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

@@ -19,6 +19,9 @@ public class CriaBanco extends SQLiteOpenHelper{
     public static final String QUANTIDADE = "quantidade";
     public static final String VALOR_TOTAL = "valor_total";
 
+    public static final String CATEGORIA_ITEM = "categoria";
+    public static final String KEY_ITEM = "keyItemCardapio";
+
     public static final String NOME_METADE_2 = "nomeMetade2";
     public static final String DESCRICAO_METADE_2 = "descricaoMetade2";
     public static final String OBSERVACAO_METADE_2 = "observacaoMetade2";
@@ -43,6 +46,9 @@ public class CriaBanco extends SQLiteOpenHelper{
 
                 + QUANTIDADE + " integer, "
                 + VALOR_TOTAL + " real, "
+
+                + CATEGORIA_ITEM + " text, "
+                + KEY_ITEM + " text, "
 
                 + NOME_METADE_2 + " text, "
                 + DESCRICAO_METADE_2 + " text, "

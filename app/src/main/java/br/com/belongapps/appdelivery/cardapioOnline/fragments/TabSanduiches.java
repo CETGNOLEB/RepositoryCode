@@ -113,6 +113,8 @@ public class TabSanduiches extends Fragment {
             protected void populateViewHolder(TabSanduiches.SanduichesViewHolder viewHolder, final ItemCardapio model, int position) {
                 closeProgressBar();
 
+                final String key = getRef(position).getKey();
+
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitarioEPromocao(model.getValor_pao_bola(), model.isStatus_promocao(), model.getPromo_pao_bola());
@@ -170,12 +172,12 @@ public class TabSanduiches extends Fragment {
                                     @Override
                                     public void onClick(View v) {
                                         dialogDeliveryFechado.dismiss();
-                                        selecionarItem(model);
+                                        selecionarItem(model, key);
                                     }
                                 });
 
                             } else {
-                                selecionarItem(model);
+                                selecionarItem(model, key);
                             }
                         }
                     });
@@ -188,18 +190,21 @@ public class TabSanduiches extends Fragment {
 
     }
 
-    public void selecionarItem(final ItemCardapio model) {
+    public void selecionarItem(final ItemCardapio model, String key) {
         if (model.getStatus_item() ==  1) { //Se Disponível
 
             itemPedido.setNome(model.getNome());
             itemPedido.setDescricao(model.getDescricao());
             itemPedido.setRef_img(model.getRef_img());
+            itemPedido.setCategoria(model.getCategoria_id());
 
             if (model.isStatus_promocao() == true) {
                 itemPedido.setValor_unit(model.getPromo_pao_bola());
             } else {
                 itemPedido.setValor_unit(model.getValor_pao_bola());
             }
+
+            itemPedido.setKeyItem(key);
 
             Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
 

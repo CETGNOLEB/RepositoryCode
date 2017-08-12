@@ -110,5 +110,8 @@ public class Endereco implements Parcelable{
         return result;
     }
 
-
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

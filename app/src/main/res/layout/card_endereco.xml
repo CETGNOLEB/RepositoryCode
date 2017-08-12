@@ -110,11 +110,11 @@
             android:id="@+id/option_menu_endereco"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&#8942;"
+            android:drawableLeft="@drawable/ic_dots_vertical"
+            android:textColor="#262626"
             android:textAppearance="?android:textAppearanceLarge"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:paddingRight="5dp"/>
+            android:layout_alignParentRight="true"/>
 
     </RelativeLayout>
 

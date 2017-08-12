@@ -1,6 +1,5 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,8 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
@@ -43,20 +39,14 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabPromocoes;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSucos;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabVitaminas;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
-import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
-import br.com.belongapps.appdelivery.helpAbout.activities.AjudaActivity;
 import br.com.belongapps.appdelivery.helpAbout.activities.SobreActivity;
 import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
-import br.com.belongapps.appdelivery.posPedido.adapters.PedidosRealizadosAdapter;
-import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabAcai;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabCombos;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSalgados;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSanduiches;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
-
-import static android.content.ContentValues.TAG;
 
 public class CardapioMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -82,7 +72,8 @@ public class CardapioMainActivity extends AppCompatActivity
         layout = (CoordinatorLayout) findViewById(R.id.main_content);
 
         //Exibir nome do usuário
-        /*nomeusuario = (TextView) findViewById(R.id.nome_usuario_menu)*/;
+        /*nomeusuario = (TextView) findViewById(R.id.nome_usuario_menu)*/
+        ;
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -110,7 +101,7 @@ public class CardapioMainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
 
-            Intent  it = new Intent(getApplicationContext(), CardapioMainActivity.class);
+            Intent it = new Intent(getApplicationContext(), CardapioMainActivity.class);
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             it.putExtra("SAIR", true);
             startActivity(it);
@@ -120,7 +111,7 @@ public class CardapioMainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        if(getIntent().getBooleanExtra("SAIR", false)){
+        if (getIntent().getBooleanExtra("SAIR", false)) {
             finish();
         }
         super.onResume();
@@ -186,21 +177,27 @@ public class CardapioMainActivity extends AppCompatActivity
         if (id == R.id.nav_cardapio) {
             Intent i = new Intent(CardapioMainActivity.this, CardapioMainActivity.class);
             startActivity(i);
+            finish();
         } else if (id == R.id.nav_carrinho) {
             Intent i = new Intent(CardapioMainActivity.this, CarrinhoActivity.class);
             startActivity(i);
+            finish();
         } else if (id == R.id.nav_meuspedidos) {
             Intent i = new Intent(CardapioMainActivity.this, MeusPedidosActivity.class);
             startActivity(i);
+            finish();
         } else if (id == R.id.nav_enderecos) {
             Intent i = new Intent(CardapioMainActivity.this, EnderecosActivity.class);
             startActivity(i);
+            finish();
+        } else if (id == R.id.nav_a_empresa) {
+            Intent i = new Intent(CardapioMainActivity.this, SobreActivity.class);
+            startActivity(i);
+            finish();
         } else if (id == R.id.nav_sobre) {
             Intent i = new Intent(CardapioMainActivity.this, SobreActivity.class);
             startActivity(i);
-       /* } else if (id == R.id.nav_ajuda) {
-            Intent i = new Intent(CardapioMainActivity.this, AjudaActivity.class);
-            startActivity(i);*/
+            finish();
         } else if (id == R.id.nav_sair) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(CardapioMainActivity.this, LoginActivity.class);
@@ -318,9 +315,9 @@ public class CardapioMainActivity extends AppCompatActivity
                         .make(layout, "Desculpe, nosso estabelecimento está fechado!", 4000)
                         .setAction("Action", null);
 
-                if(statusEstabelecimento == true){
+                if (statusEstabelecimento == true) {
                     snackbar.dismiss();
-                } else{
+                } else {
 
                     View snackView = snackbar.getView();
                     snackView.setBackgroundColor(ContextCompat.getColor(CardapioMainActivity.this, R.color.colorPrimary));

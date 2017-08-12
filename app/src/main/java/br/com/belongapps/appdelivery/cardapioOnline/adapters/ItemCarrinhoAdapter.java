@@ -67,6 +67,7 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
 
         holder.setNome(itemPedido.getNome());
         holder.setDescricao(itemPedido.getDescricao());
+        holder.setObservacao(itemPedido.getObservacao());
         holder.setValorUnitario(itemPedido.getValor_unit());
         holder.setValorTotalProduto(itemPedido.getValor_total());
         holder.setQuantidadeProduto(itemPedido.getQuantidade());
@@ -205,6 +206,13 @@ public class ItemCarrinhoAdapter extends RecyclerView.Adapter<ItemCarrinhoAdapte
 
             TextView nomeProduto = (TextView) mView.findViewById(R.id.nome_item_carrinho);
             nomeProduto.setText(nome);
+
+        }
+
+        public void setObservacao(String obs) {
+
+            TextView obsProduto = (TextView) mView.findViewById(R.id.obs_item_carrinho);
+            obsProduto.setText(obs);
 
         }
 

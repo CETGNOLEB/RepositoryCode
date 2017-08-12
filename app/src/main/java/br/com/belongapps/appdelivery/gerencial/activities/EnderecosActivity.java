@@ -270,7 +270,8 @@ public class EnderecosActivity extends AppCompatActivity {
 
     public void salvarEndereco(Endereco endereco) {
 
-        String key = mDatabaseReference.push().getKey(); //PEGAR ID DO USUÁRIO LOGADO
+        DatabaseReference enderecoref = mDatabaseReference.child("clientes").child("1").child("enderecos"); //PEGAR ID DO USUÁRIO LOGADO
+        String key = enderecoref.push().getKey();
         Map<String, Object> enderecoValues = endereco.toMap();
         Map<String, Object> childUpdatesEndereco = new HashMap<>();
         childUpdatesEndereco.put("/clientes/1/enderecos/" + key, enderecoValues);
@@ -360,9 +361,6 @@ public class EnderecosActivity extends AppCompatActivity {
 
         bairros = new ArrayList<>();
         bairrosNomes = new ArrayList<>();
-
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar_endereco);
 
         //Get id do usuário
@@ -431,7 +429,7 @@ public class EnderecosActivity extends AppCompatActivity {
         mEnderecoList.setAdapter(firebaseRecyclerAdapter);
 
         //ListarBairros
-        ValueEventListener postListener = new ValueEventListener() {
+        ValueEventListener bairroListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -457,7 +455,7 @@ public class EnderecosActivity extends AppCompatActivity {
             }
         };
 
-        mDatabaseReference.child("configuracoes").child("bairro_taxa").addValueEventListener(postListener);
+        mDatabaseReference.child("configuracoes").child("bairro_taxa").addValueEventListener(bairroListener);
 
     }
 

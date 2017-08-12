@@ -82,24 +82,10 @@
     </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/til_complemento"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_bairro"
-        android:layout_marginTop="10dp">
-
-        <EditText
-            android:id="@+id/complemento_cad_endereco"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Complemento" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
         android:id="@+id/til_nome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/til_complemento"
+        android:layout_below="@+id/ll_bairro"
         android:layout_marginTop="10dp">
 
         <EditText
@@ -109,12 +95,26 @@
             android:hint="Nome. Ex: Minha Casa" />
     </android.support.design.widget.TextInputLayout>
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_complemento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/til_nome"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/complemento_cad_endereco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Complemento" />
+    </android.support.design.widget.TextInputLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/til_nome">
+        android:layout_below="@+id/til_complemento">
 
         <Button
             android:id="@+id/bt_fechar_car_endereco"

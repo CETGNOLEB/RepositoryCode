@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/border_popups"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/title_dialog_alterar_endereco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="10dp"
+        android:text="Alterar Endereço"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"/>
+
+    <LinearLayout
+        android:id="@+id/ll_bairro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_dialog_alterar_endereco"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seus Endereços:"
+            android:layout_marginLeft="5dp"
+            android:textSize="15sp"/>
+
+        <Spinner
+            android:id="@+id/enderecos_spinner"
+            android:layout_weight="1.5"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/gl_detalhe_endereco"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_bairro"
+        android:layout_marginTop="10dp"
+        android:columnCount="4"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/ae_text_rua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Rua: "
+            android:textColor="@android:color/black"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/ae_tv_rua_endereco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Tabelião Enéias"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/ae_text_numero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Nº: "
+            android:textColor="@android:color/black"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/ae_tv_numero_endereco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="35"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/ae_text_bairro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="Bairro: "
+            android:textColor="@android:color/black"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/ae_tv_bairro_endereco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Rodoviária"
+            android:textSize="18sp"/>
+
+    </GridLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/gl_detalhe_endereco">
+
+        <Button
+            android:id="@+id/bt_fechar_alterar_endereco"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/bt_alterar_endereco"
+            android:background="@android:color/transparent"
+            android:text="FECHAR"
+            android:textColor="@color/textColorSecundary"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/bt_alterar_endereco"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:background="@android:color/transparent"
+            android:text="CONFIRMAR"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

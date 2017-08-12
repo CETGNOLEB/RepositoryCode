@@ -176,9 +176,9 @@ public class TelaInicialActivity extends AppCompatActivity {
 
 
                 }
-
+/*
                 Timer timer = new Timer();
-                timer.scheduleAtFixedRate(new TempodeExibicaoPromo(), 2000, 4000);
+                timer.scheduleAtFixedRate(new TempodeExibicaoPromo(), 2000, 4000);*/
 
             }
 

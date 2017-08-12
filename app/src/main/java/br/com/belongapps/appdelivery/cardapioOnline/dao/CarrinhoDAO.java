@@ -38,11 +38,8 @@ public class CarrinhoDAO {
         valores.put(banco.QUANTIDADE, itemPedido.getQuantidade());
         valores.put(banco.VALOR_TOTAL, itemPedido.getValor_total());
 
-        valores.put(banco.NOME_METADE_2, itemPedido.getNomeMetade2());
-        valores.put(banco.DESCRICAO_METADE_2, itemPedido.getDescMetade2());
-        valores.put(banco.OBSERVACAO_METADE_2, itemPedido.getObsMetade2());
-        valores.put(banco.REF_IMG_METADE_2, itemPedido.getImgMetade2());
-        valores.put(banco.VALOR_UNIT_METADE_2, itemPedido.getValorMetade2());
+        valores.put(banco.CATEGORIA_ITEM, itemPedido.getCategoria());
+        valores.put(banco.KEY_ITEM, itemPedido.getKeyItem());
 
         resultado = db.insert(CriaBanco.TABELA, null, valores);
         db.close();
@@ -75,11 +72,8 @@ public class CarrinhoDAO {
                     item.setQuantidade(cursor.getInt(cursor.getColumnIndex(banco.QUANTIDADE)));
                     item.setValor_total(cursor.getDouble(cursor.getColumnIndex(banco.VALOR_TOTAL)));
 
-                    item.setNomeMetade2(cursor.getString(cursor.getColumnIndex(banco.NOME_METADE_2)));
-                    item.setDescMetade2(cursor.getString(cursor.getColumnIndex(banco.DESCRICAO_METADE_2)));
-                    item.setObsMetade2(cursor.getString(cursor.getColumnIndex(banco.OBSERVACAO_METADE_2)));
-                    item.setImgMetade2(cursor.getString(cursor.getColumnIndex(banco.REF_IMG_METADE_2)));
-                    item.setValorMetade2(cursor.getDouble(cursor.getColumnIndex(banco.VALOR_UNIT_METADE_2)));
+                    item.setCategoria(cursor.getString(cursor.getColumnIndex(banco.CATEGORIA_ITEM)));
+                    item.setKeyItem(cursor.getString(cursor.getColumnIndex(banco.KEY_ITEM)));
 
                     itens.add(item);
                 } while (cursor.moveToNext());
@@ -132,12 +126,8 @@ public class CarrinhoDAO {
 
                 banco.QUANTIDADE,
                 banco.VALOR_TOTAL,
-
-                banco.NOME_METADE_2,
-                banco.DESCRICAO_METADE_2,
-                banco.OBSERVACAO_METADE_2,
-                banco.REF_IMG_METADE_2,
-                banco.VALOR_UNIT_METADE_2,
+                banco.CATEGORIA_ITEM,
+                banco.KEY_ITEM,
         };
 
 

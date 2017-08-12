@@ -93,7 +93,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
 
                 observacao = observacaoDetalheProduto.getText().toString();
-                itemPedido.setObservacao(observacao);
+
+                if (!observacao.isEmpty()){
+                    itemPedido.setObservacao(observacao);
+                }
+
                 itemPedido.setQuantidade(quantidade);
 
                 Double totalProduto = calcularValorToralDoItem(itemPedido.getQuantidade(), itemPedido.getValor_unit());

@@ -6,14 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -33,10 +30,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import br.com.belongapps.appdelivery.R;
-import br.com.belongapps.appdelivery.cardapioOnline.adapters.FormasdePagamentoAdapter;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Cliente;
-import br.com.belongapps.appdelivery.cardapioOnline.model.FormadePagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.KeyPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pagamento;
@@ -105,13 +100,13 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
                 } else {
 
                     AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoRetiradaActivity.this, R.style.MyDialogTheme);
-                    View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_selecionar_fpgm, null);
+                    View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_entendi, null);
 
                     mBilder.setView(layoutDialog);
                     final AlertDialog dialogEscolhaFormPag = mBilder.create();
                     dialogEscolhaFormPag.show();
 
-                    Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_entendi_finalizar);
+                    Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_entendi);
 
                     btCancel.setOnClickListener(new View.OnClickListener() {
                         @Override

@@ -31,7 +31,7 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
     public FormasdePagamentoAdapter(List<FormadePagamento> formadePagamento, Context context, double totalPedido) {
         this.formasdePagamento = formadePagamento;
         this.context = context;
-        this.totalPedido = totalPedido + 1.0;
+        this.totalPedido = totalPedido;
     }
 
     @Override

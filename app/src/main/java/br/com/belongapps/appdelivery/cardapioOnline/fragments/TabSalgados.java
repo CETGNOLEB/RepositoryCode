@@ -113,6 +113,8 @@ public class TabSalgados extends Fragment {
             protected void populateViewHolder(TabSalgados.SalgadoViewHolder viewHolder, final ItemCardapio model, int position) {
                 closeProgressBar();
 
+                final String key = getRef(position).getKey();
+
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitarioEPromocao(model.getValor_unit(), model.isStatus_promocao(), model.getPreco_promocional());
@@ -170,12 +172,12 @@ public class TabSalgados extends Fragment {
                                     @Override
                                     public void onClick(View v) {
                                         dialogDeliveryFechado.dismiss();
-                                        selecionarItem(model);
+                                        selecionarItem(model, key);
                                     }
                                 });
 
                             } else{
-                                selecionarItem(model);
+                                selecionarItem(model, key);
                             }
                         }
                     });
@@ -189,16 +191,19 @@ public class TabSalgados extends Fragment {
 
     }
 
-    public void selecionarItem(ItemCardapio model){
+    public void selecionarItem(final ItemCardapio model, String key) {
         itemPedido.setNome(model.getNome());
         itemPedido.setDescricao(model.getDescricao());
         itemPedido.setRef_img(model.getRef_img());
+        itemPedido.setCategoria(model.getCategoria_id());
 
         if (model.isStatus_promocao() == true) {
             itemPedido.setValor_unit(model.getPreco_promocional());
         } else {
             itemPedido.setValor_unit(model.getValor_unit());
         }
+
+        itemPedido.setKeyItem(key);
 
         Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
 

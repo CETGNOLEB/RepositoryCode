@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
 
-public class AjudaActivity extends AppCompatActivity {
+public class AEmpresaActivity extends AppCompatActivity {
 
     Toolbar mToolbar;
 
@@ -28,7 +28,7 @@ public class AjudaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(AjudaActivity.this, CardapioMainActivity.class);
+                Intent intent = new Intent(AEmpresaActivity.this, CardapioMainActivity.class);
                 startActivity(intent);
                 finish();
         }
@@ -40,9 +40,8 @@ public class AjudaActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent intent = new Intent(AjudaActivity.this, CardapioMainActivity.class);
+        Intent intent = new Intent(AEmpresaActivity.this, CardapioMainActivity.class);
         startActivity(intent);
-
         finish();
     }
 }

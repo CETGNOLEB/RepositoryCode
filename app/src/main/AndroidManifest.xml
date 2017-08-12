@@ -5,7 +5,7 @@
     <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
     <application
         android:name=".util.FirebaseLearn"
-        android:icon="@mipmap/launch_icon_kisabor"
+        android:icon="@mipmap/launch_icon_rits"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -26,10 +26,7 @@
         //Módulo Cardapio Online
         <activity android:name=".cardapioOnline.activitys.CardapioMainActivity">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".cardapioOnline.activitys.EscolherRecheioActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherAdicionalActivity" />
@@ -50,13 +47,19 @@
 
         //Módulo Sobre/Ajuda
         <activity android:name=".helpAbout.activities.SobreActivity" />
-        <activity android:name=".helpAbout.activities.AjudaActivity" />
+        <activity android:name=".helpAbout.activities.AEmpresaActivity" />
 
         //Módulo gerencial do cliente
         <activity android:name=".gerencial.activities.EnderecosActivity" />
 
         //Módulo Banner Promocionais
-        <activity android:name=".promocoes.activities.TelaInicialActivity"></activity>
+        <activity android:name=".promocoes.activities.TelaInicialActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         //Módulo Pós Pedido
         <activity android:name=".posPedido.activities.MeusPedidosActivity" />

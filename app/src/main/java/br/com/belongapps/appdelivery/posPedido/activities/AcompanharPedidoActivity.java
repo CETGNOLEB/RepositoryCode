@@ -107,6 +107,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         statusTempo = intent.getStringExtra("StatusTempo");
         itensdoPedido = intent.getParcelableArrayListExtra("ItensPedido");
 
+        Log.println(Log.ERROR, "STATUS", "" + statusPedido);
     }
 
     private void initViews() {
@@ -114,21 +115,25 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         txtDiaHoraPedido = (TextView) findViewById(R.id.txt_dia_hora_pedido);
         txtValorPedido = (TextView) findViewById(R.id.txt_valor_pedido);
 
+        //CONFIRMADO
         textStatusPedidoConfirmado = (TextView) findViewById(R.id.text_status_pedido_confirmado);
         imgStatusPedidoConfirmado = (ImageView) findViewById(R.id.img_status_pedido_confirmado);
 
+        //EM PRODUÇÃO
         textStatusPedidoProducao =  (TextView) findViewById(R.id.text_status_pedido_producao);
         imgStatusPedidoProducao = (ImageView) findViewById(R.id.img_status_pedido_producao);
 
+        //SAIU DA COZINHA
         textStatusPedidoPronto = (TextView) findViewById(R.id.text_status_pedido_pronto);
         imgStatusPedidoPronto = (ImageView) findViewById(R.id.img_status_pedido_pronto);
 
+        //SAIU P/ ENTREGA
         textStatusPedidoSaiuEntrega = (TextView) findViewById(R.id.text_status_pedido_saiu_entrega);
         imgStatusPedidoSaiuEntrega = (ImageView) findViewById(R.id.img_status_pedido_saiu_entrega);
 
+        //ENTREGUE
         textStatusPedidoEntregue = (TextView) findViewById(R.id.text_status_pedido_entregue);
         imgStatusPedidoEntregue = (ImageView) findViewById(R.id.img_status_pedido_entregue);
-
 
         mRecyclerViewItensdoPedido = (RecyclerView) findViewById(R.id.list_itens_pedido);
         mRecyclerViewItensdoPedido.setHasFixedSize(true);
@@ -156,11 +161,11 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
             imgStatusPedidoPronto.setImageResource(R.drawable.ic_check);
 
             if (tipoEntrega == 1) { //Retirada
-                textStatusPedidoPronto.setText("Pronto p/ retirada" + getStatusHora(statusTempo, statusPedido));
+                textStatusPedidoPronto.setText("Pronto p/ retirada " + getStatusHora(statusTempo, statusPedido));
             }
 
             if (tipoEntrega == 2) { //Consumo no estabelecimento
-                textStatusPedidoPronto.setText("Pronto p/ consumo" + getStatusHora(statusTempo, statusPedido));
+                textStatusPedidoPronto.setText("Pronto p/ consumo " + getStatusHora(statusTempo, statusPedido));
             }
 
         } else if (statusPedido == 3) { //Pronto P/entrega
@@ -173,11 +178,28 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
             imgStatusPedidoPronto.setImageResource(R.drawable.ic_check);
 
         } else if (statusPedido == 4){ //Saiu p/ Entrega
+            imgStatusPedidoConfirmado.setImageResource(R.drawable.ic_check);
+            imgStatusPedidoProducao.setImageResource(R.drawable.ic_check);
+            textStatusPedidoConfirmado.setText("Confirmado " + getStatusHora(statusTempo, 1));
+            textStatusPedidoProducao.setText("Em produção " + getStatusHora(statusTempo, 1));
+            imgStatusPedidoPronto.setImageResource(R.drawable.ic_check);
+            textStatusPedidoPronto.setText("Saiu da Cozinha " + getStatusHora(statusTempo, 3));
 
+            imgStatusPedidoSaiuEntrega.setImageResource(R.drawable.ic_check);
+            textStatusPedidoSaiuEntrega.setText("Saiu para entrega " + getStatusHora(statusTempo, statusPedido));
 
         } else if(statusPedido == 5){ //entregue
+            imgStatusPedidoConfirmado.setImageResource(R.drawable.ic_check);
+            imgStatusPedidoProducao.setImageResource(R.drawable.ic_check);
+            textStatusPedidoConfirmado.setText("Confirmado " + getStatusHora(statusTempo, 1));
+            textStatusPedidoProducao.setText("Em produção " + getStatusHora(statusTempo, 1));
+            imgStatusPedidoPronto.setImageResource(R.drawable.ic_check);
+            textStatusPedidoPronto.setText("Saiu da Cozinha " + getStatusHora(statusTempo, 3));
+            imgStatusPedidoSaiuEntrega.setImageResource(R.drawable.ic_check);
+            textStatusPedidoSaiuEntrega.setText("Saiu para entrega " + getStatusHora(statusTempo, 4));
 
-
+            imgStatusPedidoEntregue.setImageResource(R.drawable.ic_check);
+            textStatusPedidoEntregue.setText("Entregue " + getStatusHora(statusTempo, statusPedido));
         }
 
     }
@@ -202,16 +224,15 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         Log.println(Log.ERROR, "Status_tempo", statusTempo);
 
         if (statusPedido == 1) { //Em produção
-            retorno = "(" + statusTempo.substring(7, 12) + ")";
+            retorno = "(" + statusTempo.substring(9, 14) + ")";
         } else if (statusPedido == 2) { //Consumo/Retirada
-            retorno = "(" + statusTempo.substring(7, 12) + ")";
+            retorno = "(" + statusTempo.substring(9, 14) + ")";
         } else if (statusPedido == 3) { //Pronto P/entrega
-            retorno = "(" + statusTempo.substring(13, 18) + ")";
+            retorno = "(" + statusTempo.substring(17, 22) + ")";
         } else if (statusPedido == 4){ //Saiu p/ Entrega
-
+            retorno = "(" + statusTempo.substring(25, 30) + ")";
         } else if(statusPedido == 5){ //entregue
-
-
+            retorno = "(" + statusTempo.substring(33, 38) + ")";
         }
 
         return retorno;

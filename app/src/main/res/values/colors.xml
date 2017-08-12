@@ -13,6 +13,7 @@
     <color name="dialogBackground">#616161</color>
     <color name="loginBackground">@color/colorPrimary</color>
 
+    <color name="nonactiveDot">#FFCB2C</color>
 
     <!--ALEX-->
     <!--<color name="colorPrimary">#6E2B77</color>
