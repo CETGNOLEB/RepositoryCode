@@ -1,8 +1,10 @@
 package br.com.belongapps.appdelivery.posPedido.adapters;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,17 +29,18 @@ import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActi
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherRecheioActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.posPedido.PedidoKey;
 import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
 import br.com.belongapps.appdelivery.util.DataUtil;
 
 
 public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealizadosAdapter.ViewHolder> {
 
-    private static List<Pedido> pedidosRealizados;
+    private static List<PedidoKey> pedidosRealizados;
     private Context context;
     private ProgressBar mProgressBar;
 
-    public PedidosRealizadosAdapter(List<Pedido> pedidosRealizados, Context context, ProgressBar progressBar) {
+    public PedidosRealizadosAdapter(List<PedidoKey> pedidosRealizados, Context context, ProgressBar progressBar) {
         this.pedidosRealizados = pedidosRealizados;
         this.context = context;
         this.mProgressBar = progressBar;
@@ -57,7 +60,8 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         closeProgressBar();
 
-        final Pedido pedido = pedidosRealizados.get(position);
+        final Pedido pedido = pedidosRealizados.get(position).getPedido();
+        final String key = pedidosRealizados.get(position).getKey();
 
         viewHolder.setNumerodoPedido(pedido.getNumero_pedido());
         viewHolder.setDatadoPedido(getData(pedido.getData()));
@@ -78,6 +82,7 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
                 intent.putExtra("StatusPedido", pedido.getStatus());
                 intent.putExtra("TipoEntrega", pedido.getEntrega_retirada());
                 intent.putExtra("StatusTempo", pedido.getStatus_tempo());
+                intent.putExtra("keyPedido", key);
 
                 ArrayList<ItemPedido> itensdoPedido = new ArrayList<>();
                 for (ItemPedido pedidoaux: pedido.getItens_pedido() ) {
@@ -161,6 +166,18 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
                 statusPedido.setText("ENVIADO");
             } else if (status == 1) {
                 statusPedido.setText("EM PRODUÇÃO");
+
+                /*NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(context)
+                                .setContentTitle("Em Produção")
+                                .setContentText("Hello World!");
+
+                NotificationManager mNotificationManager =
+                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+                mNotificationManager.notify(1, mBuilder.build());*/
+
+
             } else if (status == 2) {
                 if (tipoEntrega == 1) {
                     statusPedido.setText("PRONTO P/ RETIRADA");

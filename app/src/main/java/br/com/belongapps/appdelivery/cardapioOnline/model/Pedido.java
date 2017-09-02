@@ -73,6 +73,7 @@ public class Pedido{
         result.put("valor_total", pagamento.getValorTotal());
         result.put("forma_pagamento", pagamento.getFormaPagamento());
         result.put("descricao_pagamento", pagamento.getDescricaoPagemento());
+        result.put("valor_pago", pagamento.getValorPago());
 
         return result;
     }

@@ -20,10 +20,19 @@
             app:theme="@style/ToolbarColoredBackArrow"
             app:titleTextColor="@android:color/white" />
 
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ProgressBar
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:progressTint="@color/colorPrimary"
+                android:visibility="gone"
+                android:theme="@style/MyProgressbarColor"
+                android:id="@+id/progressbar_acompanhamento_pedido" />
 
             <TextView
                 android:id="@+id/text_num_pedido"

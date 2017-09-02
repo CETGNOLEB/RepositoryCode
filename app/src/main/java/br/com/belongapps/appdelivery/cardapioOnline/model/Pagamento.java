@@ -6,11 +6,13 @@ public class Pagamento {
     private double valorTotal;
     private String formaPagamento;
     private String descricaoPagemento;
+    private double valorPago;
 
-    public Pagamento(double valorTotal, String formaPagamento, String descricaoPagamento) {
+    public Pagamento(double valorTotal, String formaPagamento, String descricaoPagamento, double valorPago) {
         this.valorTotal = valorTotal;
         this.formaPagamento = formaPagamento;
         this.descricaoPagemento = descricaoPagamento;
+        this.valorPago = valorPago;
     }
 
     public Pagamento(){
@@ -39,5 +41,13 @@ public class Pagamento {
 
     public void setDescricaoPagemento(String descricaoPagemento) {
         this.descricaoPagemento = descricaoPagemento;
+    }
+
+    public double getValorPago() {
+        return valorPago;
+    }
+
+    public void setValorPago(double valorPago) {
+        this.valorPago = valorPago;
     }
 }

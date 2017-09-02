@@ -8,22 +8,36 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.posPedido.PedidoKey;
 import br.com.belongapps.appdelivery.posPedido.adapters.ItensdoPedidoAdapter;
+import br.com.belongapps.appdelivery.util.DataUtil;
 
 public class AcompanharPedidoActivity extends AppCompatActivity {
 
-    Toolbar mToolbar;
+    private Toolbar mToolbar;
+    private ProgressBar mProgressBar;
 
     //Parâmetros
     private String numeroPedido;
@@ -34,6 +48,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
     private int tipoEntrega;
     private String statusTempo;
     private List<ItemPedido> itensdoPedido;
+    private String keyPedido;
 
     //Views
     private TextView txtNumPedido;
@@ -60,6 +75,8 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
     private Button chamarAtendente;
 
+    private DatabaseReference database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,30 +87,19 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_acompanhamento_pedido);
+
         pegarParametros();
         initViews();
 
-        //SET VIEWS
-        txtNumPedido.setText("Pedido Nº " + numeroPedido);
-        txtDiaHoraPedido.setText("Enviado em " + dataPedido + " as " + horaPedido);
-        txtValorPedido.setText("Valor do Pedido: R$ " + String.format(Locale.US, "%.2f", valorPedido).replace(".", ","));
+        //SET VIEWS INFO DO PEDIDO
+        setViewInfoDoPedido();
 
+        //DEFINIR STATUS DO PEDIDO
         definirStatus(statusPedido, tipoEntrega);
 
         //PREENCHER LISTA ITENS_PEDIDO
-        adapter = new ItensdoPedidoAdapter(itensdoPedido, AcompanharPedidoActivity.this);
-        mRecyclerViewItensdoPedido.setAdapter(adapter);
-
-        chamarAtendente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + "85991181131"));
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                }
-            }
-        });
+        populateItensdoPedido();
     }
 
     private void pegarParametros() {
@@ -106,6 +112,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         tipoEntrega = intent.getIntExtra("TipoEntrega", 0);
         statusTempo = intent.getStringExtra("StatusTempo");
         itensdoPedido = intent.getParcelableArrayListExtra("ItensPedido");
+        keyPedido = intent.getStringExtra("keyPedido");
 
         Log.println(Log.ERROR, "STATUS", "" + statusPedido);
     }
@@ -120,7 +127,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         imgStatusPedidoConfirmado = (ImageView) findViewById(R.id.img_status_pedido_confirmado);
 
         //EM PRODUÇÃO
-        textStatusPedidoProducao =  (TextView) findViewById(R.id.text_status_pedido_producao);
+        textStatusPedidoProducao = (TextView) findViewById(R.id.text_status_pedido_producao);
         imgStatusPedidoProducao = (ImageView) findViewById(R.id.img_status_pedido_producao);
 
         //SAIU DA COZINHA
@@ -142,7 +149,13 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         chamarAtendente = (Button) findViewById(R.id.bt_ligar_atendente);
     }
 
-    private void definirStatus(int statusPedido,int tipoEntrega) {
+    private void setViewInfoDoPedido(){
+        txtNumPedido.setText("Pedido Nº " + numeroPedido);
+        txtDiaHoraPedido.setText("Enviado em " + dataPedido + " as " + horaPedido);
+        txtValorPedido.setText("Valor do Pedido: R$ " + String.format(Locale.US, "%.2f", valorPedido).replace(".", ","));
+    }
+
+    private void definirStatus(int statusPedido, int tipoEntrega) {
 
         setVisibityStatusPedido(tipoEntrega);
 
@@ -177,7 +190,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
             textStatusPedidoPronto.setText("Saiu da Cozinha " + getStatusHora(statusTempo, statusPedido));
             imgStatusPedidoPronto.setImageResource(R.drawable.ic_check);
 
-        } else if (statusPedido == 4){ //Saiu p/ Entrega
+        } else if (statusPedido == 4) { //Saiu p/ Entrega
             imgStatusPedidoConfirmado.setImageResource(R.drawable.ic_check);
             imgStatusPedidoProducao.setImageResource(R.drawable.ic_check);
             textStatusPedidoConfirmado.setText("Confirmado " + getStatusHora(statusTempo, 1));
@@ -188,7 +201,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
             imgStatusPedidoSaiuEntrega.setImageResource(R.drawable.ic_check);
             textStatusPedidoSaiuEntrega.setText("Saiu para entrega " + getStatusHora(statusTempo, statusPedido));
 
-        } else if(statusPedido == 5){ //entregue
+        } else if (statusPedido == 5) { //entregue
             imgStatusPedidoConfirmado.setImageResource(R.drawable.ic_check);
             imgStatusPedidoProducao.setImageResource(R.drawable.ic_check);
             textStatusPedidoConfirmado.setText("Confirmado " + getStatusHora(statusTempo, 1));
@@ -204,21 +217,37 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
     }
 
-    private void setVisibityStatusPedido(int tipoEntrega){
-        if (tipoEntrega == 0){
+    public void populateItensdoPedido(){
+        adapter = new ItensdoPedidoAdapter(itensdoPedido, AcompanharPedidoActivity.this);
+        mRecyclerViewItensdoPedido.setAdapter(adapter);
+
+        chamarAtendente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + "85991181131"));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private void setVisibityStatusPedido(int tipoEntrega) {
+        if (tipoEntrega == 0) {
             textStatusPedidoPronto.setText("Saiu da cozinha");
             imgStatusPedidoSaiuEntrega.setVisibility(View.VISIBLE);
             textStatusPedidoSaiuEntrega.setVisibility(View.VISIBLE);
             imgStatusPedidoEntregue.setVisibility(View.VISIBLE);
             textStatusPedidoEntregue.setVisibility(View.VISIBLE);
-        } else if(tipoEntrega == 1){
+        } else if (tipoEntrega == 1) {
             textStatusPedidoPronto.setText("Pronto p/ retirada");
-        } else{
+        } else {
             textStatusPedidoPronto.setText("Pronto p/ consumo");
         }
     }
 
-    private String getStatusHora(String statusTempo, int statusPedido){
+    private String getStatusHora(String statusTempo, int statusPedido) {
         String retorno = "";
 
         Log.println(Log.ERROR, "Status_tempo", statusTempo);
@@ -229,13 +258,71 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
             retorno = "(" + statusTempo.substring(9, 14) + ")";
         } else if (statusPedido == 3) { //Pronto P/entrega
             retorno = "(" + statusTempo.substring(17, 22) + ")";
-        } else if (statusPedido == 4){ //Saiu p/ Entrega
+        } else if (statusPedido == 4) { //Saiu p/ Entrega
             retorno = "(" + statusTempo.substring(25, 30) + ")";
-        } else if(statusPedido == 5){ //entregue
+        } else if (statusPedido == 5) { //entregue
             retorno = "(" + statusTempo.substring(33, 38) + ")";
         }
 
         return retorno;
+    }
+
+    public void atualizarAcompanhamento(String key) {
+
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        database = FirebaseDatabase.getInstance().getReference();
+
+        String mesAno = key.substring(0, 6);
+        String dia = key.substring(7, 15);
+        final String keyPedido = key.substring(16);
+
+        Log.println(Log.ERROR, "mes", mesAno);
+        Log.println(Log.ERROR, "dia", dia);
+        Log.println(Log.ERROR, "key", keyPedido);
+
+        ValueEventListener buscarPedidos = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mProgressBar.setVisibility(View.GONE);
+
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Pedido pedido = data.getValue(Pedido.class);
+
+                    if (data.getKey().equals(keyPedido)) {
+                        numeroPedido = pedido.getNumero_pedido();
+                        dataPedido = DataUtil.getDataPedido(pedido.getData());
+                        horaPedido = DataUtil.getHoraPedido(pedido.getData());
+                        valorPedido = pedido.getValor_total();
+                        statusPedido = pedido.getStatus();
+                        tipoEntrega = pedido.getEntrega_retirada();
+                        statusTempo = pedido.getStatus_tempo();
+                        itensdoPedido = pedido.getItens_pedido();
+
+                        setViewInfoDoPedido();
+                        definirStatus(statusPedido, tipoEntrega);
+                        populateItensdoPedido();
+                    }
+                }
+
+                Toast.makeText(AcompanharPedidoActivity.this, "Atualizado", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        database.child("pedidos").child(mesAno).child(dia).addListenerForSingleValueEvent(buscarPedidos);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_acompanhar_pedido, menu);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -245,6 +332,10 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
                 Intent intent = new Intent(AcompanharPedidoActivity.this, MeusPedidosActivity.class);
                 startActivity(intent);
                 finish();
+                break;
+            case R.id.adicionar_endereco:
+                atualizarAcompanhamento(keyPedido);
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -260,3 +351,4 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         finish();
     }
 }
+;

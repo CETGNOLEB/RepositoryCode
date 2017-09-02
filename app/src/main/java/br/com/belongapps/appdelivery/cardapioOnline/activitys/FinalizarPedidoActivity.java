@@ -28,10 +28,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -180,8 +180,17 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         //verificar o endereço
 
         if (frmPagValida && endereco != null) {
-            realizarEnvioDoPedido();
-           // Toast.makeText(FinalizarPedidoActivity.this, "Pode enviar", Toast.LENGTH_SHORT).show();
+
+            try {
+                realizarEnvioDoPedido();
+
+                //LIMPAR O CARRINHO
+                /*CarrinhoDAO dao = new CarrinhoDAO(this);
+                dao.deleteAll();*/
+            }catch (Exception e){
+                //Exibir Dialog de Erro ao enviar o pedido
+                exibirErroAoEnviarPedido();
+            }
         } else {
             naoEnviarPedido(frmPagValida);
         }
@@ -196,7 +205,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         pedido.setData(dataPedido);
         pedido.setStatus_tempo("n" + DataUtil.formatar(data, "HH:mm"));
-        pedido.setNumero_pedido(gerarNumeroPedido(numerodopedido));
         pedido.setStatus(0);
         pedido.setEntrega_retirada(getIntent().getIntExtra("tipoEntrega", 0));
         pedido.setItens_pedido(getItensdoPedido());
@@ -221,6 +229,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         pagamento.setFormaPagamento(formadePagamento.getNome());
         pagamento.setValorTotal(totaldoPedido);
         pagamento.setDescricaoPagemento(formadePagamento.getDescricao());
+        //pagamento.setValorPago(formadePagamento.getValorDinheiro());
 
         pedido.setPagamento(pagamento);
 
@@ -229,43 +238,88 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     }
 
+    public void exibirErroAoEnviarPedido(){
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    /*METÓDOS PARA ENVIO DO PEDIDO -----------------------*/
+        AlertDialog.Builder mBilder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+        View layoutDialog = inflater.inflate(R.layout.dialog_erro_ao_enviar_pedido, null);
+        initView(layoutDialog);
 
-    private void salvarPedido(Pedido pedido, String hj) {
-        String key = database.child("pedidos").push().getKey();
-        Pedido pedidoAux = pedido;
-        Map<String, Object> pedidoValues = pedidoAux.toMap();
+        Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_erro);
 
-        Log.println(Log.ERROR, "NODO:", hj);
+        mBilder.setView(layoutDialog);
+        final AlertDialog dialogErro = mBilder.create();
+        dialogErro.show();
 
-        Map<String, Object> childUpdatesPedido = new HashMap<>();
-        childUpdatesPedido.put("/pedidos/" + StringUtil.mesdoPedido(hj) + "/" + key, pedidoValues);
+        btEntendi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogErro.dismiss();
+            }
+        });
 
-        database.updateChildren(childUpdatesPedido);
-
-        //ATUALIZA PEDIDOS DO USUÁRIO LOGADO
-        atualizarPedidosdoCliente(key);
-
-        //ATUALIZAR NÚMERO ITENS PEDIDO
-        buscarTotaldePedidosDoItem(pedido.getItens_pedido());
-
-        //LIMPAR CARRINHO
-       CarrinhoDAO dao = new CarrinhoDAO(this);
-        dao.deleteAll();
     }
 
 
-    public void atualizarPedidosdoCliente(String keyPedido) {
+    /*METÓDOS PARA ENVIO DO PEDIDO -----------------------*/
+
+    private void salvarPedido(final Pedido pedido, final String hj) {
+
+        DatabaseReference numPedidoRef = database.child("pedidos");
+        numPedidoRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Integer total = mutableData.child("ultimo_pedido").getValue(Integer.class);
+
+                if (total == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                //SET NUMERO DO PEDIDO
+                total++;
+                pedido.setNumero_pedido(String.valueOf(total));
+                mutableData.child("ultimo_pedido").setValue(total); //Atualiza o total de pedidos realizados
+
+                String key = database.child("pedidos").push().getKey();
+                Pedido pedidoAux = pedido;
+                Map<String, Object> pedidoValues = pedidoAux.toMap();
+
+                Log.println(Log.ERROR, "NODO:", hj);
+
+                Map<String, Object> childUpdatesPedido = new HashMap<>();
+                childUpdatesPedido.put("/pedidos/" + StringUtil.mesdoPedido(hj) + "/" + hj + "/" + key, pedidoValues);
+
+                database.updateChildren(childUpdatesPedido);
+
+                //ATUALIZA PEDIDOS DO USUÁRIO LOGADO
+                atualizarPedidosdoCliente(hj,key);
+;
+                //ATUALIZAR NÚMERO ITENS PEDIDO
+                buscarEAtualizarTotaldePedidosDoItem(pedido.getItens_pedido());
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
+
+    }
+
+    public void atualizarPedidosdoCliente(String hj, String keyPedido) {
         KeyPedido keyp = new KeyPedido(keyPedido);
-        keyp.setId(keyPedido);
+        keyp.setId(StringUtil.mesdoPedido(hj) + "/" + hj + "/" +keyPedido);
 
         String key = database.child("clientes").child("1").push().getKey();//pegar id do usuário logado
 
         database.child("clientes").child("1").child("pedidos").child(key).setValue(keyp);
     }
 
-    public void buscarTotaldePedidosDoItem(final List<ItemPedido> itensdoPedido){
+    public void buscarEAtualizarTotaldePedidosDoItem(final List<ItemPedido> itensdoPedido) {
 
         final List<ItemQtdPedido> itensqtd = new ArrayList<>();
 
@@ -300,12 +354,12 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         database.child("itens_cardapio").addValueEventListener(valueEventListener);
     }
 
-    public void incrementarTotalPedidodosItens(ValueEventListener event, List<ItemQtdPedido> itensQtd){
+    public void incrementarTotalPedidodosItens(ValueEventListener event, List<ItemQtdPedido> itensQtd) {
 
         database.child("itens_cardapio").removeEventListener(event);
 
         /*USAR TRANSAÇÃO*/
-        for (ItemQtdPedido item: itensQtd) {
+        for (ItemQtdPedido item : itensQtd) {
 
             if (item.getKeyItem() != null) {
                 database.child("itens_cardapio")
@@ -503,12 +557,12 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         });
     }
 
-    public void cadastrarEndereco(){
+    public void cadastrarEndereco() {
         buscarBairros();
         exibirDilogAddEndereco();
     }
 
-    public void alterarEndereco(){
+    public void alterarEndereco() {
         exibirDilogAlterarEndereco();
     }
 
@@ -527,7 +581,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         return fpgm;
     }
 
-    public boolean verificarFormadePagamento(){
+    public boolean verificarFormadePagamento() {
         for (FormadePagamento fpgm : formasDePagamento) {
             if (fpgm.isStatus()) {
                 return true;
@@ -537,21 +591,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         return false;
     }
 
-    public void updateNumero(List<Integer> list) {
-
-        if (list.isEmpty()) {
-            numerodopedido = "0";
-
-        } else {
-
-            Collections.sort(list);
-
-            numerodopedido = list.get(list.size() - 1).toString();
-            Log.println(Log.ERROR, "Ultimo Pedido: ", list.get(list.size() - 1).toString());
-        }
-
-    }
-
     public List<ItemPedido> getItensdoPedido() {
         List<ItemPedido> itensAux;
         CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
@@ -559,27 +598,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         return itensAux;
     }
 
-    public String gerarNumeroPedido(String numero) {
-
-        Log.println(Log.ERROR, "PEDIDO ANTERIOR:", numero);
-
-        int intnum = Integer.parseInt(numero);
-        intnum++;
-
-        if (intnum < 10) {
-            NumberFormat formatter = new DecimalFormat("00");
-
-            numero = formatter.format(intnum);
-        } else {
-            numero = String.valueOf(intnum);
-        }
-
-        Log.println(Log.ERROR, "NUMERO DO PEDIDO:", numero);
-
-        return numero;
-    }
-
-    public void buscarBairros(){
+    public void buscarBairros() {
 
         final List<Bairro> bairros = new ArrayList<>();
 
@@ -743,7 +762,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         });
     }
 
-    public void updateViewsAlterarEndereco(View root, Endereco endereco){
+    public void updateViewsAlterarEndereco(View root, Endereco endereco) {
 
         aeTvRuaEndereco = (TextView) root.findViewById(R.id.ae_tv_rua_endereco);
         aeTvRuaEndereco.setText(endereco.getRua());
@@ -786,7 +805,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         database.updateChildren(childUpdatesEndereco);
     }
 
-    public void atualizarViewEnderecoeTaxa(Endereco endereco){
+    public void atualizarViewEnderecoeTaxa(Endereco endereco) {
         //taxa de entrega
         tvtaxadeEntrega = (TextView) findViewById(R.id.taxa_de_entrega);
 
@@ -825,7 +844,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         }
     }
 
-    public void buscarTaxaPeloBairro(final String bairroAux){
+    public void buscarTaxaPeloBairro(final String bairroAux) {
         final List<Bairro> bairroList = new ArrayList<>();
 
         database.child("configuracoes").child("bairro_taxa").addValueEventListener(new ValueEventListener() {
@@ -840,10 +859,10 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 }
 
                 for (Bairro bairro : bairroList) {
-                   if (bairro.getBairro().equals(bairroAux)){
-                       taxadeEntrega = bairro.getTaxa();
-                       populateViewValores();
-                   }
+                    if (bairro.getBairro().equals(bairroAux)) {
+                        taxadeEntrega = bairro.getTaxa();
+                        populateViewValores();
+                    }
                 }
             }
 
@@ -861,7 +880,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         bairrosNomes = new ArrayList<>();
         totaldoPedido = getIntent().getDoubleExtra("totalPedido", 0);
 
-        buscarNumerodoPedido();
         buscarFormasdePagamento();
         buscarEnderecosdoUsuario();
         buscarBairros();
@@ -869,38 +887,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     }
 
-    public void buscarNumerodoPedido(){
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<Integer> list = new ArrayList<>();
-
-                try {
-                    for (DataSnapshot pedido : dataSnapshot.getChildren()) {
-                        for (DataSnapshot dia : pedido.getChildren()) {
-                            String numpedido = dia.child("numero_pedido").getValue().toString();
-                            list.add(Integer.parseInt(numpedido));
-                        }
-                    }
-
-                    updateNumero(list);
-                } catch (Exception n) {
-                    updateNumero(list);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-
-        database.child("pedidos").addValueEventListener(postListener);
-    }
-
-    public void buscarFormasdePagamento(){
+    public void buscarFormasdePagamento() {
 
         mRecyclerViewFormasdePagamento = (RecyclerView) findViewById(R.id.formas_de_pagamento);
         mRecyclerViewFormasdePagamento.setHasFixedSize(true);
@@ -971,7 +958,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         });
     }
 
-    public void buscarEnderecosdoUsuario(){
+    public void buscarEnderecosdoUsuario() {
 
         btAlterarEndereco = (Button) findViewById(R.id.bt_alterar_endereco);
         glEndereco = (GridLayout) findViewById(R.id.gl_endereco);

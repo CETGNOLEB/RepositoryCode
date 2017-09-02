@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +25,7 @@ import java.util.List;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.posPedido.PedidoKey;
 import br.com.belongapps.appdelivery.posPedido.adapters.PedidosRealizadosAdapter;
 
 import static android.content.ContentValues.TAG;
@@ -40,8 +42,8 @@ public class TabPedidosRealizados extends Fragment {
     private List<String> keypedidosRealizados;
     private List<String> keypedidosRealizadosAux;
 
-    private List<Pedido> pedidosRealizados;
-    List<Pedido> pedidosRealizadosAux;
+    private List<PedidoKey> pedidosRealizados;
+    List<PedidoKey> pedidosRealizadosAux;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +52,21 @@ public class TabPedidosRealizados extends Fragment {
 
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressbar_pedidos_realizados);
 
-        mPedidosRealizadosList = (RecyclerView) rootView.findViewById(R.id.list_pedidos_realizados);
+        return rootView;
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mPedidosRealizadosList = (RecyclerView) getActivity().findViewById(R.id.list_pedidos_realizados);
         mPedidosRealizadosList.setHasFixedSize(true);
         mPedidosRealizadosList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -76,6 +92,10 @@ public class TabPedidosRealizados extends Fragment {
                         keypedidosRealizados.addAll(keypedidosRealizadosAux);
                         keypedidosRealizadosAux = new ArrayList<>();
 
+                        for (String key : keypedidosRealizados) {
+                            Log.println(Log.ERROR, "KEY", key);
+                        }
+
                         buscarPedidosdoCliente(keypedidosRealizados);
 
                     }
@@ -87,56 +107,122 @@ public class TabPedidosRealizados extends Fragment {
                     }
                 });
 
-        return rootView;
-
     }
 
     private void buscarPedidosdoCliente(final List<String> keypedidosRealizados) {
 
         pedidosRealizadosAux = new ArrayList<>();
+        pedidosRealizados = new ArrayList<>();
 
-        mDatabaseReferencePedidos.child("pedidos").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dias : dataSnapshot.getChildren()) {
-                    for (DataSnapshot pedido : dias.getChildren()) {
-                        for (String keyPedido : keypedidosRealizados) {
-                            if (pedido.getKey().equals(keyPedido)) {
-                                Pedido pedidoaux = pedido.getValue(Pedido.class);
-                                pedidosRealizadosAux.add(pedidoaux);
-                            }
-                        }
+        for (final String key : keypedidosRealizados) {
+            String mesAno = key.substring(0, 6);
+            String dia = key.substring(7, 15);
+            final String keyPedido = key.substring(16);
 
+            Log.println(Log.ERROR, "mes", mesAno);
+            Log.println(Log.ERROR, "dia", dia);
+            Log.println(Log.ERROR, "key", keyPedido);
+
+            ChildEventListener buscar = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    /* for (DataSnapshot data : dataSnapshot.getChildren()) {*/
+
+                    Pedido pedido = dataSnapshot.getValue(Pedido.class);
+                    Log.println(Log.ERROR, "keynachild", dataSnapshot.getKey());
+
+                    if (dataSnapshot.getKey().equals(keyPedido)) {
+                        PedidoKey pedidokey = new PedidoKey(pedido, key);
+                        pedidosRealizadosAux.add(pedidokey);
                     }
+                    /*}*/
+
+                    pedidosRealizados.addAll(pedidosRealizadosAux);
+                    pedidosRealizadosAux = new ArrayList<>();
+                    preencherListView(pedidosRealizados);
                 }
 
-                pedidosRealizados = new ArrayList<>();
-                pedidosRealizados.addAll(pedidosRealizadosAux);
-                pedidosRealizadosAux = new ArrayList<>();
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    pedidosRealizados = new ArrayList<>();
+                    atualizarPedidos();
+                }
 
-                Collections.reverse(pedidosRealizados);
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                adapter = new PedidosRealizadosAdapter(pedidosRealizados, getContext(), mProgressBar);
-                mPedidosRealizadosList.setAdapter(adapter);
+                }
 
-            }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                }
 
-            }
-        });
-    }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+                }
+            };
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
+            mDatabaseReferencePedidos.child("pedidos").child(mesAno).child(dia).addChildEventListener(buscar);
+        }
 
     }
+
+    public void atualizarPedidos(){
+
+        for (final String key : keypedidosRealizados) {
+            String mesAno = key.substring(0, 6);
+            String dia = key.substring(7, 15);
+            final String keyPedido = key.substring(16);
+
+            Log.println(Log.ERROR, "mes", mesAno);
+            Log.println(Log.ERROR, "dia", dia);
+            Log.println(Log.ERROR, "key", keyPedido);
+
+            ValueEventListener buscarPedidos = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+
+                        Pedido pedido = data.getValue(Pedido.class);
+                        Log.println(Log.ERROR, "keynachild", data.getKey());
+
+                        if (data.getKey().equals(keyPedido)) {
+                            PedidoKey pedidokey = new PedidoKey(pedido, keyPedido);
+                            pedidosRealizadosAux.add(pedidokey);
+                        }
+                    }
+
+                    pedidosRealizados.addAll(pedidosRealizadosAux);
+                    pedidosRealizadosAux = new ArrayList<>();
+                    preencherListView(pedidosRealizados);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+
+            mDatabaseReferencePedidos.child("pedidos").child(mesAno).child(dia).addListenerForSingleValueEvent(buscarPedidos);
+        }
+
+    }
+
+    public void preencherListView(List<PedidoKey> pedidos) {
+        if (pedidos != null) {
+            pedidosRealizados = new ArrayList<>();
+            pedidosRealizados.addAll(pedidos);
+            //pedidos = new ArrayList<>();
+
+            Collections.reverse(pedidosRealizados);
+
+            adapter = new PedidosRealizadosAdapter(pedidosRealizados, getContext(), mProgressBar);
+            mPedidosRealizadosList.setAdapter(adapter);
+        }
+
+    }
+
 }

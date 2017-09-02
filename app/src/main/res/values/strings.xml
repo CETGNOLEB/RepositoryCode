@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hits Burgueria</string>
+    <string name="app_name">Kisabor Delivery</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -9,6 +9,7 @@
     <!--MINHAS STRINGS-->
     <string name="action_carrinho">Carrinho</string>
     <string name="action_enderecos">Adcionar Endereço</string>
+    <string name="action_atualizar_acompanhamento">Atualizar</string>
     <string name="detalhe_pizza">Cancelar</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_teste">TesteActivity</string>

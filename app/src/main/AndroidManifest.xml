@@ -5,7 +5,7 @@
     <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
     <application
         android:name=".util.FirebaseLearn"
-        android:icon="@mipmap/launch_icon_rits"
+        android:icon="@mipmap/launch_icon_kisabor"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
