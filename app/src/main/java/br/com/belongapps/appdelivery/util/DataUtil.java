@@ -1,9 +1,12 @@
 package br.com.belongapps.appdelivery.util;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DataUtil {
     public static String formatar(Date data, String formato) {
@@ -43,5 +46,39 @@ public class DataUtil {
     public static  String getHoraPedido(String data) {
         String retorno = data.trim().substring(10, data.length());
         return retorno;
+    }
+
+    public static String getDiadaSemana(Date data) {
+        Calendar c = new GregorianCalendar();
+        c.setTime(data);
+        String nomedodia = "";
+        int dia = c.get(c.DAY_OF_WEEK);
+        switch (dia) {
+            case Calendar.SUNDAY:
+                nomedodia = "domingo";
+                break;
+            case Calendar.MONDAY:
+                nomedodia = "segunda";
+                break;
+            case Calendar.TUESDAY:
+                nomedodia = "terca";
+                break;
+            case Calendar.WEDNESDAY:
+                nomedodia = "quarta";
+                break;
+            case Calendar.THURSDAY:
+                nomedodia = "quinta";
+                break;
+            case Calendar.FRIDAY:
+                nomedodia = "sexta";
+                break;
+            case Calendar.SATURDAY:
+                nomedodia = "sabado";
+                break;
+        }
+
+        Log.println(Log.ERROR, "DIA DA SEMANA:", nomedodia);
+
+        return nomedodia;
     }
 }

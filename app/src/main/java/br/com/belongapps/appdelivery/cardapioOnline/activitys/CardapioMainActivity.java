@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -331,6 +332,26 @@ public class CardapioMainActivity extends AppCompatActivity
 
             }
         });
+
+       /* //VERIFICA CONEXÃO
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    Toast.makeText(CardapioMainActivity.this, "Conectado", Toast.LENGTH_SHORT).show();
+                    System.out.println("connected");
+                } else {
+                    Toast.makeText(CardapioMainActivity.this, "Não Conectado", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
+            }
+        });*/
 
     }
 

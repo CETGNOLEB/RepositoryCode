@@ -100,6 +100,8 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
         //PREENCHER LISTA ITENS_PEDIDO
         populateItensdoPedido();
+
+
     }
 
     private void pegarParametros() {

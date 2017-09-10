@@ -1,7 +1,10 @@
 package br.com.belongapps.appdelivery.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class StringUtil {
@@ -13,12 +16,13 @@ public class StringUtil {
     }
 
     public static Double formatMoedaToDouble(String textValor) {
-        textValor = textValor.replace(",", ".").replace("R$" , "").trim();
+        textValor = textValor.replace(",", ".").replace("R$", "").trim();
         Double valor = Double.parseDouble(textValor);
         return valor;
     }
 
-    public static String mesdoPedido(String data){
-        return data.substring(2,8);
+    public static String mesdoPedido(String data) {
+        return data.substring(2, 8);
     }
+
 }

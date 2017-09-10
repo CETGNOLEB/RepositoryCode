@@ -43,6 +43,7 @@ import java.util.Map;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.FormasdePagamentoAdapter;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
+import br.com.belongapps.appdelivery.cardapioOnline.dao.FirebaseDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Cliente;
 import br.com.belongapps.appdelivery.cardapioOnline.model.FormadePagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
@@ -183,10 +184,11 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
             try {
                 realizarEnvioDoPedido();
+                new exibirDialogdeEnvio().execute((Void[]) null); //Executar dialog de status de envio]
 
                 //LIMPAR O CARRINHO
-                /*CarrinhoDAO dao = new CarrinhoDAO(this);
-                dao.deleteAll();*/
+                CarrinhoDAO dao = new CarrinhoDAO(this);
+                dao.deleteAll();
             }catch (Exception e){
                 //Exibir Dialog de Erro ao enviar o pedido
                 exibirErroAoEnviarPedido();
@@ -233,8 +235,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         pedido.setPagamento(pagamento);
 
-        new exibirDialogdeEnvio().execute((Void[]) null); //Executar dialog de status de envio
-        salvarPedido(pedido, diaPedido);
+        salvarPedido(pedido, diaPedido, data);
 
     }
 
@@ -263,7 +264,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     /*METÓDOS PARA ENVIO DO PEDIDO -----------------------*/
 
-    private void salvarPedido(final Pedido pedido, final String hj) {
+    private void salvarPedido(final Pedido pedido, final String hj, final Date data) {
 
         DatabaseReference numPedidoRef = database.child("pedidos");
         numPedidoRef.runTransaction(new Transaction.Handler() {
@@ -284,18 +285,26 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 Pedido pedidoAux = pedido;
                 Map<String, Object> pedidoValues = pedidoAux.toMap();
 
-                Log.println(Log.ERROR, "NODO:", hj);
+                String mes = StringUtil.mesdoPedido(hj);
+                Log.println(Log.ERROR, "MÊS:", mes);
+                Log.println(Log.ERROR, "DIA:", hj);
 
                 Map<String, Object> childUpdatesPedido = new HashMap<>();
-                childUpdatesPedido.put("/pedidos/" + StringUtil.mesdoPedido(hj) + "/" + hj + "/" + key, pedidoValues);
+                childUpdatesPedido.put("/pedidos/" + mes + "/" + hj + "/" + key, pedidoValues);
 
                 database.updateChildren(childUpdatesPedido);
 
                 //ATUALIZA PEDIDOS DO USUÁRIO LOGADO
                 atualizarPedidosdoCliente(hj,key);
-;
-                //ATUALIZAR NÚMERO ITENS PEDIDO
+
+                //ATUALIZA NÚMERO DE PEDIDOS DO USUÁRIO LOGADO
+                FirebaseDAO.atualizarNumeroPedidosdoCliente("1"); //PEGAR ID DO USUÁRIO
+
+                //ATUALIZAR TOTAL DOS ITENS PEDIDO
                 buscarEAtualizarTotaldePedidosDoItem(pedido.getItens_pedido());
+
+                //ATUALIZAR MÓDULO FINANCEIRO
+                atualiazarModuloFinanceiro(mes, hj, data);
 
                 return Transaction.success(mutableData);
             }
@@ -369,6 +378,14 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                         .setValue(item.getQtdPedido() + item.getQuantidade());
             }
         }
+    }
+
+    public void atualiazarModuloFinanceiro(String mes, String hj, Date data){
+        //Atualizar Total de Pedidos na Semana
+        FirebaseDAO.atualizarPedidosnaSemana(mes, hj, data);
+
+        //Atualizar Total de Pedidos no Mes
+        FirebaseDAO.atualizarPedidosnoMes(mes);
     }
 
     private class exibirDialogdeEnvio extends AsyncTask<Void, Void, Void> {

@@ -239,7 +239,6 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
 
         pedido.setData(dataPedido);
         pedido.setStatus_tempo("n" + DataUtil.formatar(data, "HH:mm"));
-        pedido.setNumero_pedido(gerarNumeroPedido(numerodopedido));
         pedido.setStatus(0);
         pedido.setEntrega_retirada(getIntent().getIntExtra("tipoEntrega", 0));
         pedido.setItens_pedido(getItensdoPedido());
@@ -296,20 +295,6 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
         database.child("clientes").child("1").child("pedidos").child(key).setValue(keyp);
     }
 
-    public void updateNumero(List<Integer> list) {
-
-        if (list.isEmpty()) {
-            numerodopedido = "0";
-
-        } else {
-
-            Collections.sort(list);
-
-            numerodopedido = list.get(list.size() - 1).toString();
-            Log.println(Log.ERROR, "Ultimo Pedido: ", list.get(list.size() - 1).toString());
-        }
-
-    }
 
     public List<ItemPedido> getItensdoPedido() {
         List<ItemPedido> itensAux;
@@ -318,62 +303,13 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
         return itensAux;
     }
 
-    public String gerarNumeroPedido(String numero) {
-
-        Log.println(Log.ERROR, "PEDIDO ANTERIOR:", numero);
-
-        int intnum = Integer.parseInt(numero);
-        intnum++;
-
-        if (intnum < 10) {
-            NumberFormat formatter = new DecimalFormat("00");
-
-            numero = formatter.format(intnum);
-        } else {
-            numero = String.valueOf(intnum);
-        }
-
-        Log.println(Log.ERROR, "NUMERO DO PEDIDO:", numero);
-
-        return numero;
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
 
         totaldoPedido = getIntent().getDoubleExtra("totalPedido", 0);
 
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<Integer> list = new ArrayList<>();
-
-                Log.println(Log.ERROR, "NUMBERMETODY", "Entrou no metodo!");
-
-                try {
-                    for (DataSnapshot pedido : dataSnapshot.getChildren()) {
-                        for (DataSnapshot dia : pedido.getChildren()) {
-                            String numpedido = dia.child("numero_pedido").getValue().toString();
-                            list.add(Integer.parseInt(numpedido));
-                        }
-                    }
-
-                    updateNumero(list);
-                } catch (Exception n) {
-                    updateNumero(list);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-
-        database.child("pedidos").addValueEventListener(postListener);
+        //BUSCAR ULTIMO PEDIDO
 
     }
 }

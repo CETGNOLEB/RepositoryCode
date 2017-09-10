@@ -7,14 +7,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 
-import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.util.DataUtil;
 
 import static android.content.ContentValues.TAG;
 
@@ -22,64 +20,94 @@ public class FirebaseDAO {
 
     private static DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
-    static List<String> numerosdosPedidos = new ArrayList<>();
-    String numero = "0001";
+    //ATUALIZAR MÓDULO FINANCEIRO
+    public static void atualizarPedidosnaSemana(String mes, String hj, Date data){
+        String diaDaSemana = DataUtil.getDiadaSemana(data);
 
-    private void enviarPedido(Pedido pedido) {
+        DatabaseReference numPedidoRef = database.child("financeiro").child("pedidos_semana").child(mes).child(diaDaSemana);
+        numPedidoRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Integer total = mutableData.child("total").getValue(Integer.class);
 
-        String key = database.child("pedidos").push().getKey();
-        Map<String, Object> postValues = pedido.toMap();
+                if (total == null) {
+                    return Transaction.success(mutableData);
+                }
 
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/pedidos/" + key, postValues);
+                //ATUALIZAR TOTAL
+                total++;
+                mutableData.child("total").setValue(total); //Atualiza o total de pedidos realizados
 
-        database.updateChildren(childUpdates);
+                return Transaction.success(mutableData);
+            }
 
-        DatabaseReference mChildRef = database.child("pedidos").child(key).push();
-
-        /*for (ItemPedido item:
-             itens_pedidos) {
-            mChildRef.setValue(item);
-        }*/
-    }
-
-    public static void ultimoPedidoDoDia(String dia) {
-
-        dia = dia.replace("/", "");
-        Log.println(Log.ERROR, "Dia: ", dia);
-        String numero = "0001";
-
-        database.child("pedidos").child(dia).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        ArrayList<String> list = new ArrayList<String>();
-
-                        for (DataSnapshot pedido : dataSnapshot.getChildren()) {
-                            String numpedido = pedido.child("numero_pedido").getValue().toString();
-                            list.add(numpedido);
-                        }
-
-                        if (numerosdosPedidos.isEmpty()){
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                    }
-                });
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
 
     }
 
-    public static String updateList(List<String> pedidos){
-        numerosdosPedidos = pedidos;
+    public static void atualizarPedidosnoMes(String mes){
 
-        if (numerosdosPedidos.isEmpty()){
-            return "0001";
-        }
+        DatabaseReference numPedidoRef = database.child("financeiro").child("pedidos_mes").child(mes);
+        numPedidoRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Integer total = mutableData.child("total").getValue(Integer.class);
 
-        return numerosdosPedidos.get(numerosdosPedidos.size() - 1);
+                if (total == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                //ATUALIZAR TOTAL
+                total++;
+                mutableData.child("total").setValue(total); //Atualiza o total de pedidos realizados
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
+
     }
+
+    /*ATUALIZAR DADOS DO CLIENTE*/
+    public static void atualizarNumeroPedidosdoCliente(String idDoUsuario){
+
+        DatabaseReference numPedidoRef = database.child("clientes").child(idDoUsuario);
+        numPedidoRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Integer total = mutableData.child("total_pedidos").getValue(Integer.class);
+
+                if (total == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                //ATUALIZAR TOTAL DE PEDIDOS REALIZADOS
+                total++;
+                mutableData.child("total_pedidos").setValue(total); //Atualiza o total de pedidos realizados pelo cliente
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
+
+    }
+
+
 }
