@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editEmail;
     EditText editSenha;
     Button btEntrar;
+    Button btCadUsuario;
     ProgressDialog mProgressDialog;
 
     private FirebaseAuth mAuth;
@@ -35,6 +36,18 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
+
+        btCadUsuario = (Button) findViewById(R.id.bt_init_cad_usuario);
+
+        btCadUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginActivity.this, CadastrarUsuarioActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
 /*
         mAuth = FirebaseAuth.getInstance();
 

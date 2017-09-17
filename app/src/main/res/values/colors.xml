@@ -24,5 +24,21 @@
     &lt;!&ndash;OUTRAS CORES&ndash;&gt;
     <color name="tabIndication">#FFCB2C</color>-->
 
+    <!--DOTS TELA DE TUTORIAL-->
+    <color name="dot_light_screen">#FFCB2C</color>
+
+    <array name="array_dot_active">
+        <item>@color/colorAccent</item>
+        <item>@color/colorAccent</item>
+        <item>@color/colorAccent</item>
+        <item>@color/colorAccent</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_light_screen</item>
+        <item>@color/dot_light_screen</item>
+        <item>@color/dot_light_screen</item>
+        <item>@color/dot_light_screen</item>
+    </array>
 
 </resources>

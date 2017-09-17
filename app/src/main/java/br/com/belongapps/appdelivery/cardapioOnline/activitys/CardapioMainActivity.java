@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +48,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabAcai;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabCombos;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSalgados;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSanduiches;
+import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 
 public class CardapioMainActivity extends AppCompatActivity
@@ -62,10 +64,15 @@ public class CardapioMainActivity extends AppCompatActivity
     private DatabaseReference mDatabaseReference;
     private Snackbar snackbar;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cardapio);
+
+        mAuth = FirebaseAuth.getInstance();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF")); //Cor do Titulo da Tela
         setSupportActionBar(toolbar);
@@ -125,7 +132,7 @@ public class CardapioMainActivity extends AppCompatActivity
         MenuItem menuItem = menu.getItem(0);
 
         //buscar tamanho da lista do carrinho
-        CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
+        /*CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
         List<ItemPedido> itens_pedido = crud.getAllItens();
         int size = itens_pedido.size();
 
@@ -150,7 +157,7 @@ public class CardapioMainActivity extends AppCompatActivity
             menuItem.setIcon(R.drawable.ic_cart_nine);
         } else {
             menuItem.setIcon(R.drawable.ic_action_cart);
-        }
+        }*/
 
         return true;
     }
@@ -302,6 +309,15 @@ public class CardapioMainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+
+        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
+
+        if (usuarioLogado == null){
+            Intent i = new Intent(CardapioMainActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
+
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 

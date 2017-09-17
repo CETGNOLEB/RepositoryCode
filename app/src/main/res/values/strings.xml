@@ -15,4 +15,21 @@
     <string name="title_activity_teste">TesteActivity</string>
     <string name="title_activity_pedidos_realizados">Meus Pedidos</string>
 
+    <!--TELA TUTORIAL-->
+    <string name="next">PRÓXIMO</string>
+    <string name="skip">PULAR</string>
+    <string name="start">COMEÇAR</string>
+
+    <string name="slide_1_title">Cardápio Completo</string>
+    <string name="slide_1_desc">Escolha de forma rápida e fácil, veja tudo antes de pedir!</string>
+
+    <string name="slide_2_title">Adicione ao Carrinho</string>
+    <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
+
+    <string name="slide_3_title">Escolha como Receber</string>
+    <string name="slide_3_desc">Receba os pedidos no conforto de sua casa, ou como desejar!</string>
+
+    <string name="slide_4_title">Rastrei Tudo</string>
+    <string name="slide_4_desc">Finalize o pedido e acompanhe todo o processo até a entrega!</string>
+
 </resources>

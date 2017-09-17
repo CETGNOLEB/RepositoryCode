@@ -145,6 +145,7 @@ public class TabPedidosRealizados extends Fragment {
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     pedidosRealizados = new ArrayList<>();
+                    preencherListView(pedidosRealizados);
                     atualizarPedidos();
                 }
 
@@ -170,6 +171,9 @@ public class TabPedidosRealizados extends Fragment {
     }
 
     public void atualizarPedidos(){
+
+        pedidosRealizadosAux = new ArrayList<>();
+        pedidosRealizados = new ArrayList<>();
 
         for (final String key : keypedidosRealizados) {
             String mesAno = key.substring(0, 6);
@@ -198,7 +202,7 @@ public class TabPedidosRealizados extends Fragment {
                     pedidosRealizados.addAll(pedidosRealizadosAux);
                     pedidosRealizadosAux = new ArrayList<>();
                     preencherListView(pedidosRealizados);
-                }
+            }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -217,7 +221,7 @@ public class TabPedidosRealizados extends Fragment {
             pedidosRealizados.addAll(pedidos);
             //pedidos = new ArrayList<>();
 
-            Collections.reverse(pedidosRealizados);
+            Collections.sort(pedidosRealizados);
 
             adapter = new PedidosRealizadosAdapter(pedidosRealizados, getContext(), mProgressBar);
             mPedidosRealizadosList.setAdapter(adapter);

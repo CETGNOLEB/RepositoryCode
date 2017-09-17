@@ -1,89 +1,102 @@
 <resources>
 
-<!-- Base application theme. -->
+    <!-- Base application theme. -->
 
-<style name="AppTheme" parent="Base.AppTheme"></style>
+    <style name="AppTheme" parent="Base.AppTheme"></style>
 
-<style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-    <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
-</style>
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
-<style name="Base.LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Base.LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-    <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@android:color/white</item>
-</style>
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@android:color/white</item>
+    </style>
 
-<style name="AppTheme.NoActionBar">
-    <item name="windowActionBar">false</item>
-    <item name="windowNoTitle">true</item>
-</style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
-<style name="ToolbarTheme" parent="AppTheme">
-    <item name="android:textColorPrimary">@android:color/white</item>
-    <item name="android:textColorSecondary">@android:color/white</item>
-</style>
+    <style name="ToolbarTheme" parent="AppTheme">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+    </style>
 
-<style name="ToolbarColoredBackArrow" parent="AppTheme">
-    <item name="android:textColorSecondary">@android:color/white</item>
-    <item name="android:actionMenuTextColor">@android:color/white</item>
-</style>
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:actionMenuTextColor">@android:color/white</item>
+    </style>
 
-<style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
-    <item name="colorAccent">@color/colorAccent</item>
-    <item name="android:textColorPrimary">@color/colorPrimary</item>
-    <item name="android:background">@color/colorPrimary</item>
-</style>
+    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
 
-<style name="NavigationViewTheme" parent="AppTheme">
-    <item name="android:textAppearanceListItem">@style/Base.TextAppearance.AppCompat.Body2
-    </item>
-</style>
+    <style name="NavigationViewTheme" parent="AppTheme">
+        <item name="android:textAppearanceListItem">@style/Base.TextAppearance.AppCompat.Body2
+        </item>
+    </style>
 
-<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-<style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
-    <item name="tabIndicatorColor">@color/colorAccent</item>
-    <item name="tabBackground">@color/colorPrimary</item>
-    <item name="tabSelectedTextColor">@android:color/white</item>
-    <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
-</style>
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/colorAccent</item>
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
+    </style>
 
-<style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
-    <item name="android:textSize">14sp</item>
-    <item name="android:textColor">#ECEFF1</item>
-    <item name="textAllCaps">true</item>
-</style>
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#ECEFF1</item>
+        <item name="textAllCaps">true</item>
+    </style>
 
-<style name="MyActionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-    <item name="android:textColorPrimary">#FFFFFF</item>
-</style>
+    <style name="MyActionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+    </style>
 
-<style name="MyProgressbarColor">
-    <item name="colorAccent">@color/colorPrimary</item> <!-- Whatever color you want-->
-</style>
+    <style name="MyProgressbarColor">
+        <item name="colorAccent">@color/colorPrimary</item> <!-- Whatever color you want-->
+    </style>
 
-<style name="MyEditTextTheme">
-    <item name="colorControlNormal">@color/colorPrimary</item>
-    <item name="colorControlActivated">@color/colorPrimary</item>
-    <item name="colorControlHighlight">@color/colorPrimary</item>
-</style>
+    <style name="MyEditTextTheme">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+    </style>
 
-<style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-    <item name="android:background">@color/dialogBackground</item>
-</style>
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/dialogBackground</item>
+    </style>
 
-<style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
-    <item name="colorAccent">@color/colorPrimary</item>
-    <item name="android:textColorPrimary">@color/textColorPrimary</item>
-    <item name="android:background">@android:color/white</item>
-</style>
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <!--TELA DE TUTORIAL-->
+    <style name="ThemeTutorial" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ThemeTutorial.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="ThemeTutorial.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -9,7 +9,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -17,21 +16,20 @@
         <activity
             android:name=".seguranca.activities.LoginActivity"
             android:theme="@style/Base.LoginTheme">
-            <!-- <intent-filter>
+
+            <!--
+             <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
 
                  <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>-->
+             </intent-filter>
+            -->
         </activity>
         //Módulo Cardapio Online
-        <activity android:name=".cardapioOnline.activitys.CardapioMainActivity">
-
-
-        </activity>
+        <activity android:name=".cardapioOnline.activitys.CardapioMainActivity"></activity>
         <activity android:name=".cardapioOnline.activitys.EscolherRecheioActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherAdicionalActivity" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemActivity" />
-
         //PIZZAS
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemPizzaActivity" />
@@ -40,30 +38,26 @@
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity4" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemPizzaMMActivity" />
         <activity android:name=".cardapioOnline.activitys.EditarPizzaActivity" />
-
         <activity android:name=".cardapioOnline.activitys.CarrinhoActivity" />
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoActivity" />
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoRetiradaActivity" />
-
         //Módulo Sobre/Ajuda
         <activity android:name=".helpAbout.activities.SobreActivity" />
         <activity android:name=".helpAbout.activities.AEmpresaActivity" />
-
         //Módulo gerencial do cliente
         <activity android:name=".gerencial.activities.EnderecosActivity" />
-
         //Módulo Banner Promocionais
         <activity android:name=".promocoes.activities.TelaInicialActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         //Módulo Pós Pedido
         <activity android:name=".posPedido.activities.MeusPedidosActivity" />
         <activity android:name=".posPedido.activities.AcompanharPedidoActivity" />
+        <activity android:name=".seguranca.activities.CadastrarUsuarioActivity"></activity>
     </application>
 
 </manifest>

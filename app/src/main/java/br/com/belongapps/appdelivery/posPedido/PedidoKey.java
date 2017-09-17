@@ -1,8 +1,10 @@
 package br.com.belongapps.appdelivery.posPedido;
 
+import android.support.annotation.NonNull;
+
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 
-public class PedidoKey {
+public class PedidoKey implements Comparable{
     private Pedido pedido;
     private String key;
 
@@ -29,5 +31,20 @@ public class PedidoKey {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        PedidoKey pedidokey = (PedidoKey) o;
+
+        if (Integer.parseInt(this.pedido.getNumero_pedido()) > Integer.parseInt(pedidokey.pedido.getNumero_pedido())) {
+            return -1;
+        }
+        if (Integer.parseInt(this.pedido.getNumero_pedido()) < Integer.parseInt(pedidokey.pedido.getNumero_pedido())) {
+            return 1;
+        }
+
+        return 0;
     }
 }
