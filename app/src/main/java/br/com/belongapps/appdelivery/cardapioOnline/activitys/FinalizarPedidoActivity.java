@@ -189,7 +189,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 //LIMPAR O CARRINHO
                 CarrinhoDAO dao = new CarrinhoDAO(this);
                 dao.deleteAll();
-            }catch (Exception e){
+            } catch (Exception e) {
                 //Exibir Dialog de Erro ao enviar o pedido
                 exibirErroAoEnviarPedido();
             }
@@ -239,7 +239,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     }
 
-    public void exibirErroAoEnviarPedido(){
+    public void exibirErroAoEnviarPedido() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         AlertDialog.Builder mBilder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
@@ -295,7 +295,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 database.updateChildren(childUpdatesPedido);
 
                 //ATUALIZA PEDIDOS DO USUÁRIO LOGADO
-                atualizarPedidosdoCliente(hj,key);
+                atualizarPedidosdoCliente(hj, key);
 
                 //ATUALIZA NÚMERO DE PEDIDOS DO USUÁRIO LOGADO
                 FirebaseDAO.atualizarNumeroPedidosdoCliente("1"); //PEGAR ID DO USUÁRIO
@@ -321,7 +321,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void atualizarPedidosdoCliente(String hj, String keyPedido) {
         KeyPedido keyp = new KeyPedido(keyPedido);
-        keyp.setId(StringUtil.mesdoPedido(hj) + "/" + hj + "/" +keyPedido);
+        keyp.setId(StringUtil.mesdoPedido(hj) + "/" + hj + "/" + keyPedido);
 
         String key = database.child("clientes").child("1").push().getKey();//pegar id do usuário logado
 
@@ -380,7 +380,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         }
     }
 
-    public void atualiazarModuloFinanceiro(String mes, String hj, Date data){
+    public void atualiazarModuloFinanceiro(String mes, String hj, Date data) {
         //Atualizar Total de Pedidos na Semana
         FirebaseDAO.atualizarPedidosnaSemana(mes, hj, data);
 

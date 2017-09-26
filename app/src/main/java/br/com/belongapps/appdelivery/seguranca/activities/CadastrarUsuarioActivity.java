@@ -85,8 +85,8 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     mCadProgress.dismiss();
-
                     Intent intent = new Intent(CadastrarUsuarioActivity.this, CardapioMainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 } else {

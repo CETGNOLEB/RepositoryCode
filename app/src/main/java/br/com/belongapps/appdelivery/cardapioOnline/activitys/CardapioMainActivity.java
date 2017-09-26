@@ -42,6 +42,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSucos;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabVitaminas;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
+import br.com.belongapps.appdelivery.gerencial.activities.PerfilActivity;
 import br.com.belongapps.appdelivery.helpAbout.activities.SobreActivity;
 import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabAcai;
@@ -206,6 +207,12 @@ public class CardapioMainActivity extends AppCompatActivity
             Intent i = new Intent(CardapioMainActivity.this, SobreActivity.class);
             startActivity(i);
             finish();
+
+        } else if (id == R.id.nav_perfil) {
+            Intent i = new Intent(CardapioMainActivity.this, PerfilActivity.class);
+            startActivity(i);
+            finish();
+
         } else if (id == R.id.nav_sair) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(CardapioMainActivity.this, LoginActivity.class);

@@ -12,21 +12,11 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <activity
-            android:name=".seguranca.activities.LoginActivity"
-            android:theme="@style/Base.LoginTheme">
-
-            <!--
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-
-                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-            -->
-        </activity>
+        //LOGIN/CADASTRO
+        <activity android:name=".seguranca.activities.LoginActivity" />
+        <activity android:name=".seguranca.activities.CadastrarUsuarioActivity" />
         //Módulo Cardapio Online
-        <activity android:name=".cardapioOnline.activitys.CardapioMainActivity"></activity>
+        <activity android:name=".cardapioOnline.activitys.CardapioMainActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherRecheioActivity" />
         <activity android:name=".cardapioOnline.activitys.EscolherAdicionalActivity" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemActivity" />
@@ -41,12 +31,14 @@
         <activity android:name=".cardapioOnline.activitys.CarrinhoActivity" />
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoActivity" />
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoRetiradaActivity" />
-        //Módulo Sobre/Ajuda
+        //SOBRE/AJUDA
         <activity android:name=".helpAbout.activities.SobreActivity" />
         <activity android:name=".helpAbout.activities.AEmpresaActivity" />
-        //Módulo gerencial do cliente
+        //GERENCIA/CLIENTE
         <activity android:name=".gerencial.activities.EnderecosActivity" />
-        //Módulo Banner Promocionais
+        <activity
+            android:name=".gerencial.activities.PerfilActivity"></activity>
+        //TELA INICIAL
         <activity android:name=".promocoes.activities.TelaInicialActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,10 +46,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        //Módulo Pós Pedido
+        //PÓS-PEDIDO
         <activity android:name=".posPedido.activities.MeusPedidosActivity" />
         <activity android:name=".posPedido.activities.AcompanharPedidoActivity" />
-        <activity android:name=".seguranca.activities.CadastrarUsuarioActivity"></activity>
+
     </application>
 
 </manifest>

@@ -19,27 +19,29 @@ import com.google.firebase.auth.FirebaseUser;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
-import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
     EditText editEmail;
     EditText editSenha;
     Button btEntrar;
-    Button btCadUsuario;
+
+    Button btGoCadUsuario;
     ProgressDialog mProgressDialog;
 
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
 
-        btCadUsuario = (Button) findViewById(R.id.bt_init_cad_usuario);
+        mAuth = FirebaseAuth.getInstance();
 
-        btCadUsuario.setOnClickListener(new View.OnClickListener() {
+        initViews();
+
+
+        btGoCadUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this, CadastrarUsuarioActivity.class);
@@ -48,76 +50,61 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-/*
-        mAuth = FirebaseAuth.getInstance();
-
-        mProgressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
-
-        editEmail = (EditText) findViewById(R.id.input_email);
-        editSenha = (EditText) findViewById(R.id.input_senha);
-        btEntrar = (Button) findViewById(R.id.button_entrar);
-
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Intent i = new Intent(LoginActivity.this, CardapioMainActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-            }
-        };
-
         btEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSingIn();
+                String email = editEmail.getText().toString();
+                String senha = editSenha.getText().toString();
 
+                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) { //verifica se os campos estão vazios
+                    Toast.makeText(LoginActivity.this, "Informe seu email e senha!", Toast.LENGTH_SHORT).show();
+                } else {
+                    mProgressDialog.setTitle("Entrando");
+                    mProgressDialog.setMessage("Aguarde, validando seus dados...");
+                    mProgressDialog.setCanceledOnTouchOutside(false);
+                    mProgressDialog.show();
+                    startSingIn(email, senha);
+                }
             }
-        });*/
+        });
+
     }
 
-    private void startSingIn() {
-        String email = editEmail.getText().toString();
-        String senha = editSenha.getText().toString();
+    private void initViews() {
+        mProgressDialog = new ProgressDialog(this);
+        editEmail = (EditText) findViewById(R.id.login_email);
+        editSenha = (EditText) findViewById(R.id.login_senha);
+        btEntrar = (Button) findViewById(R.id.bt_entrar);
+        btGoCadUsuario = (Button) findViewById(R.id.bt_init_cad_usuario);
+    }
 
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) { //verifica se os campos estão vazios
-            Toast.makeText(LoginActivity.this, "Informe seu email e senha!", Toast.LENGTH_SHORT).show();
-        } else {
+    private void startSingIn(String email, String senha) {
 
-            mProgressDialog.setMessage("Entrando...");
-            mProgressDialog.show();
-
-            mAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful()) {
-
-                        mProgressDialog.dismiss();
-
-                        Toast.makeText(LoginActivity.this, "Usuário não encontrado!", Toast.LENGTH_SHORT).show();
-
-                    }
+        mAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    mProgressDialog.dismiss();
+                    Intent intent = new Intent(LoginActivity.this, CardapioMainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    mProgressDialog.hide();
+                    Toast.makeText(LoginActivity.this, "Usuário não encontrado!", Toast.LENGTH_SHORT).show();
                 }
-            });
-
-        }
+            }
+        });
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        /*mAuth.addAuthStateListener(mAuthStateListener);*/
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        /*if (mAuthStateListener != null) {
-            mAuth.removeAuthStateListener(mAuthStateListener);
-        }*/
     }
 }
