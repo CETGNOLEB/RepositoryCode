@@ -48,7 +48,7 @@ public class PerfilActivity extends AppCompatActivity {
 
         OpcoesPerfil opcoesPerfil1 = new OpcoesPerfil(R.drawable.ic_check_all, "Meus Pedidos");
         OpcoesPerfil opcoesPerfil2 = new OpcoesPerfil(R.drawable.ic_home, "Endereços de Entrega");
-        OpcoesPerfil opcoesPerfil3 = new OpcoesPerfil(R.drawable.ic_home, "Sair");
+        OpcoesPerfil opcoesPerfil3 = new OpcoesPerfil(R.drawable.ic_logout, "Sair");
 
 
         listaDeOpcoes.add(opcoesPerfil1);

@@ -10,11 +10,19 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
         android:src="@drawable/ic_logo_kisabor"/>
+
+    <TextView
+        android:id="@+id/nome_usuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Th Barbosa"
+        android:textSize="16sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"/>
 
     <!--<RelativeLayout
         android:layout_width="match_parent"

@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -100,6 +101,12 @@ public class CardapioMainActivity extends AppCompatActivity
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        /*MOSTRAR NOME DO USUÁRIO*/
+        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
+        View header = navigationView.getHeaderView(0);
+        nomeusuario = (TextView) header.findViewById(R.id.nome_usuario);
+        nomeusuario.setText(usuarioLogado.getDisplayName());
 
     }
 
@@ -324,7 +331,6 @@ public class CardapioMainActivity extends AppCompatActivity
             startActivity(i);
             finish();
         }
-
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 

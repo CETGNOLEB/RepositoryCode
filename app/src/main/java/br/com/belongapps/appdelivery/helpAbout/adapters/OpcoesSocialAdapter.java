@@ -1,32 +1,26 @@
-package br.com.belongapps.appdelivery.gerencial.adapters;
+package br.com.belongapps.appdelivery.helpAbout.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.firebase.auth.FirebaseAuth;
+import android.widget.Toast;
 
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
-import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
-import br.com.belongapps.appdelivery.gerencial.model.OpcoesPerfil;
-import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
-import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
+import br.com.belongapps.appdelivery.helpAbout.model.OpcoesSocial;
 
 
-public class OpcoesPerfilAdapter extends RecyclerView.Adapter<OpcoesPerfilAdapter.ViewHolderOpcoes> {
+public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapter.ViewHolderOpcoes> {
 
-    private static List<OpcoesPerfil> opcoes;
+    private static List<OpcoesSocial> opcoes;
     private static Context context;
 
-    public OpcoesPerfilAdapter(List<OpcoesPerfil> opcoes, Context context) {
+    public OpcoesSocialAdapter(List<OpcoesSocial> opcoes, Context context) {
         this.opcoes = opcoes;
         this.context = context;
     }
@@ -39,7 +33,7 @@ public class OpcoesPerfilAdapter extends RecyclerView.Adapter<OpcoesPerfilAdapte
 
     @Override
     public void onBindViewHolder(ViewHolderOpcoes holder, int position) {
-        final OpcoesPerfil opcao = opcoes.get(position);
+        final OpcoesSocial opcao = opcoes.get(position);
 
         holder.icon.setImageResource(opcao.getIcon());
         holder.descOpcao.setText(opcao.getNomeOpcao());
@@ -51,22 +45,21 @@ public class OpcoesPerfilAdapter extends RecyclerView.Adapter<OpcoesPerfilAdapte
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
 
-                if (opcao.getNomeOpcao().equals("Meus Pedidos")){
-                    intent = new Intent(context, MeusPedidosActivity.class);
-                    context.startActivity(intent);
-                    ((Activity)context).finish();
+                if (opcao.getNomeOpcao().equals("Envie Comentários")){
 
-                } else if(opcao.getNomeOpcao().equals("Endereços de Entrega")){
+                    Toast.makeText(context, "Enviar Comentário", Toast.LENGTH_SHORT).show();
 
-                    intent = new Intent(context, EnderecosActivity.class);
-                    context.startActivity(intent);
-                    ((Activity)context).finish();
+                } else if(opcao.getNomeOpcao().equals("Gostou do aplicativo? Avalie!")){
+
+                    Toast.makeText(context, "Gostou do aplicativo? Avalie!", Toast.LENGTH_SHORT).show();
+
+                } else if(opcao.getNomeOpcao().equals("Curta nosso Facebook")){
+
+                    Toast.makeText(context, "Curta nosso Facebook", Toast.LENGTH_SHORT).show();
+
                 } else { //Sair
-                    FirebaseAuth.getInstance().signOut();
-                    intent = new Intent(context, TelaInicialActivity.class);
-                    context.startActivity(intent);
+                    Toast.makeText(context, "Conte aos amigos", Toast.LENGTH_SHORT).show();
                 }
             }
         });
