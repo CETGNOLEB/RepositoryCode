@@ -35,7 +35,8 @@
                 android:text="Açai 300ml"
                 android:layout_toLeftOf="@+id/item_qtd"
                 android:layout_centerVertical="true"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:textColor="@color/titleTextColor"/>
 
             <TextView
                 android:id="@+id/item_qtd"

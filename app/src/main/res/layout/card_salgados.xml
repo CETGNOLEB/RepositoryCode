@@ -50,7 +50,8 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
                 android:text="Hot Dog"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/titleTextColor"/>
 
             <TextView
                 android:id="@+id/item_desc_salgado"

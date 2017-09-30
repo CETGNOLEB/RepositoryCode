@@ -52,7 +52,8 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Coca-cola"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/titleTextColor"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

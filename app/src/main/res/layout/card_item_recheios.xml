@@ -34,7 +34,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="AMENDOIN"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/titleTextColor"/>
 
             <TextView
                 android:id="@+id/qtd_item_recheio"

@@ -30,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:text="DINHEIRO E CARTÃO"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/titleTextColor"/>
 
             <TextView
                 android:id="@+id/desc_frm_pagamento"
