@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -22,6 +24,7 @@ import java.util.Locale;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 
 public class DetalhesdoItemActivity extends AppCompatActivity {
 
@@ -49,10 +52,14 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     Button btDiminuirQtd;
     CardView cardTipoPaoItem;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_item);
+
+        mAuth = FirebaseAuth.getInstance();
 
         getParametros(); //Setar parametros recebidos
 
@@ -118,6 +125,14 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
+
+        if (usuarioLogado == null) {
+            Intent i = new Intent(DetalhesdoItemActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
 
     }
 

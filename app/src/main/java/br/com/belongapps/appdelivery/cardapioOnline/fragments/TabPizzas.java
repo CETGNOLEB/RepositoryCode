@@ -1,5 +1,6 @@
 package br.com.belongapps.appdelivery.cardapioOnline.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,8 +40,10 @@ import java.text.NumberFormat;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherPizzaActivity;
+import br.com.belongapps.appdelivery.cardapioOnline.dao.FirebaseDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.TamPizza;
+import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class TabPizzas extends Fragment {
@@ -124,57 +127,66 @@ public class TabPizzas extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if (statusEstabelecimento == false) {
+                        if(FirebaseDAO.temUsuarioLogado()) {
 
-                            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            if (statusEstabelecimento == false) {
 
-                            AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                            View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
+                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                            Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
+                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+                                View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
 
-                            mBilder.setView(layoutDialog);
-                            final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                            dialogEstabelecimentoFechado.show();
+                                Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
 
-                            btEntendi.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialogEstabelecimentoFechado.dismiss();
-                                }
-                            });
+                                mBilder.setView(layoutDialog);
+                                final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
+                                dialogEstabelecimentoFechado.show();
 
-                        } else if (statusDelivery == false){
+                                btEntendi.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialogEstabelecimentoFechado.dismiss();
+                                    }
+                                });
 
-                            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            } else if (statusDelivery == false) {
 
-                            AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                            View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
+                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                            Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
-                            Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
+                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+                                View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
 
-                            mBilder.setView(layoutDialog);
-                            final AlertDialog dialogDeliveryFechado = mBilder.create();
-                            dialogDeliveryFechado.show();
+                                Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
+                                Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
 
-                            btVoltar.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialogDeliveryFechado.dismiss();
-                                }
-                            });
+                                mBilder.setView(layoutDialog);
+                                final AlertDialog dialogDeliveryFechado = mBilder.create();
+                                dialogDeliveryFechado.show();
 
-                            btContinuar.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialogDeliveryFechado.dismiss();
-                                    selecionarItem(model);
-                                }
-                            });
+                                btVoltar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialogDeliveryFechado.dismiss();
+                                    }
+                                });
 
-                        } else {
-                            selecionarItem(model);
+                                btContinuar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialogDeliveryFechado.dismiss();
+                                        selecionarItem(model);
+                                    }
+                                });
+
+                            } else {
+                                selecionarItem(model);
+                            }
+
+
+                        } else{ //Sem usuario Logado
+                            Intent i = new Intent(getContext(), LoginActivity.class);
+                            startActivity(i);
+                            ((Activity)getContext()).finish();
                         }
                     }
                 });

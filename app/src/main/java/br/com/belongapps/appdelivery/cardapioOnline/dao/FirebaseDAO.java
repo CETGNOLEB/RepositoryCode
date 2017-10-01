@@ -3,6 +3,8 @@ package br.com.belongapps.appdelivery.cardapioOnline.dao;
 
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,9 +21,10 @@ import static android.content.ContentValues.TAG;
 public class FirebaseDAO {
 
     private static DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    private static FirebaseAuth mAuth;
 
     //ATUALIZAR MÓDULO FINANCEIRO
-    public static void atualizarPedidosnaSemana(String mes, String hj, Date data){
+    public static void atualizarPedidosnaSemana(String mes, String hj, Date data) {
         String diaDaSemana = DataUtil.getDiadaSemana(data);
 
         DatabaseReference numPedidoRef = database.child("financeiro").child("pedidos_semana").child(mes).child(diaDaSemana);
@@ -51,7 +54,7 @@ public class FirebaseDAO {
 
     }
 
-    public static void atualizarPedidosnoMes(String mes){
+    public static void atualizarPedidosnoMes(String mes) {
 
         DatabaseReference numPedidoRef = database.child("financeiro").child("pedidos_mes").child(mes);
         numPedidoRef.runTransaction(new Transaction.Handler() {
@@ -81,7 +84,7 @@ public class FirebaseDAO {
     }
 
     /*ATUALIZAR DADOS DO CLIENTE*/
-    public static void atualizarNumeroPedidosdoCliente(String idDoUsuario){
+    public static void atualizarNumeroPedidosdoCliente(String idDoUsuario) {
 
         DatabaseReference numPedidoRef = database.child("clientes").child(idDoUsuario);
         numPedidoRef.runTransaction(new Transaction.Handler() {
@@ -107,6 +110,17 @@ public class FirebaseDAO {
             }
         });
 
+    }
+
+    public static boolean temUsuarioLogado() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
+
+        if (usuarioLogado == null) {
+            return false;
+        }
+
+        return true;
     }
 
 

@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +42,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
 import br.com.belongapps.appdelivery.gerencial.model.Bairro;
 import br.com.belongapps.appdelivery.gerencial.model.Endereco;
+import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 
 public class EnderecosActivity extends AppCompatActivity {
 
@@ -57,10 +60,14 @@ public class EnderecosActivity extends AppCompatActivity {
     EditText rua, numero, complemento, cep, nome;
     Spinner bairroSpinner;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enderecos);
+
+        mAuth = FirebaseAuth.getInstance();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_enderecos);
         mToolbar.setTitle("Meus Endereços");
@@ -358,6 +365,14 @@ public class EnderecosActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
+
+        if (usuarioLogado == null) {
+            Intent i = new Intent(EnderecosActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
 
         bairros = new ArrayList<>();
         bairrosNomes = new ArrayList<>();

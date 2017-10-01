@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:text="Social"
         android:textColor="@color/colorPrimary"
-        android:layout_margin="15dp"/>
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="15dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/opcoes_social"
@@ -26,7 +28,9 @@
         android:layout_height="wrap_content"
         android:text="Sobre"
         android:textColor="@color/colorPrimary"
-        android:layout_margin="15dp"/>
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="15dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/opcoes_sobre"

@@ -68,6 +68,8 @@ public class CardapioMainActivity extends AppCompatActivity
 
     private FirebaseAuth mAuth;
 
+    NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,17 +83,13 @@ public class CardapioMainActivity extends AppCompatActivity
 
         layout = (CoordinatorLayout) findViewById(R.id.main_content);
 
-        //Exibir nome do usuário
-        /*nomeusuario = (TextView) findViewById(R.id.nome_usuario_menu)*/
-        ;
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_drawer);
+        navigationView = (NavigationView) findViewById(R.id.navigation_drawer);
         navigationView.setNavigationItemSelectedListener(this);
 
         mSectionsPagerAdapter = new CardapioMainActivity.SectionsPagerAdapter(getSupportFragmentManager());
@@ -104,10 +102,17 @@ public class CardapioMainActivity extends AppCompatActivity
 
         /*MOSTRAR NOME DO USUÁRIO*/
         FirebaseUser usuarioLogado = mAuth.getCurrentUser();
-        View header = navigationView.getHeaderView(0);
-        nomeusuario = (TextView) header.findViewById(R.id.nome_usuario);
-        nomeusuario.setText(usuarioLogado.getDisplayName());
 
+        if (usuarioLogado != null) {
+            View header = navigationView.getHeaderView(0);
+            nomeusuario = (TextView) header.findViewById(R.id.nome_usuario);
+            nomeusuario.setText(usuarioLogado.getDisplayName());
+
+            hideItensMenuComUsuario();
+
+        } else {
+            hideItensMenuSemUsuario();
+        }
     }
 
     @Override
@@ -220,6 +225,11 @@ public class CardapioMainActivity extends AppCompatActivity
             startActivity(i);
             finish();
 
+        } else if (id == R.id.nav_entrar) {
+            Intent i = new Intent(CardapioMainActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+
         } else if (id == R.id.nav_sair) {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(CardapioMainActivity.this, LoginActivity.class);
@@ -232,6 +242,18 @@ public class CardapioMainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void hideItensMenuSemUsuario() {
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_perfil).setVisible(false);
+        nav_Menu.findItem(R.id.nav_sair).setVisible(false);
+    }
+
+    private void hideItensMenuComUsuario() {
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_entrar).setVisible(false);
+    }
+
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -323,14 +345,14 @@ public class CardapioMainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-
+/*
         FirebaseUser usuarioLogado = mAuth.getCurrentUser();
 
-        if (usuarioLogado == null){
+        if (usuarioLogado == null) {
             Intent i = new Intent(CardapioMainActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
-        }
+        }*/
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 

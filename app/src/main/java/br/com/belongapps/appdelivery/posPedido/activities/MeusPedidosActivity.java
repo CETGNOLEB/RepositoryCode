@@ -15,10 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
 import br.com.belongapps.appdelivery.posPedido.fragments.TabCartaoFidelidade;
 import br.com.belongapps.appdelivery.posPedido.fragments.TabPedidosRealizados;
+import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 
 public class MeusPedidosActivity extends AppCompatActivity {
 
@@ -26,10 +30,14 @@ public class MeusPedidosActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private Toolbar mToolbar;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedidos_realizados);
+
+        mAuth = FirebaseAuth.getInstance();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_meus_pedidos);
         mToolbar.setTitle("Meus Pedidos");
@@ -129,5 +137,18 @@ public class MeusPedidosActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
+
+        if (usuarioLogado == null) {
+            Intent i = new Intent(MeusPedidosActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 }

@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -26,6 +28,8 @@ import com.squareup.picasso.Picasso;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
+import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 
 public class EscolherRecheioActivity extends AppCompatActivity {
 
@@ -51,10 +55,14 @@ public class EscolherRecheioActivity extends AppCompatActivity {
 
     long qtdRecheioSelecionado = 0;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escolher_recheio);
+
+        mAuth = FirebaseAuth.getInstance();
 
         Intent intent = getIntent();
         itemPedido = intent.getExtras().getParcelable("ItemPedido");
@@ -107,6 +115,14 @@ public class EscolherRecheioActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
+
+        if (usuarioLogado == null) {
+            Intent i = new Intent(EscolherRecheioActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("4");
         mDatabaseReference.keepSynced(true);
@@ -238,4 +254,5 @@ public class EscolherRecheioActivity extends AppCompatActivity {
             return;
         }
     }
+
 }

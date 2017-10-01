@@ -1,6 +1,7 @@
 package br.com.belongapps.appdelivery.helpAbout.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,7 @@ public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapte
         holder.icon.setImageResource(opcao.getIcon());
         holder.descOpcao.setText(opcao.getNomeOpcao());
 
-        if (position == opcoes.size() - 1){
+        if (position == opcoes.size() - 1) {
             holder.divider.setVisibility(View.INVISIBLE);
         }
 
@@ -46,20 +47,20 @@ public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapte
             @Override
             public void onClick(View v) {
 
-                if (opcao.getNomeOpcao().equals("Envie Comentários")){
+                if (opcao.getNomeOpcao().equals("Envie Comentários")) {
 
                     Toast.makeText(context, "Enviar Comentário", Toast.LENGTH_SHORT).show();
 
-                } else if(opcao.getNomeOpcao().equals("Gostou do aplicativo? Avalie!")){
+                } else if (opcao.getNomeOpcao().equals("Gostou do aplicativo? Avalie!")) {
 
                     Toast.makeText(context, "Gostou do aplicativo? Avalie!", Toast.LENGTH_SHORT).show();
 
-                } else if(opcao.getNomeOpcao().equals("Curta nosso Facebook")){
+                } else if (opcao.getNomeOpcao().equals("Curta nosso Facebook")) {
 
                     Toast.makeText(context, "Curta nosso Facebook", Toast.LENGTH_SHORT).show();
 
                 } else { //Sair
-                    Toast.makeText(context, "Conte aos amigos", Toast.LENGTH_SHORT).show();
+                    compartilharLinkdoAplicativo();
                 }
             }
         });
@@ -86,5 +87,15 @@ public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapte
             descOpcao = (TextView) itemView.findViewById(R.id.desc_opcoes);
             divider = itemView.findViewById(R.id.divider_opcoes);
         }
+    }
+
+    public void compartilharLinkdoAplicativo() {
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        share.putExtra(Intent.EXTRA_SUBJECT, "Titulo do compartilhamento");
+        share.putExtra(Intent.EXTRA_TEXT, "Dá uma olhada nesse app! https://play.google.com/store/apps/details?id=br.com.belongapps.appdelivery");
+        context.startActivity(Intent.createChooser(share, "Complete a ação usando:"));
     }
 }

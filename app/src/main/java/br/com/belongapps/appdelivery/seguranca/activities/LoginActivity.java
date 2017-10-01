@@ -207,4 +207,13 @@ public class LoginActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent i = new Intent(LoginActivity.this, CardapioMainActivity.class);
+        startActivity(i);
+        finish();
+    }
 }

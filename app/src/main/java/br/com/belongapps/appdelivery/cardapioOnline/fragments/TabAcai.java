@@ -35,6 +35,7 @@ import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherRecheioActivity;
+import br.com.belongapps.appdelivery.cardapioOnline.dao.FirebaseDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 
@@ -64,8 +65,6 @@ public class TabAcai extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         mDatabaseReference.child("configuracoes").addValueEventListener(new ValueEventListener() {
             @Override
@@ -126,7 +125,7 @@ public class TabAcai extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            if (statusEstabelecimento == false) {
+                            if (!statusEstabelecimento) {
                                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                                 AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
@@ -144,7 +143,7 @@ public class TabAcai extends Fragment {
                                         dialogEstabelecimentoFechado.dismiss();
                                     }
                                 });
-                            } else if (statusDelivery == false){
+                            } else if (!statusDelivery) {
 
                                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -173,7 +172,7 @@ public class TabAcai extends Fragment {
                                     }
                                 });
 
-                            } else{
+                            } else {
                                 selecionarItem(model, key);
                             }
 
