@@ -1,7 +1,9 @@
 package br.com.belongapps.appdelivery.helpAbout.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,13 +55,14 @@ public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapte
 
                 } else if (opcao.getNomeOpcao().equals("Gostou do aplicativo? Avalie!")) {
 
-                    Toast.makeText(context, "Gostou do aplicativo? Avalie!", Toast.LENGTH_SHORT).show();
+                    avaliarNaPlayStore();
 
                 } else if (opcao.getNomeOpcao().equals("Curta nosso Facebook")) {
 
-                    Toast.makeText(context, "Curta nosso Facebook", Toast.LENGTH_SHORT).show();
+                    curtirNoFacebook();
 
-                } else { //Sair
+                } else { //Compartilhar aplicativo
+
                     compartilharLinkdoAplicativo();
                 }
             }
@@ -87,6 +90,18 @@ public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapte
             descOpcao = (TextView) itemView.findViewById(R.id.desc_opcoes);
             divider = itemView.findViewById(R.id.divider_opcoes);
         }
+    }
+
+    public void avaliarNaPlayStore(){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=br.com.belongapps.appdelivery"));
+        context.startActivity(intent);
+    }
+
+    public void curtirNoFacebook(){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://www.facebook.com/belongtecnologia/?ref=br_rs"));
+        context.startActivity(intent);
     }
 
     public void compartilharLinkdoAplicativo() {

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +32,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -46,21 +49,26 @@ import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 
 public class EnderecosActivity extends AppCompatActivity {
 
-    Toolbar mToolbar;
+    private Toolbar mToolbar;
 
     private DatabaseReference mDatabaseReference;
     private ProgressBar mProgressBar;
     private RecyclerView mEnderecoList;
-    List<Bairro> bairros;
-    List<String> bairrosNomes;
+    private List<Bairro> bairros;
+    private List<String> bairrosNomes;
 
-    String bairro;
+    private String bairro;
 
     //Views
-    EditText rua, numero, complemento, cep, nome;
-    Spinner bairroSpinner;
+    private EditText rua, numero, complemento, cep, nome;
+    private Spinner bairroSpinner;
 
     private FirebaseAuth mAuth;
+    private FirebaseUser usuarioLogado;
+
+    //Nenhum endereco cadastrados
+    private Button btEndEmpty;
+    private View viewEmptyEndereco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,41 +119,6 @@ public class EnderecosActivity extends AppCompatActivity {
     }
 
     public void exibirDilogAddEndereco() {
-       /* new MDDialog.Builder(this)
-                .setTitle("Cadastrar Endereço")
-                .setPrimaryTextColor(getResources().getColor(R.color.colorPrimary))
-                .setContentView(R.layout.dialog_add_endereco)
-                .setNegativeButton("Fechar", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                })
-                .setPositiveButton("Cadastrar", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        View root = v.getRootView();
-                        initView(root);
-
-                        Endereco endereco = new Endereco();
-                        endereco.setRua(rua.getText().toString());
-                        endereco.setNumero(numero.getText().toString());
-                        endereco.setBairro(bairroSpinner.getText().toString());
-                        endereco.setComplemento(complemento.getText().toString());
-                        endereco.setNome(nome.getText().toString());
-
-                        if (campoValidoInvalido(endereco.getNome())){
-                            Log.println(Log.ERROR, "dfg", "ENTROU AQUI");
-                            invalidateOptionsMenu();
-                        } else{
-                            *//*salvarEndereco(endereco);*//*
-                            Toast.makeText(EnderecosActivity.this, "Pode Salvar", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-
-                .create()
-                .show();*/
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -187,10 +160,8 @@ public class EnderecosActivity extends AppCompatActivity {
 
                     endereco.setNome(nome.getText().toString());
 
-                    salvarEndereco(endereco);
+                    salvarEndereco(dialogCadastrarEndereco, endereco);
 
-                    dialogCadastrarEndereco.dismiss();
-                    Toast.makeText(EnderecosActivity.this, "Endereço cadastrado com sucesso", Toast.LENGTH_SHORT).show();
 
                 } else {
                     Toast.makeText(EnderecosActivity.this, "Informe " + campos, Toast.LENGTH_SHORT).show();
@@ -275,27 +246,70 @@ public class EnderecosActivity extends AppCompatActivity {
 
     }
 
-    public void salvarEndereco(Endereco endereco) {
+    public void salvarEndereco(final AlertDialog dialogCadastrarEndereco, final Endereco endereco) {
 
-        DatabaseReference enderecoref = mDatabaseReference.child("clientes").child("1").child("enderecos"); //PEGAR ID DO USUÁRIO LOGADO
-        String key = enderecoref.push().getKey();
+        openProgressBar();
+
+        final String userID = usuarioLogado.getUid();
+        final DatabaseReference clienteRef = mDatabaseReference.child("clientes").child(userID); //PEGAR ID DO USUÁRIO LOGADO
+
+        //SALVA ENDEREÇO
+        String key = clienteRef.child("enderecos").push().getKey();
         Map<String, Object> enderecoValues = endereco.toMap();
         Map<String, Object> childUpdatesEndereco = new HashMap<>();
-        childUpdatesEndereco.put("/clientes/1/enderecos/" + key, enderecoValues);
+        childUpdatesEndereco.put(key, enderecoValues);
 
-        mDatabaseReference.updateChildren(childUpdatesEndereco);
+        clienteRef.child("enderecos").updateChildren(childUpdatesEndereco);
+
+        clienteRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+
+                //ATUALIZA TOTAL DE ENDERECOS CADASTRADOS
+                Integer total = mutableData.child("total_enderecos").getValue(Integer.class);
+
+                if (total == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                total++;
+
+                Log.println(Log.ERROR, "TOTAL", "Total: " + total);
+
+                mutableData.child("total_enderecos").setValue(total);
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+
+                dialogCadastrarEndereco.dismiss();
+                Toast.makeText(EnderecosActivity.this, "Endereço cadastrado com sucesso", Toast.LENGTH_SHORT).show();
+
+                buscarEndereços();
+
+                // Transaction completed
+            }
+        });
+
     }
 
     public void editarEndereco(Endereco endereco, String key) {
 
+        String userID = usuarioLogado.getUid();
+
         Map<String, Object> enderecoValues = endereco.toMap();
         Map<String, Object> childUpdatesEndereco = new HashMap<>();
-        childUpdatesEndereco.put("/clientes/1/enderecos/" + key, enderecoValues); //PEGAR ID DO USUÁRIO LOGADO
+        childUpdatesEndereco.put("/clientes/" + userID + "/enderecos/" + key, enderecoValues); //PEGAR ID DO USUÁRIO LOGADO
 
         mDatabaseReference.updateChildren(childUpdatesEndereco);
     }
 
     public void excluirEndereco(final String key) {
+
+        final String userID = usuarioLogado.getUid();
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -311,8 +325,11 @@ public class EnderecosActivity extends AppCompatActivity {
         btConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDatabaseReference.child("clientes").child("1").child("enderecos").child(key).removeValue(); //PEGAR ID DO USUÁRIO LOGADO
+                mDatabaseReference.child("clientes").child(userID).child("enderecos").child(key).removeValue(); //PEGAR ID DO USUÁRIO LOGADO
                 Toast.makeText(EnderecosActivity.this, "Endereço deletado com sucesso", Toast.LENGTH_SHORT).show();
+
+                decrementarTotaldeEnderecos(userID);
+
                 dialogExcluirEndereco.dismiss();
             }
         });
@@ -366,30 +383,74 @@ public class EnderecosActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
+        usuarioLogado = mAuth.getCurrentUser();
 
         if (usuarioLogado == null) {
             Intent i = new Intent(EnderecosActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
+
+        } else { //Usuário Logado
+
+            verificarEnderecosCadastrados();
+            buscarBairros(); //Buscar Bairros para posterior cadastro de enderecos
+
         }
 
-        bairros = new ArrayList<>();
-        bairrosNomes = new ArrayList<>();
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_endereco);
+    }
 
-        //Get id do usuário
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mDatabaseReference.keepSynced(true);
+    //Verifica se existe algum endereço cadastrado
+    private void verificarEnderecosCadastrados() {
+        viewEmptyEndereco = findViewById(R.id.view_empty_endereco);
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference(); //Start database reference
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_endereco);
+        openProgressBar();
+
+        //VERIFICAR ENDEREÇOS CADASTRADOS
+        ValueEventListener enderecoListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                closeProgressBar();
+
+                Integer totalEnderecos = dataSnapshot.child("total_enderecos").getValue(Integer.class);
+
+                if (totalEnderecos == 0) { //Não tem nenhum endereço cadastrado
+
+                    viewEmptyEndereco.setVisibility(View.VISIBLE);
+
+                    btEndEmpty = (Button) findViewById(R.id.bt_end_empty);
+                    btEndEmpty.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(EnderecosActivity.this, "Abrir diálogo Cad Endereço", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else { //Existem endereços cadastrados
+                    buscarEndereços();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+            }
+        };
+
+        mDatabaseReference.child("clientes").child(usuarioLogado.getUid()).addListenerForSingleValueEvent(enderecoListener);
+
+    }
+
+    private void buscarEndereços() {
+        viewEmptyEndereco.setVisibility(View.GONE);
 
         mEnderecoList = (RecyclerView) findViewById(R.id.list_enderecos);
         mEnderecoList.setHasFixedSize(true);
         mEnderecoList.setLayoutManager(new LinearLayoutManager(EnderecosActivity.this));
 
-        openProgressBar();
-
         final FirebaseRecyclerAdapter<Endereco, EnderecosActivity.EnderecoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Endereco, EnderecosActivity.EnderecoViewHolder>(
-                Endereco.class, R.layout.card_endereco, EnderecosActivity.EnderecoViewHolder.class, mDatabaseReference.child("clientes").child("1").child("enderecos")
+                Endereco.class, R.layout.card_endereco, EnderecosActivity.EnderecoViewHolder.class, mDatabaseReference.child("clientes").child(usuarioLogado.getUid()).child("enderecos")
         ) {
 
             @Override
@@ -407,7 +468,7 @@ public class EnderecosActivity extends AppCompatActivity {
                 viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //Exibir popupMenu
+                        //Exibir popupMen5u
                         PopupMenu popupMenu = new PopupMenu(EnderecosActivity.this, viewHolder.optionsMenu);
                         popupMenu.inflate(R.menu.menu_item_card_endereco);
                         popupMenu.setGravity(Gravity.RIGHT);
@@ -442,6 +503,11 @@ public class EnderecosActivity extends AppCompatActivity {
         };
 
         mEnderecoList.setAdapter(firebaseRecyclerAdapter);
+    }
+
+    private void buscarBairros() {
+        bairros = new ArrayList<>();
+        bairrosNomes = new ArrayList<>();
 
         //ListarBairros
         ValueEventListener bairroListener = new ValueEventListener() {
@@ -456,7 +522,6 @@ public class EnderecosActivity extends AppCompatActivity {
                 } catch (Exception n) {
                 }
 
-
                 for (Bairro bairro : bairros) {
                     bairrosNomes.add(bairro.getBairro());
                 }
@@ -466,12 +531,46 @@ public class EnderecosActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
-                // ...
             }
         };
 
         mDatabaseReference.child("configuracoes").child("bairro_taxa").addValueEventListener(bairroListener);
+    }
 
+    public void decrementarTotaldeEnderecos(String userID){
+        openProgressBar();
+
+        DatabaseReference clienteRef = mDatabaseReference.child("clientes").child(userID);
+
+        clienteRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+
+                //ATUALIZA TOTAL DE ENDERECOS CADASTRADOS
+                Integer total = mutableData.child("total_enderecos").getValue(Integer.class);
+
+                if (total == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                total--;
+
+                Log.println(Log.ERROR, "TOTAL", "Total: " + total);
+
+                mutableData.child("total_enderecos").setValue(total);
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+
+                verificarEnderecosCadastrados();
+
+                // Transaction completed
+            }
+        });
     }
 
     public static class EnderecoViewHolder extends RecyclerView.ViewHolder {
@@ -528,7 +627,6 @@ public class EnderecosActivity extends AppCompatActivity {
         }
 
     }
-
 
     private void openProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);

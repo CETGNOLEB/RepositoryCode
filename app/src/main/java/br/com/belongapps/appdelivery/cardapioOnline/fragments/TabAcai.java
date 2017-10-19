@@ -66,6 +66,8 @@ public class TabAcai extends Fragment {
     public void onStart() {
         super.onStart();
 
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         mDatabaseReference.child("configuracoes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

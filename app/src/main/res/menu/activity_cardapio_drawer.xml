@@ -24,14 +24,14 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_a_empresa"
-            android:icon="@drawable/ic_home"
-            android:title="A Empresa" />
-
-        <item
             android:id="@+id/nav_enderecos"
             android:icon="@drawable/ic_marks"
             android:title="Meus Endereços" />
+
+        <item
+            android:id="@+id/nav_a_empresa"
+            android:icon="@drawable/ic_home"
+            android:title="A Empresa" />
 
         <item
             android:id="@+id/nav_sobre"

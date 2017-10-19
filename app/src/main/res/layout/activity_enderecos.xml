@@ -34,5 +34,9 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <include layout="@layout/empty_endereco"
+        android:id="@+id/view_empty_endereco"
+        android:visibility="gone"/>
+
 </RelativeLayout>
 

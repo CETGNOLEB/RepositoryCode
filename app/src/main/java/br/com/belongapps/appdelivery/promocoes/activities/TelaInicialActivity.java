@@ -153,7 +153,7 @@ public class TelaInicialActivity extends AppCompatActivity {
 
                 if (dots != null) {
 
-                    dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_active_dot));
+                    //dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_active_dot));
                     viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                         @Override
                         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

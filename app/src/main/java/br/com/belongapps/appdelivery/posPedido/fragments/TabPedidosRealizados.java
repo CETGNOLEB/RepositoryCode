@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +47,9 @@ public class TabPedidosRealizados extends Fragment {
     private List<PedidoKey> pedidosRealizados;
     List<PedidoKey> pedidosRealizadosAux;
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser usuarioLogado;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,11 +65,14 @@ public class TabPedidosRealizados extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+        usuarioLogado = mAuth.getCurrentUser();
 
         mPedidosRealizadosList = (RecyclerView) getActivity().findViewById(R.id.list_pedidos_realizados);
         mPedidosRealizadosList.setHasFixedSize(true);
@@ -76,7 +84,7 @@ public class TabPedidosRealizados extends Fragment {
         keypedidosRealizados = new ArrayList<>();
         keypedidosRealizadosAux = new ArrayList<>();
 
-        final String userId = "1"; //PEGAR ID DO USUÀRIO LOGADO
+        final String userId = usuarioLogado.getUid(); //PEGAR ID DO USUÀRIO LOGADO
         mDatabaseReferenceClientes.child(userId).child("pedidos").addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override

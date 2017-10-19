@@ -6,104 +6,14 @@
     android:orientation="vertical"
     android:paddingTop="20dp"
     tools:context=".helpAbout.activities.AEmpresaActivity"
-    tools:showIn="@layout/activity_ajuda">
+    tools:showIn="@layout/activity_a_empresa">
 
-    <LinearLayout
-        android:id="@+id/layout_list_recheios"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="?actionBarSize"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/layout_ajuda"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_icon_ajuda" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:text="Ajuda"
-
-                android:textSize="18dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_tutorial"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_icon_ajuda" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:text="Tutorial"
-                android:textSize="18dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_perguntas_frenquentes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_icon_ajuda" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:text="Pergutas Frequentes"
-                android:textSize="18dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_enviar_comentarios"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_icon_ajuda" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:text="Enviar Comentários"
-
-                android:textSize="18dp" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Dados da Empresa"
+        android:textSize="@dimen/md_dialog_title_textview_textsize"/>
 
 </RelativeLayout>

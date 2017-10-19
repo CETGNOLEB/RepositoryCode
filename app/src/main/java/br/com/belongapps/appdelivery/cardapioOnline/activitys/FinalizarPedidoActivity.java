@@ -24,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -122,10 +124,17 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private TextView aeTvRuaEndereco, aeTvNumeroEndereco, aeTvBairroEndereco;
     private Spinner enderecoSpinner;
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser usuarioLogado;
+
+    private Cliente cliente;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finalizar_pedido);
+
+        mAuth = FirebaseAuth.getInstance();
 
         mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this);
 
@@ -211,10 +220,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         pedido.setEntrega_retirada(getIntent().getIntExtra("tipoEntrega", 0));
         pedido.setItens_pedido(getItensdoPedido());
 
-        //Pegar usuário logado
-        Cliente cliente = new Cliente();
-        cliente.setNomeCliente("Thiago Oliveira");
-
         //setar apenas se a entrega for delivery
         if (pedido.getEntrega_retirada() == 0) {
             cliente.setRuaEndCliente(endereco.getRua());
@@ -298,7 +303,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 atualizarPedidosdoCliente(hj, key);
 
                 //ATUALIZA NÚMERO DE PEDIDOS DO USUÁRIO LOGADO
-                FirebaseDAO.atualizarNumeroPedidosdoCliente("1"); //PEGAR ID DO USUÁRIO
+                FirebaseDAO.atualizarNumeroPedidosdoCliente(usuarioLogado.getUid()); //PEGAR ID DO USUÁRIO
 
                 //ATUALIZAR TOTAL DOS ITENS PEDIDO
                 buscarEAtualizarTotaldePedidosDoItem(pedido.getItens_pedido());
@@ -320,12 +325,15 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     }
 
     public void atualizarPedidosdoCliente(String hj, String keyPedido) {
+        String userID = usuarioLogado.getUid();
+
+
         KeyPedido keyp = new KeyPedido(keyPedido);
         keyp.setId(StringUtil.mesdoPedido(hj) + "/" + hj + "/" + keyPedido);
 
-        String key = database.child("clientes").child("1").push().getKey();//pegar id do usuário logado
+        String key = database.child("clientes").child(userID).push().getKey();//pegar id do usuário logado
 
-        database.child("clientes").child("1").child("pedidos").child(key).setValue(keyp);
+        database.child("clientes").child(userID).child("pedidos").child(key).setValue(keyp);
     }
 
     public void buscarEAtualizarTotaldePedidosDoItem(final List<ItemPedido> itensdoPedido) {
@@ -541,6 +549,27 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void buscarDadosdoCliente(String userID){
+
+        Log.println(Log.ERROR, "USUARIO:" , userID);
+
+        ValueEventListener dadosClienteListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Cliente c = new Cliente();
+                c.setNomeCliente(dataSnapshot.child("nome").getValue(String.class));
+
+                cliente = c;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        database.child("clientes").child(userID).addValueEventListener(dadosClienteListener);
     }
 
     public void naoEnviarPedido(boolean formadepagamento) {
@@ -813,11 +842,13 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void salvarEndereco(Endereco endereco) {
 
-        DatabaseReference enderecoref = database.child("clientes").child("1").child("enderecos"); //PEGAR ID DO USUÁRIO LOGADO
+        String userId = usuarioLogado.getUid();
+
+        DatabaseReference enderecoref = database.child("clientes").child(userId).child("enderecos"); //PEGAR ID DO USUÁRIO LOGADO
         String key = enderecoref.push().getKey();
         Map<String, Object> enderecoValues = endereco.toMap();
         Map<String, Object> childUpdatesEndereco = new HashMap<>();
-        childUpdatesEndereco.put("/clientes/1/enderecos/" + key, enderecoValues); //PEGAR ID DO USUÁRIO LOGADO
+        childUpdatesEndereco.put("/clientes/" + userId +"/enderecos/" + key, enderecoValues); //PEGAR ID DO USUÁRIO LOGADO
 
         database.updateChildren(childUpdatesEndereco);
     }
@@ -894,6 +925,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        usuarioLogado = mAuth.getCurrentUser();
+
         bairrosNomes = new ArrayList<>();
         totaldoPedido = getIntent().getDoubleExtra("totalPedido", 0);
 
@@ -901,6 +934,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         buscarEnderecosdoUsuario();
         buscarBairros();
         populateFormasdePagamento();
+        buscarDadosdoCliente(usuarioLogado.getUid());
 
     }
 
@@ -977,6 +1011,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void buscarEnderecosdoUsuario() {
 
+        String userId = usuarioLogado.getUid();
+
         btAlterarEndereco = (Button) findViewById(R.id.bt_alterar_endereco);
         glEndereco = (GridLayout) findViewById(R.id.gl_endereco);
         btcadastrarEndereco = (Button) findViewById(R.id.cadastrar_endereco);
@@ -1010,7 +1046,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             }
         };
 
-        database.child("clientes").child("1").child("enderecos").addValueEventListener(enderecoListener); //PEGAR ID DO USUÁRIO
+        database.child("clientes").child(userId).child("enderecos").addValueEventListener(enderecoListener); //PEGAR ID DO USUÁRIO
     }
 
     @Override

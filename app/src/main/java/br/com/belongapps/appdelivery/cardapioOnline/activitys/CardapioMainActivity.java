@@ -44,6 +44,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabVitaminas;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
 import br.com.belongapps.appdelivery.gerencial.activities.PerfilActivity;
+import br.com.belongapps.appdelivery.helpAbout.activities.AEmpresaActivity;
 import br.com.belongapps.appdelivery.helpAbout.activities.SobreActivity;
 import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabAcai;
@@ -68,7 +69,9 @@ public class CardapioMainActivity extends AppCompatActivity
 
     private FirebaseAuth mAuth;
 
-    NavigationView navigationView;
+    private NavigationView navigationView;
+
+    private String nomeUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,19 +103,47 @@ public class CardapioMainActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        /*MOSTRAR NOME DO USUÁRIO*/
+        /*MOSTRAR NOME DO USUÁRIO E MOSTRAR/NÂO MOSTRAR ITENS MENU*/
         FirebaseUser usuarioLogado = mAuth.getCurrentUser();
 
         if (usuarioLogado != null) {
+
             View header = navigationView.getHeaderView(0);
             nomeusuario = (TextView) header.findViewById(R.id.nome_usuario);
-            nomeusuario.setText(usuarioLogado.getDisplayName());
+            buscarNomeUsuario(usuarioLogado.getUid());
+
 
             hideItensMenuComUsuario();
 
         } else {
             hideItensMenuSemUsuario();
         }
+    }
+
+    public void buscarNomeUsuario(String userId) {
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+        nomeUsuario = "";
+
+        DatabaseReference userReference = mDatabaseReference.child("clientes").child(userId);
+
+        ValueEventListener nameUserListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                nomeUsuario = dataSnapshot.child("nome").getValue(String.class);
+                nomeusuario.setText(nomeUsuario);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                // ...
+            }
+        };
+
+        userReference.addValueEventListener(nameUserListener);
+
     }
 
     @Override
@@ -212,7 +243,7 @@ public class CardapioMainActivity extends AppCompatActivity
             startActivity(i);
             finish();
         } else if (id == R.id.nav_a_empresa) {
-            Intent i = new Intent(CardapioMainActivity.this, SobreActivity.class);
+            Intent i = new Intent(CardapioMainActivity.this, AEmpresaActivity.class);
             startActivity(i);
             finish();
         } else if (id == R.id.nav_sobre) {
