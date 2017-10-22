@@ -4,49 +4,49 @@
     android:layout_height="match_parent" android:id="@+id/end_empty">
 
     <ImageView
-        android:id="@+id/img_sem_enderecos"
+        android:id="@+id/img_sem_pedidos"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/empty_endereco"
+        android:src="@drawable/emptycart"
         android:visibility="visible"/>
 
     <TextView
-        android:id="@+id/text_sem_enderecos"
-        android:layout_below="@+id/img_sem_enderecos"
+        android:id="@+id/text_sem_pedidos"
+        android:layout_below="@+id/img_sem_pedidos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:text="Sem Endereços"
+        android:text="Nenhum Pedido Realizado"
         android:visibility="visible"/>
 
     <TextView
-        android:id="@+id/desc_sem_enderecos"
-        android:layout_below="@+id/text_sem_enderecos"
+        android:id="@+id/desc_sem_pedidos"
+        android:layout_below="@+id/text_sem_pedidos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textSize="16sp"
-        android:text="Cadastre seus endereços."
+        android:text="Que tal pedir algo delicioso para comer?."
         android:visibility="visible"/>
 
     <Button
-        android:id="@+id/bt_sem_enderecos_cad_endereco"
+        android:id="@+id/bt_sem_pedidos_ver_cardapio"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_marginTop="15dp"
         android:paddingRight="20dp"
         android:paddingLeft="20dp"
-        android:text="Novo Endereço"
+        android:text="Ver o Cardápio"
         android:textColor="@color/textColorPrimary"
         android:background="@drawable/border_button_white"
         android:visibility="visible"
-        android:layout_below="@+id/desc_sem_enderecos"
+        android:layout_below="@+id/desc_sem_pedidos"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

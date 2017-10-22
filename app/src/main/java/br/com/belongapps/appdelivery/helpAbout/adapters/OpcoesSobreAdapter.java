@@ -1,6 +1,8 @@
 package br.com.belongapps.appdelivery.helpAbout.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +14,8 @@ import android.widget.Toast;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.helpAbout.activities.SobreAplicativoActivity;
 import br.com.belongapps.appdelivery.helpAbout.model.OpcoesSobre;
-import br.com.belongapps.appdelivery.helpAbout.model.OpcoesSocial;
 
 
 public class OpcoesSobreAdapter extends RecyclerView.Adapter<OpcoesSobreAdapter.ViewHolderOpcoes> {
@@ -39,7 +41,7 @@ public class OpcoesSobreAdapter extends RecyclerView.Adapter<OpcoesSobreAdapter.
         holder.icon.setImageResource(opcao.getIcon());
         holder.descOpcao.setText(opcao.getNomeOpcao());
 
-        if (position == opcoes.size() - 1){
+        if (position == opcoes.size() - 1) {
             holder.divider.setVisibility(View.INVISIBLE);
         }
 
@@ -47,16 +49,20 @@ public class OpcoesSobreAdapter extends RecyclerView.Adapter<OpcoesSobreAdapter.
             @Override
             public void onClick(View v) {
 
-                if (opcao.getNomeOpcao().equals("Sobre o aplicativo")){
+                if (opcao.getNomeOpcao().equals("Sobre o aplicativo")) {
 
-                    Toast.makeText(context, "Sobre o aplicativo", Toast.LENGTH_SHORT).show();
+                    exibirActivityDadosDoAplicativo();
 
-                } else if(opcao.getNomeOpcao().equals("Política de privacidade")) {
+                } else if (opcao.getNomeOpcao().equals("Política de privacidade")) {
 
-                    Toast.makeText(context, "Política de privacidade", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Link para a Política de privacidade", Toast.LENGTH_SHORT).show();
+
+                } else if (opcao.getNomeOpcao().equals("Nosso site")) {
+
+                    Toast.makeText(context, "Link para o site", Toast.LENGTH_SHORT).show();
 
                 } else { //Sair
-                    Toast.makeText(context, "Versão 1.0.0", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Link para a lista de Versão 1.0.0", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -84,4 +90,13 @@ public class OpcoesSobreAdapter extends RecyclerView.Adapter<OpcoesSobreAdapter.
             divider = itemView.findViewById(R.id.divider_opcoes);
         }
     }
+
+
+    //MÉTODOS AUXILIÁRES
+    private void exibirActivityDadosDoAplicativo() {
+        Intent intent = new Intent(context, SobreAplicativoActivity.class);
+        context.startActivity(intent);
+        ((Activity)context).finish();
+    }
+
 }

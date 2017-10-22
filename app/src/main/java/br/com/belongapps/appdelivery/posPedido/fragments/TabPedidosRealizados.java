@@ -1,5 +1,7 @@
 package br.com.belongapps.appdelivery.posPedido.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.posPedido.PedidoKey;
@@ -35,6 +40,7 @@ import static android.content.ContentValues.TAG;
 public class TabPedidosRealizados extends Fragment {
 
     private RecyclerView mPedidosRealizadosList;
+    private DatabaseReference mDatabaseReference;
     private DatabaseReference mDatabaseReferenceClientes;
     private DatabaseReference mDatabaseReferencePedidos;
     private RecyclerView.Adapter adapter;
@@ -50,12 +56,12 @@ public class TabPedidosRealizados extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser usuarioLogado;
 
+    private View viewEmptyPedidos;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_pedidos_realizados, container, false);
-
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressbar_pedidos_realizados);
 
         return rootView;
 
@@ -72,13 +78,69 @@ public class TabPedidosRealizados extends Fragment {
     public void onStart() {
         super.onStart();
 
+        initViews();
+        verificarSeTemPedidosRealizados();
+
+    }
+
+    //MÉTODOS AUXULIARES
+    private void initViews() {
+        mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_pedidos_realizados);
+        viewEmptyPedidos = getActivity().findViewById(R.id.view_empty_pedidos_realizados);
+    }
+
+    private void verificarSeTemPedidosRealizados() {
+
         usuarioLogado = mAuth.getCurrentUser();
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference(); //Start database reference
+        openProgressBar();
+
+        //VERIFICAR PEDIDOS REALIZADOS
+        ValueEventListener pedidosRealizadosListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                closeProgressBar();
+
+                Integer totalPedidos = dataSnapshot.child("total_pedidos").getValue(Integer.class);
+
+                if (totalPedidos != null) {
+                    if (totalPedidos == 0) { //Não tem nenhum pedido realizado
+
+                        viewEmptyPedidos.setVisibility(View.VISIBLE);
+
+                        Button btSemPedidos = (Button) getActivity().findViewById(R.id.bt_sem_pedidos_ver_cardapio);
+                        btSemPedidos.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getContext(), CardapioMainActivity.class);
+                                getContext().startActivity(intent);
+                                ((Activity) getContext()).finish();
+                            }
+                        });
+                    } else { //Existem pedidos realizados
+                        buscarKeyPedidosdoCliente();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+            }
+        };
+
+        mDatabaseReference.child("clientes").child(usuarioLogado.getUid()).addListenerForSingleValueEvent(pedidosRealizadosListener);
+
+    }
+
+    private void buscarKeyPedidosdoCliente() {
 
         mPedidosRealizadosList = (RecyclerView) getActivity().findViewById(R.id.list_pedidos_realizados);
         mPedidosRealizadosList.setHasFixedSize(true);
         mPedidosRealizadosList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mDatabaseReferenceClientes = FirebaseDatabase.getInstance().getReference().child("clientes");
+        mDatabaseReferenceClientes = mDatabaseReference.child("clientes");
         mDatabaseReferencePedidos = FirebaseDatabase.getInstance().getReference();
 
         keypedidosRealizados = new ArrayList<>();
@@ -178,7 +240,7 @@ public class TabPedidosRealizados extends Fragment {
 
     }
 
-    public void atualizarPedidos(){
+    public void atualizarPedidos() {
 
         pedidosRealizadosAux = new ArrayList<>();
         pedidosRealizados = new ArrayList<>();
@@ -210,7 +272,7 @@ public class TabPedidosRealizados extends Fragment {
                     pedidosRealizados.addAll(pedidosRealizadosAux);
                     pedidosRealizadosAux = new ArrayList<>();
                     preencherListView(pedidosRealizados);
-            }
+                }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -235,6 +297,14 @@ public class TabPedidosRealizados extends Fragment {
             mPedidosRealizadosList.setAdapter(adapter);
         }
 
+    }
+
+    private void openProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void closeProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
     }
 
 }

@@ -1,6 +1,7 @@
 package br.com.belongapps.appdelivery.helpAbout.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -32,7 +33,14 @@ public class AEmpresaActivity extends AppCompatActivity {
         verNoMapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AEmpresaActivity.this, "Abrir o maps", Toast.LENGTH_SHORT).show();
+
+                Uri gmmIntentUri = Uri.parse("geo:-4.972303,-39.022953?q=Kisabor ");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+
             }
         });
     }

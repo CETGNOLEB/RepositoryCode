@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.com.belongapps.appdelivery.helpAbout.activities.SobreAplicativoActivity">
+
+    <include
+        android:id="@+id/toolbar_sobre_o_app"
+        layout="@layout/app_bar_layout" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_sobre_o_app"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/logo_app"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/logo_belong" />
+
+            <TextView
+                android:id="@+id/title_app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/logo_app"
+                android:layout_centerHorizontal="true"
+                android:text="Nome da Solução"
+                android:textColor="#212121"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/direitos_app_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_app"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Copyright 2017 Belong Tecnologia"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/direitos_app_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/direitos_app_one"
+                android:layout_centerHorizontal="true"
+                android:text="Todos os direitos reservados"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/desc_app_use"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/direitos_app_two"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="O Nome do Aplicativo usa Google Firebase"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <!--AGRADECIMENTOS-->
+            <TextView
+                android:id="@+id/tv_agradecimentos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_app_use"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="AGRADECIMENTOS"
+                android:textColor="#212121"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+
+            <!--PICASSO-->
+            <TextView
+                android:id="@+id/desc_picasso_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_agradecimentos"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Picasso"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/desc_picasso_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_picasso_one"
+                android:layout_centerHorizontal="true"
+                android:text="by Square Inc"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/desc_icons_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_picasso_two"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="Material Desig Icons"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/desc_icons_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_icons_one"
+                android:layout_centerHorizontal="true"
+                android:text="by Austin Andrews"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_contato"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_icons_two"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="CONTATO"
+                android:textColor="#212121"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/desc_contato"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_contato"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Se você tem alguma dúvida ou sugestão sobre o aplicativo, por favor fique a vontade para enviar comentários ou acessse nosso site:"
+                android:textAlignment="center"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/link_to_coment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_contato"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Enviar Comentários"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/link_to_site"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/link_to_coment"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:text="Visite nosso site"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

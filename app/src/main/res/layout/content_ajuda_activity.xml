@@ -8,12 +8,5 @@
     tools:context=".helpAbout.activities.AEmpresaActivity"
     tools:showIn="@layout/activity_a_empresa">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Dados da Empresa"
-        android:textSize="@dimen/md_dialog_title_textview_textsize"/>
 
 </RelativeLayout>

@@ -10,7 +10,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:progressTint="@color/colorPrimary"
-        android:visibility="visible"
+        android:visibility="gone"
         android:theme="@style/MyProgressbarColor"
         android:id="@+id/progressbar_pedidos_realizados" />
 
@@ -20,5 +20,9 @@
         android:id="@+id/list_pedidos_realizados">
 
     </android.support.v7.widget.RecyclerView>
+
+    <include layout="@layout/empty_pedidos_realizados"
+        android:id="@+id/view_empty_pedidos_realizados"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -416,19 +416,21 @@ public class EnderecosActivity extends AppCompatActivity {
 
                 Integer totalEnderecos = dataSnapshot.child("total_enderecos").getValue(Integer.class);
 
-                if (totalEnderecos == 0) { //Não tem nenhum endereço cadastrado
+                if (totalEnderecos != null) {
+                    if (totalEnderecos == 0) { //Não tem nenhum endereço cadastrado
 
-                    viewEmptyEndereco.setVisibility(View.VISIBLE);
+                        viewEmptyEndereco.setVisibility(View.VISIBLE);
 
-                    btEndEmpty = (Button) findViewById(R.id.bt_end_empty);
-                    btEndEmpty.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(EnderecosActivity.this, "Abrir diálogo Cad Endereço", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else { //Existem endereços cadastrados
-                    buscarEndereços();
+                        btEndEmpty = (Button) findViewById(R.id.bt_sem_enderecos_cad_endereco);
+                        btEndEmpty.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(EnderecosActivity.this, "Abrir diálogo Cad Endereço", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else { //Existem endereços cadastrados
+                        buscarEndereços();
+                    }
                 }
             }
 

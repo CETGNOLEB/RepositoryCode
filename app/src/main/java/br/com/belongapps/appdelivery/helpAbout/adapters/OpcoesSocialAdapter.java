@@ -1,21 +1,23 @@
 package br.com.belongapps.appdelivery.helpAbout.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.helpAbout.model.OpcoesSocial;
+import br.com.belongapps.appdelivery.helpAbout.util.ComentarioUtil;
 
 
 public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapter.ViewHolderOpcoes> {
@@ -51,7 +53,7 @@ public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapte
 
                 if (opcao.getNomeOpcao().equals("Envie Comentários")) {
 
-                    Toast.makeText(context, "Enviar Comentário", Toast.LENGTH_SHORT).show();
+                    ComentarioUtil.exibirDialogEnviarComentarios(context);
 
                 } else if (opcao.getNomeOpcao().equals("Gostou do aplicativo? Avalie!")) {
 
@@ -92,13 +94,13 @@ public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapte
         }
     }
 
-    public void avaliarNaPlayStore(){
+    public void avaliarNaPlayStore() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=br.com.belongapps.appdelivery"));
         context.startActivity(intent);
     }
 
-    public void curtirNoFacebook(){
+    public void curtirNoFacebook() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("https://www.facebook.com/belongtecnologia/?ref=br_rs"));
         context.startActivity(intent);
@@ -113,4 +115,5 @@ public class OpcoesSocialAdapter extends RecyclerView.Adapter<OpcoesSocialAdapte
         share.putExtra(Intent.EXTRA_TEXT, "Dá uma olhada nesse app! https://play.google.com/store/apps/details?id=br.com.belongapps.appdelivery");
         context.startActivity(Intent.createChooser(share, "Complete a ação usando:"));
     }
+
 }

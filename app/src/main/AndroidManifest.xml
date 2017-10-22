@@ -32,12 +32,17 @@
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoActivity" />
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoRetiradaActivity" />
         //SOBRE/AJUDA
-        <activity android:name=".helpAbout.activities.SobreActivity" />
+        <activity android:name=".helpAbout.activities.SobreActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+                <data android:scheme="mailto" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".helpAbout.activities.AEmpresaActivity" />
         //GERENCIA/CLIENTE
         <activity android:name=".gerencial.activities.EnderecosActivity" />
-        <activity
-            android:name=".gerencial.activities.PerfilActivity"></activity>
+        <activity android:name=".gerencial.activities.PerfilActivity" />
         //TELA INICIAL
         <activity android:name=".promocoes.activities.TelaInicialActivity">
             <intent-filter>
@@ -49,7 +54,7 @@
         //PÓS-PEDIDO
         <activity android:name=".posPedido.activities.MeusPedidosActivity" />
         <activity android:name=".posPedido.activities.AcompanharPedidoActivity" />
-
+        <activity android:name=".helpAbout.activities.SobreAplicativoActivity"></activity>
     </application>
 
 </manifest>
