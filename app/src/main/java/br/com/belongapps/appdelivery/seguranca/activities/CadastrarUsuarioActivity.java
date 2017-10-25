@@ -1,7 +1,10 @@
 package br.com.belongapps.appdelivery.seguranca.activities;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import br.com.belongapps.appdelivery.R;
@@ -33,7 +38,11 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
     private TextView email;
     private TextView senha;
     private TextView celular;
+    private TextView dataNascimento;
     private Button btCadastrarUsuario;
+
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private DatePickerDialog dialogSelectDate;
 
     private ProgressDialog mCadProgress;
 
@@ -59,6 +68,15 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
         initViews();
 
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int ano, int mes, int dia) {
+                mes = mes + 1;
+
+                String dataSelecionada = dia + "/" + mes + "/" + ano;
+                dataNascimento.setText(dataSelecionada);
+            }
+        };
     }
 
     public void initViews() {
@@ -66,6 +84,30 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
         email = (TextView) findViewById(R.id.cad_usuario_email);
         senha = (TextView) findViewById(R.id.cad_usuario_senha);
         celular = (TextView) findViewById(R.id.cad_usuario_celular);
+        dataNascimento = (TextView) findViewById(R.id.cad_usuario_data_nasc);
+
+        //SELECIONAR DATA NASCIMENTO
+        dataNascimento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Calendar mCalendar = Calendar.getInstance();
+                int ano = mCalendar.get(Calendar.YEAR);
+                int mes = mCalendar.get(Calendar.MONTH);
+                int dia = mCalendar.get(Calendar.DAY_OF_MONTH);
+
+                dialogSelectDate = new DatePickerDialog(
+                        CadastrarUsuarioActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        1998, 7, 15
+                );
+
+                dialogSelectDate.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialogSelectDate.show();
+
+            }
+        });
 
         btCadastrarUsuario = (Button) findViewById(R.id.bt_cad_usuario);
 
@@ -74,23 +116,31 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String nomeUsuario = nome.getText().toString();
+                String dataNascUsuario = dataNascimento.getText().toString().trim();
                 String emailUsuario = email.getText().toString().trim();
                 String senhaUsuario = senha.getText().toString().trim();
                 String celularUsuario = celular.getText().toString().trim();
 
-                if (!TextUtils.isEmpty(nomeUsuario) || TextUtils.isEmpty(emailUsuario) || TextUtils.isEmpty(senhaUsuario)) {
+                if (!TextUtils.isEmpty(nomeUsuario) && !TextUtils.isEmpty(emailUsuario)
+                        && !TextUtils.isEmpty(senhaUsuario) && !TextUtils.isEmpty(dataNascUsuario)
+                        && !TextUtils.isEmpty(celularUsuario)) {
+
                     mCadProgress.setTitle("Cadastrando Usuário");
                     mCadProgress.setMessage("Aguarde um instante...");
                     mCadProgress.setCanceledOnTouchOutside(false);
                     mCadProgress.show();
-                    cadastrarUsuario(nomeUsuario, emailUsuario, senhaUsuario, celularUsuario);
+                    cadastrarUsuario(nomeUsuario, dataNascUsuario, emailUsuario, senhaUsuario, celularUsuario);
+                } else {
+                    Toast.makeText(CadastrarUsuarioActivity.this, "Por favor, preencha todos os campos!", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
+
+
     }
 
-    private void cadastrarUsuario(final String nomeUsuario, String emailUsuario, String senhaUsuario, final String celularUsuario) {
+    private void cadastrarUsuario(final String nomeUsuario, final String dataNascUsuario, String emailUsuario, String senhaUsuario, final String celularUsuario) {
         mAuth.createUserWithEmailAndPassword(emailUsuario, senhaUsuario).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -101,6 +151,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                     DatabaseReference referenceUserLogado = mDatabaseReference.child(userId);
 
                     referenceUserLogado.child("nome").setValue(nomeUsuario);
+                    referenceUserLogado.child("data_nascimento").setValue(dataNascUsuario);
                     referenceUserLogado.child("data_cadastro").setValue(DataUtil.formatar(new Date(), "dd/MM/yyyy"));
                     referenceUserLogado.child("celular").setValue(celularUsuario);
                     referenceUserLogado.child("permite_ped").setValue(1);
@@ -111,6 +162,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(CadastrarUsuarioActivity.this, CardapioMainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("login", "Bem Vindo ao App da Kisabor!");
                     startActivity(intent);
                     finish();
                 } else {

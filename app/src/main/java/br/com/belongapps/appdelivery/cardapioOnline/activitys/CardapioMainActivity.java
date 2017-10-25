@@ -78,6 +78,8 @@ public class CardapioMainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cardapio);
 
+        verificarSeVeioDoLogin();
+
         mAuth = FirebaseAuth.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
@@ -146,7 +148,14 @@ public class CardapioMainActivity extends AppCompatActivity
 
     }
 
-    @Override
+    public void verificarSeVeioDoLogin(){
+
+        String bemVindo = getIntent().getStringExtra("login");
+        if (bemVindo != null){
+            Toast.makeText(this, bemVindo, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {

@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                     mProgressDialog.setMessage("Aguarde, validando seus dados...");
                     mProgressDialog.setCanceledOnTouchOutside(false);
                     mProgressDialog.show();
-                    startSingInEmailESenha(email, senha);
+                    startSingInEmailESenha(email.trim(), senha);
                 }
             }
         });
@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                     mProgressDialog.dismiss();
                     Intent intent = new Intent(LoginActivity.this, CardapioMainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("login", "Bem Vindo ao App da Kisabor!");
                     startActivity(intent);
                     finish();
                 } else {
