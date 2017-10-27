@@ -23,6 +23,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -148,6 +149,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     //Salvar no Banco
                     String userId = mAuth.getCurrentUser().getUid();
+                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
                     DatabaseReference referenceUserLogado = mDatabaseReference.child(userId);
 
                     referenceUserLogado.child("nome").setValue(nomeUsuario);
@@ -157,6 +159,8 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                     referenceUserLogado.child("permite_ped").setValue(1);
                     referenceUserLogado.child("total_pedidos").setValue(0);
                     referenceUserLogado.child("total_enderecos").setValue(0);
+
+                    referenceUserLogado.child("device_token").setValue(deviceToken);
 
                     mCadProgress.dismiss();
 

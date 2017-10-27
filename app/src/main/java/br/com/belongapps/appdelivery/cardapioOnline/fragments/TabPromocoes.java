@@ -40,6 +40,8 @@ public class TabPromocoes extends Fragment {
     private boolean statusDelivery = true;
     private boolean statusEstabelecimento = true;
 
+    private View viewSemPromocoes;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class TabPromocoes extends Fragment {
         mItemPromoList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         itensPromocaoAux = new ArrayList<>();
-        mProgressBar.setVisibility(View.VISIBLE);
+        openProgressBar();
 
         //Verifica Status do Delivery e do Estabelecimento
         mDatabaseReference.child("configuracoes").addValueEventListener(new ValueEventListener() {
@@ -81,39 +83,6 @@ public class TabPromocoes extends Fragment {
                 Boolean statusEstab = Boolean.parseBoolean(dataSnapshot.child("status_estabelecimento").child("status").getValue().toString());
                 statusEstabelecimento = statusEstab;
 
-                ValueEventListener postListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        try {
-                            for (DataSnapshot item : dataSnapshot.getChildren()) {
-                                for (DataSnapshot item2 : item.getChildren()) {
-                                    ItemCardapio ic = item2.getValue(ItemCardapio.class);
-                                    if (ic.isStatus_promocao()) {
-                                        itensPromocaoAux.add(ic);
-                                    }
-                                }
-                            }
-
-                        } catch (Exception n) {
-                        }
-
-                        itensPromocao = new ArrayList<>();
-                        itensPromocao.addAll(itensPromocaoAux);
-                        itensPromocaoAux = new ArrayList<>();
-
-                        adapter = new PromocoesAdapter(itensPromocao, getContext(), mProgressBar, statusDelivery, statusEstabelecimento);
-                        mItemPromoList.setAdapter(adapter);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                    }
-                };
-
-                mDatabaseReference.child("itens_cardapio").addValueEventListener(postListener);
-
             }
 
             @Override
@@ -122,6 +91,63 @@ public class TabPromocoes extends Fragment {
             }
         });
 
+        buscarPromocoes();
+
+    }
+
+    public void buscarPromocoes(){
+
+        viewSemPromocoes = getActivity().findViewById(R.id.view_empty_promocoes);
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                try {
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        for (DataSnapshot item2 : item.getChildren()) {
+                            ItemCardapio ic = item2.getValue(ItemCardapio.class);
+                            if (ic.isStatus_promocao()) {
+                                itensPromocaoAux.add(ic);
+                            }
+                        }
+                    }
+
+                } catch (Exception n) {
+                }
+
+                itensPromocao = new ArrayList<>();
+                itensPromocao.addAll(itensPromocaoAux);
+                itensPromocaoAux = new ArrayList<>();
+
+                if (itensPromocao.size() > 0){
+                    mItemPromoList.setVisibility(View.VISIBLE);
+                    viewSemPromocoes.setVisibility(View.GONE);
+                    adapter = new PromocoesAdapter(itensPromocao, getContext(), mProgressBar, statusDelivery, statusEstabelecimento);
+                    mItemPromoList.setAdapter(adapter);
+                } else{
+                    closeProgressBar();
+                    mItemPromoList.setVisibility(View.GONE);
+                    viewSemPromocoes.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+
+        mDatabaseReference.child("itens_cardapio").addValueEventListener(postListener);
+    }
+
+    private void openProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void closeProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
     }
 
 }

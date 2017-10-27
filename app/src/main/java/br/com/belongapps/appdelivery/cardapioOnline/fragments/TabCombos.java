@@ -85,6 +85,8 @@ public class TabCombos extends Fragment {
             }
         });
 
+       // verificarSeExisteCombos();
+
         itemPedido = new ItemPedido();
 
         mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_escolher_combo);
@@ -183,6 +185,26 @@ public class TabCombos extends Fragment {
         mCombosList.setAdapter(firebaseRecyclerAdapter);
 
     }
+
+    /*private void verificarSeExisteCombos(){
+        ValueEventListener verificarCombos = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()){ //Tem Combos
+                    buscarCombos();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mDatabaseReference.child("itens_cardapio").child("11");
+    }*/
+
+
 
     public void selecionarItem(final ItemCardapio model, String key) {
 

@@ -40,4 +40,8 @@
         android:theme="@style/MyProgressbarColor"
         android:id="@+id/progressbar_itens_promo" />
 
+    <include layout="@layout/empty_promocoes"
+        android:id="@+id/view_empty_promocoes"
+        android:visibility="gone"/>
+
 </RelativeLayout>
