@@ -46,7 +46,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tempo de Entrega: 20 a 30 minutos"
+            android:text="Tempo de Entrega: 30 a 40 minutos"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_gravity="center"
@@ -55,6 +55,38 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp">
+
+
+        <Button
+            android:id="@+id/bt_acompanhar_pedido_enviado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:text="ACOMPANHAR PEDIDO"
+            android:background="@drawable/border_button_white"
+            android:textColor="@android:color/white"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/bt_ok_pedido_enviado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bt_acompanhar_pedido_enviado"
+            android:layout_marginTop="10dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:text="Voltar ao cardápio"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <!--<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginRight="8dp"
@@ -84,9 +116,7 @@
             android:background="@android:color/transparent"
             android:text="OK"
             android:textColor="@color/colorPrimary"
-            android:textSize="15sp" />
-
-    </RelativeLayout>
+            android:textSize="15sp" />-->
 
 
 </LinearLayout>

@@ -186,7 +186,7 @@
                 android:id="@+id/bt_finalizar_pedido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_gravity="right"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"

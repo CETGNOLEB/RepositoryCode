@@ -30,8 +30,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -45,12 +43,10 @@ import java.util.Map;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.FormasdePagamentoAdapter;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
-import br.com.belongapps.appdelivery.cardapioOnline.dao.FirebaseDAO;
+import br.com.belongapps.appdelivery.cardapioOnline.dao.FinalizarPedidoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Cliente;
 import br.com.belongapps.appdelivery.cardapioOnline.model.FormadePagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
-import br.com.belongapps.appdelivery.cardapioOnline.model.ItemQtdPedido;
-import br.com.belongapps.appdelivery.cardapioOnline.model.KeyPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.gerencial.model.Bairro;
@@ -58,8 +54,6 @@ import br.com.belongapps.appdelivery.gerencial.model.Endereco;
 import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
 import br.com.belongapps.appdelivery.util.DataUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
-
-import static android.content.ContentValues.TAG;
 
 public class FinalizarPedidoActivity extends AppCompatActivity {
 
@@ -73,7 +67,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private double taxadeEntrega;
 
     //Dialogs
-    AlertDialog dialogPedidoEnviado;
     AlertDialog.Builder mBilder;
 
     private double totaldoPedido; //parâmetro recebido
@@ -86,8 +79,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
-    private String numerodopedido = "";
-
     private Pedido pedido = new Pedido();
 
     //  STATUS FORMA PAGAMENTO
@@ -96,8 +87,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private boolean statusDinheiroCartao = false;
     private List<FormadePagamento> formasDePagamentoaux;
 
-    private ProgressDialog dialog;
-    private ProgressBar mProgressBar;
+    private ProgressDialog mProgressDialog;
 
     // ENDEREÇO
     private List<Endereco> enderecos;
@@ -120,7 +110,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private Endereco enderecoAuxAlterar;
 
     //View Editar Endereço
-    private TextView aeTextRua, aeTextNumero, aeTextBairro;
     private TextView aeTvRuaEndereco, aeTvNumeroEndereco, aeTvBairroEndereco;
     private Spinner enderecoSpinner;
 
@@ -136,12 +125,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this);
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar_enviar_pedido);
         mToolbar.setTitle("Finalizar Pedido");
-
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_finalizar_pedido);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -156,7 +141,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         finalizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enviarPedido();
+                validarEnvioDoPedido();
             }
         });
 
@@ -183,22 +168,19 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     }
 
-    public void enviarPedido() {
+    public void validarEnvioDoPedido() {
 
         boolean frmPagValida = verificarFormadePagamento();
 
         //verificar o endereço
-
         if (frmPagValida && endereco != null) {
 
             try {
-                realizarEnvioDoPedido();
-                new exibirDialogdeEnvio().execute((Void[]) null); //Executar dialog de status de envio]
-
-                //LIMPAR O CARRINHO
-                CarrinhoDAO dao = new CarrinhoDAO(this);
-                dao.deleteAll();
+                openProgressDialog(); //Exibir status de envio
+                iniciarEnvioDoPedido();
+                //new exibirDialogdeEnvio().execute((Void[]) null); //Executar dialog de status de envio]
             } catch (Exception e) {
+                e.printStackTrace();
                 //Exibir Dialog de Erro ao enviar o pedido
                 exibirErroAoEnviarPedido();
             }
@@ -207,7 +189,15 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         }
     }
 
-    private void realizarEnvioDoPedido() {
+    private void openProgressDialog(){
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle("Enviando");
+        mProgressDialog.setMessage("Aguarde, estamos enviando seu pedido...");
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+    }
+
+    private void iniciarEnvioDoPedido() {
         pedido = new Pedido();
 
         Date data = DataUtil.getCurrenteDate();
@@ -234,13 +224,15 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         Pagamento pagamento = new Pagamento();
         pagamento.setFormaPagamento(formadePagamento.getNome());
-        pagamento.setValorTotal(totaldoPedido);
+        pagamento.setValorTotal(totaldoPedido + taxadeEntrega);
         pagamento.setDescricaoPagemento(formadePagamento.getDescricao());
-        //pagamento.setValorPago(formadePagamento.getValorDinheiro());
+        pagamento.setValorPago(formadePagamento.getValorDinheiro());
 
         pedido.setPagamento(pagamento);
 
-        salvarPedido(pedido, diaPedido, data);
+        View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_pedido_finalizado, null); //Init Dialog pedido enviado
+        FinalizarPedidoDAO finalizarPedidoDAO = new FinalizarPedidoDAO(this, mProgressDialog, layoutDialog);
+        finalizarPedidoDAO.salvarPedido(pedido, diaPedido);
 
     }
 
@@ -263,211 +255,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 dialogErro.dismiss();
             }
         });
-
-    }
-
-
-    /*METÓDOS PARA ENVIO DO PEDIDO -----------------------*/
-
-    private void salvarPedido(final Pedido pedido, final String hj, final Date data) {
-
-        DatabaseReference numPedidoRef = database.child("pedidos");
-        numPedidoRef.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                Integer total = mutableData.child("ultimo_pedido").getValue(Integer.class);
-
-                if (total == null) {
-                    return Transaction.success(mutableData);
-                }
-
-                //SET NUMERO DO PEDIDO
-                total++;
-                pedido.setNumero_pedido(String.valueOf(total));
-                mutableData.child("ultimo_pedido").setValue(total); //Atualiza o total de pedidos realizados
-
-                String key = database.child("pedidos").push().getKey();
-                Pedido pedidoAux = pedido;
-                Map<String, Object> pedidoValues = pedidoAux.toMap();
-
-                String mes = StringUtil.mesdoPedido(hj);
-                Log.println(Log.ERROR, "MÊS:", mes);
-                Log.println(Log.ERROR, "DIA:", hj);
-
-                Map<String, Object> childUpdatesPedido = new HashMap<>();
-                childUpdatesPedido.put("/pedidos/" + mes + "/" + hj + "/" + key, pedidoValues);
-
-                database.updateChildren(childUpdatesPedido);
-
-                //ATUALIZA PEDIDOS DO USUÁRIO LOGADO
-                atualizarPedidosdoCliente(hj, key);
-
-                //ATUALIZA NÚMERO DE PEDIDOS DO USUÁRIO LOGADO
-                FirebaseDAO.atualizarNumeroPedidosdoCliente(usuarioLogado.getUid()); //PEGAR ID DO USUÁRIO
-
-                //ATUALIZAR TOTAL DOS ITENS PEDIDO
-                buscarEAtualizarTotaldePedidosDoItem(pedido.getItens_pedido());
-
-                //ATUALIZAR MÓDULO FINANCEIRO
-                atualiazarModuloFinanceiro(mes, hj, data);
-
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b,
-                                   DataSnapshot dataSnapshot) {
-                // Transaction completed
-                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-            }
-        });
-
-    }
-
-    public void atualizarPedidosdoCliente(String hj, String keyPedido) {
-        String userID = usuarioLogado.getUid();
-
-
-        KeyPedido keyp = new KeyPedido(keyPedido);
-        keyp.setId(StringUtil.mesdoPedido(hj) + "/" + hj + "/" + keyPedido);
-
-        String key = database.child("clientes").child(userID).push().getKey();//pegar id do usuário logado
-
-        database.child("clientes").child(userID).child("pedidos").child(key).setValue(keyp);
-    }
-
-    public void buscarEAtualizarTotaldePedidosDoItem(final List<ItemPedido> itensdoPedido) {
-
-        final List<ItemQtdPedido> itensqtd = new ArrayList<>();
-
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (ItemPedido item : itensdoPedido) {
-
-                    if (item.getKeyItem() != null) {
-                        //recupera qtd pedido do item
-                        Integer qtdPedido = dataSnapshot.child(item.getCategoria()).child(item.getKeyItem()).child("qtdPedido").getValue(Integer.class);
-
-                        if (qtdPedido == null) {
-                            qtdPedido = 0;
-                        }
-
-                        ItemQtdPedido itemQtd = new ItemQtdPedido(item.getCategoria(), item.getKeyItem(), qtdPedido, item.getQuantidade());
-                        itensqtd.add(itemQtd);
-                    }
-                }
-
-                incrementarTotalPedidodosItens(this, itensqtd);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-
-        database.child("itens_cardapio").addValueEventListener(valueEventListener);
-    }
-
-    public void incrementarTotalPedidodosItens(ValueEventListener event, List<ItemQtdPedido> itensQtd) {
-
-        database.child("itens_cardapio").removeEventListener(event);
-
-        /*USAR TRANSAÇÃO*/
-        for (ItemQtdPedido item : itensQtd) {
-
-            if (item.getKeyItem() != null) {
-                database.child("itens_cardapio")
-                        .child(item.getKeycategoria())
-                        .child(item.getKeyItem())
-                        .child("qtdPedido")
-                        .setValue(item.getQtdPedido() + item.getQuantidade());
-            }
-        }
-    }
-
-    public void atualiazarModuloFinanceiro(String mes, String hj, Date data) {
-        //Atualizar Total de Pedidos na Semana
-        FirebaseDAO.atualizarPedidosnaSemana(mes, hj, data);
-
-        //Atualizar Total de Pedidos no Mes
-        FirebaseDAO.atualizarPedidosnoMes(mes);
-    }
-
-    private class exibirDialogdeEnvio extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            dialog = new ProgressDialog(FinalizarPedidoActivity.this, R.style.AppCompatAlertDialogStyle);
-            dialog.setMessage("Estamos enviando seu pedido!!");
-            dialog.show();
-        }
-
-        protected Void doInBackground(Void... param) {
-            try {
-                Thread.currentThread();
-                Thread.sleep(4000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void param) {
-            dialog.dismiss();
-
-            View layoutDialog = exibirDialogPedidoEnviado();
-            mBilder.setView(layoutDialog);
-            dialogPedidoEnviado = mBilder.create();
-            dialogPedidoEnviado.show();
-        }
-    }
-
-    private View exibirDialogPedidoEnviado() {
-        mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this);
-        View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_pedido_finalizado, null);
-
-        Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_ok_pedido_enviado);
-        Button acompanhar = (Button) layoutDialog.findViewById(R.id.bt_acompanhar_pedido_enviado);
-
-        bt_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(FinalizarPedidoActivity.this, CardapioMainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        acompanhar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(FinalizarPedidoActivity.this, AcompanharPedidoActivity.class);
-                i.putExtra("NumeroPedido", pedido.getNumero_pedido());
-                i.putExtra("DataPedido", DataUtil.getDataPedido(pedido.getData()));
-                i.putExtra("HoraPedido", DataUtil.getHoraPedido(pedido.getData()));
-                i.putExtra("ValorPedido", totaldoPedido);
-                i.putExtra("StatusPedido", pedido.getStatus());
-                i.putExtra("TipoEntrega", pedido.getEntrega_retirada());
-                i.putExtra("StatusTempo", pedido.getStatus_tempo());
-
-                ArrayList<ItemPedido> itens = new ArrayList<>();
-                for (ItemPedido item : pedido.getItens_pedido()) {
-                    itens.add(item);
-                }
-                i.putParcelableArrayListExtra("ItensPedido", itens);
-
-                startActivity(i);
-                finish();
-
-            }
-        });
-
-        return layoutDialog;
     }
 
     public void populateViewValores() {
@@ -633,7 +420,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 return true;
             }
         }
-
         return false;
     }
 

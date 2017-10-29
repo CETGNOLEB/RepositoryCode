@@ -141,7 +141,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
     }
 
-    private void cadastrarUsuario(final String nomeUsuario, final String dataNascUsuario, String emailUsuario, String senhaUsuario, final String celularUsuario) {
+    private void cadastrarUsuario(final String nomeUsuario, final String dataNascUsuario, final String emailUsuario, String senhaUsuario, final String celularUsuario) {
         mAuth.createUserWithEmailAndPassword(emailUsuario, senhaUsuario).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -153,6 +153,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                     DatabaseReference referenceUserLogado = mDatabaseReference.child(userId);
 
                     referenceUserLogado.child("nome").setValue(nomeUsuario);
+                    referenceUserLogado.child("email").setValue(emailUsuario);
                     referenceUserLogado.child("data_nascimento").setValue(dataNascUsuario);
                     referenceUserLogado.child("data_cadastro").setValue(DataUtil.formatar(new Date(), "dd/MM/yyyy"));
                     referenceUserLogado.child("celular").setValue(celularUsuario);

@@ -35,7 +35,6 @@ import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherRecheioActivity;
-import br.com.belongapps.appdelivery.cardapioOnline.dao.FirebaseDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 
