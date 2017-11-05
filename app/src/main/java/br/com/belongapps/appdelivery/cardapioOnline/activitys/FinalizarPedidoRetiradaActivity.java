@@ -13,11 +13,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -31,6 +35,7 @@ import java.util.Map;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
+import br.com.belongapps.appdelivery.cardapioOnline.dao.FinalizarPedidoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Cliente;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.KeyPedido;
@@ -46,30 +51,25 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     //Views
+    private TextView tvFormaRecebimento;
     private TextView txtTotalPedido;
-    private TextView txtTotalDosItens;
     private Button finalizarPedido;
 
-    //Dialogs
-    AlertDialog dialogPedidoEnviado;
-    AlertDialog.Builder mBilder;
-
     private double totaldoPedido; //parâmetro recebido
+    private int tipoEntrega; //parâmetro recebido
 
-    DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    private Pedido pedido;
+    private Cliente cliente;
+    private FirebaseAuth mAuth;
+    private FirebaseUser usuarioLogado;
+    private ProgressDialog mProgressDialog;
 
-    private String numerodopedido = "";
-
-    private Pedido pedido = new Pedido();
-
-    private ProgressDialog dialog;
+    private DatabaseReference database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finalizar_pedido_retirada);
-
-        mBilder = new AlertDialog.Builder(FinalizarPedidoRetiradaActivity.this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_enviar_pedido_retirada);
         mToolbar.setTitle("Finalizar Pedido");
@@ -77,122 +77,17 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mAuth = FirebaseAuth.getInstance();
+
         //Recebe Valor total do pedido
         Intent i = getIntent();
         totaldoPedido = i.getDoubleExtra("totalPedido", 0);
+        tipoEntrega = i.getIntExtra("tipoEntrega", 5);
+
+        database = FirebaseDatabase.getInstance().getReference();
 
         populateView();
 
-        finalizarPedido = (Button) findViewById(R.id.bt_finalizar_pedido_retirada);
-
-        finalizarPedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                boolean podeEnviar = true;
-
-                if (podeEnviar) {
-
-                    beforeEnviarPedido();
-
-                    new exibirDialogdeEnvio().execute((Void[]) null);
-
-                } else {
-
-                    AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoRetiradaActivity.this, R.style.MyDialogTheme);
-                    View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_entendi, null);
-
-                    mBilder.setView(layoutDialog);
-                    final AlertDialog dialogEscolhaFormPag = mBilder.create();
-                    dialogEscolhaFormPag.show();
-
-                    Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_entendi);
-
-                    btCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialogEscolhaFormPag.dismiss();
-                        }
-                    });
-                }
-
-            }
-        });
-
-    }
-
-    private class exibirDialogdeEnvio extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            dialog = new ProgressDialog(FinalizarPedidoRetiradaActivity.this, R.style.AppCompatAlertDialogStyle);
-            dialog.setMessage("Estamos enviando seu pedido!!");
-            dialog.show();
-        }
-
-        protected Void doInBackground(Void... param) {
-            try {
-                Thread.currentThread();
-                Thread.sleep(6000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void param) {
-            dialog.dismiss();
-
-            View layoutDialog = createDialog();
-            mBilder.setView(layoutDialog);
-            dialogPedidoEnviado = mBilder.create();
-            dialogPedidoEnviado.show();
-        }
-    }
-
-    private View createDialog() {
-        mBilder = new AlertDialog.Builder(FinalizarPedidoRetiradaActivity.this);
-        View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_pedido_finalizado, null);
-
-        Button bt_ok = (Button) layoutDialog.findViewById(R.id.bt_ok_pedido_enviado);
-        Button acompanhar = (Button) layoutDialog.findViewById(R.id.bt_acompanhar_pedido_enviado);
-
-        bt_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(FinalizarPedidoRetiradaActivity.this, CardapioMainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        acompanhar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(FinalizarPedidoRetiradaActivity.this, AcompanharPedidoActivity.class);
-                i.putExtra("NumeroPedido", pedido.getNumero_pedido());
-                i.putExtra("DataPedido", DataUtil.getDataPedido(pedido.getData()));
-                i.putExtra("HoraPedido", DataUtil.getHoraPedido(pedido.getData()));
-                i.putExtra("ValorPedido", totaldoPedido);
-                i.putExtra("StatusPedido", pedido.getStatus());
-                i.putExtra("TipoEntrega", pedido.getEntrega_retirada());
-                i.putExtra("StatusTempo", pedido.getStatus_tempo());
-
-                ArrayList<ItemPedido> itens = new ArrayList<>();
-                for (ItemPedido item: pedido.getItens_pedido()) {
-                    itens.add(item);
-                }
-                i.putParcelableArrayListExtra("ItensPedido" , itens);
-
-                startActivity(i);
-                finish();
-
-            }
-        });
-
-        return layoutDialog;
     }
 
     @Override
@@ -203,12 +98,6 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
         startActivity(intent);
 
         finish();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
     }
 
     @Override
@@ -225,12 +114,36 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
 
     public void populateView() {
 
+        tvFormaRecebimento = (TextView) findViewById(R.id.tv_forma_recebimento);
+        tvFormaRecebimento.setText(setTextFormaRecebimento());
+
         txtTotalPedido = (TextView) findViewById(R.id.valor_total_pedido_retirada);
         txtTotalPedido.setText("Total: R$ " + String.format(Locale.US, "%.2f", (totaldoPedido)).replace(".", ","));
 
+
+        finalizarPedido = (Button) findViewById(R.id.bt_finalizar_pedido_retirada);
+        /*EVENTS*/
+        finalizarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                openProgressDialog();
+                iniciarEnvioDoPedido();
+
+            }
+        });
+
     }
 
-    private void beforeEnviarPedido() {
+    private String setTextFormaRecebimento() {
+        if (tipoEntrega == 1) {
+            return "Retirar no Estabelecimento";
+        }
+
+        return "Consumir no Estabelecimento";
+    }
+
+    private void iniciarEnvioDoPedido() {
         pedido = new Pedido();
 
         Date data = DataUtil.getCurrenteDate();
@@ -240,20 +153,8 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
         pedido.setData(dataPedido);
         pedido.setStatus_tempo("n" + DataUtil.formatar(data, "HH:mm"));
         pedido.setStatus(0);
-        pedido.setEntrega_retirada(getIntent().getIntExtra("tipoEntrega", 0));
+        pedido.setEntrega_retirada(tipoEntrega);
         pedido.setItens_pedido(getItensdoPedido());
-
-        //Pegar usuário logado
-        Cliente cliente = new Cliente();
-        cliente.setNomeCliente("Thiago Oliveira");
-
-        //setar apenas se a entrega for delivery
-        if (pedido.getEntrega_retirada() == 0) {
-            cliente.setRuaEndCliente("Tv. Aristides Gonçalves");
-            cliente.setNumeroEndCliente("179");
-            cliente.setBairroEndCliente("Rodoviária");
-            cliente.setComplementoEndCliente("Ap 202");
-        }
 
         pedido.setCliente(cliente); //Adicionar Cliente ao Pedido
 
@@ -262,39 +163,18 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
 
         pedido.setPagamento(pagamento);
 
-        salvarPedido(pedido, diaPedido);
+        FinalizarPedidoDAO finalizarPedidoDAO = new FinalizarPedidoDAO(this, mProgressDialog);
+        finalizarPedidoDAO.salvarPedido(pedido, diaPedido);
 
     }
 
-    private void salvarPedido(Pedido pedido, String hj) {
-        String key = database.child("pedidos").push().getKey();
-        Pedido pedidoAux = pedido;
-        Map<String, Object> pedidoValues = pedidoAux.toMap();
-
-        Log.println(Log.ERROR, "NODO:", hj);
-
-        Map<String, Object> childUpdatesPedido = new HashMap<>();
-        childUpdatesPedido.put("/pedidos/" + hj + "/" + key, pedidoValues);
-
-        database.updateChildren(childUpdatesPedido);
-
-        //ATUALIZA PEDIDOS DO USUÁRIO LOGADO
-        atualizarPedidosdoCliente(pedido.getCliente(), key);
-
-        //LIMPAR CARRINHO
-        CarrinhoDAO dao = new CarrinhoDAO(this);
-        dao.deleteAll();
+    private void openProgressDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle("Enviando");
+        mProgressDialog.setMessage("Aguarde, estamos enviando seu pedido...");
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
     }
-
-    public void atualizarPedidosdoCliente(Cliente cliente, String keyPedido) {
-        KeyPedido keyp = new KeyPedido(keyPedido);
-        keyp.setId(keyPedido);
-
-        String key = database.child("clientes").child("1").push().getKey();//pegar id do usuário logado
-
-        database.child("clientes").child("1").child("pedidos").child(key).setValue(keyp);
-    }
-
 
     public List<ItemPedido> getItensdoPedido() {
         List<ItemPedido> itensAux;
@@ -307,9 +187,35 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        usuarioLogado = mAuth.getCurrentUser();
+
         totaldoPedido = getIntent().getDoubleExtra("totalPedido", 0);
 
-        //BUSCAR ULTIMO PEDIDO
+        buscarDadosdoCliente();
 
+    }
+
+    private void buscarDadosdoCliente() {
+
+
+        String userID = usuarioLogado.getUid();
+
+        Log.println(Log.ERROR, "USUARIO:", userID);
+
+        ValueEventListener dadosClienteListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Cliente c = new Cliente();
+                c.setNomeCliente(dataSnapshot.child("nome").getValue(String.class));
+
+                cliente = c;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        database.child("clientes").child(userID).addValueEventListener(dadosClienteListener);
     }
 }

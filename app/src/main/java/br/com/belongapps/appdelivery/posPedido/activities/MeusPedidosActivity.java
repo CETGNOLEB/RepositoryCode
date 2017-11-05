@@ -1,7 +1,10 @@
 package br.com.belongapps.appdelivery.posPedido.activities;
 
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -20,9 +23,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
+import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
 import br.com.belongapps.appdelivery.posPedido.fragments.TabCartaoFidelidade;
 import br.com.belongapps.appdelivery.posPedido.fragments.TabPedidosRealizados;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
+import br.com.belongapps.appdelivery.util.ConexaoUtil;
 
 public class MeusPedidosActivity extends AppCompatActivity {
 
@@ -31,6 +36,11 @@ public class MeusPedidosActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private FirebaseAuth mAuth;
+
+    //Status Conexão
+    private CoordinatorLayout snakeBarLayout;
+    private Snackbar snackbar;
+    private boolean statusConexao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +159,26 @@ public class MeusPedidosActivity extends AppCompatActivity {
             Intent i = new Intent(MeusPedidosActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
+        }
+
+        verificaStatusDeConexao();
+    }
+
+    public void verificaStatusDeConexao(){
+        snakeBarLayout = (CoordinatorLayout) findViewById(R.id.main_content);
+
+        snackbar = Snackbar
+                .make(snakeBarLayout, "Sem conexão com a internet", Snackbar.LENGTH_INDEFINITE);
+
+        statusConexao = ConexaoUtil.verificaConectividade(this);
+
+        if (statusConexao){
+            snackbar.dismiss();
+        } else{
+            View snackView = snackbar.getView();
+            snackView.setBackgroundColor(ContextCompat.getColor(MeusPedidosActivity.this, R.color.snakebarColor));
+            snackbar.setActionTextColor(getResources().getColor(R.color.textColorPrimary));
+            snackbar.show();
         }
     }
 }

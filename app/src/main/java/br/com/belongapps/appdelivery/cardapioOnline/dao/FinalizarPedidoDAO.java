@@ -47,12 +47,10 @@ public class FinalizarPedidoDAO {
     private static FirebaseUser usuarioLogado;
     private static Context context;
     private static ProgressDialog mProgressDialog;
-    private static View layoutDialog;
 
-    public FinalizarPedidoDAO(Context context, ProgressDialog mProgressDialog, View layoutDialog) {
+    public FinalizarPedidoDAO(Context context, ProgressDialog mProgressDialog) {
         this.context = context;
         this.mProgressDialog = mProgressDialog;
-        this.layoutDialog = layoutDialog;
         database = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         usuarioLogado = mAuth.getCurrentUser();
@@ -84,22 +82,6 @@ public class FinalizarPedidoDAO {
 
                 pedido.setNumero_pedido(String.valueOf(ultimoPedido));
 
-                //ATUALIZA PEDIDOS DO USUÁRIO LOGADO
-                //atualizarPedidosdoCliente(dataPedido, keyPedido);
-
-                //ATUALIZA NÚMERO DE PEDIDOS DO USUÁRIO LOGADO
-                //atualizarNumeroPedidosdoCliente(usuarioLogado.getUid()); //PEGAR ID DO USUÁRIO
-
-                //ATUALIZAR TOTAL DOS ITENS PEDIDO
-               /* buscarEAtualizarTotaldePedidosDoItem(pedido.getItens_pedido());
-
-                //ATUALIZAR MÓDULO FINANCEIRO
-                //Atualizar Total de Pedidos na Semana
-                atualizarPedidosNaSemana(mesPedido, dataAtual);
-
-                //Atualizar Total de Pedidos no Mes
-                atualizarPedidosnoMes(mesPedido);*/
-
                 mutableData.child("ultimo_pedido").setValue(ultimoPedido); //Atualiza o ultimoPedido de pedidos realizados
 
                 return Transaction.success(mutableData);
@@ -125,15 +107,6 @@ public class FinalizarPedidoDAO {
                 //Atualizar Total de Pedidos no Mes
                 atualizarPedidosnoMes(mesPedido, pedido);
 
-                /* // Transaction completed
-                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-                mProgressDialog.hide(); //Fecha dialog de Status*/
-
-                //exibirMensagemDeSucesso(pedido); //Informa o sucesso ao enviar o pedido*/
-
-                //LIMPAR O CARRINHO
-                /*CarrinhoDAO dao = new CarrinhoDAO(context);
-                dao.deleteAll();*/
             }
         });
 

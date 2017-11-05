@@ -2,6 +2,9 @@ package br.com.belongapps.appdelivery.gerencial.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +49,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivi
 import br.com.belongapps.appdelivery.gerencial.model.Bairro;
 import br.com.belongapps.appdelivery.gerencial.model.Endereco;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
+import br.com.belongapps.appdelivery.util.ConexaoUtil;
 
 public class EnderecosActivity extends AppCompatActivity {
 
@@ -69,6 +73,11 @@ public class EnderecosActivity extends AppCompatActivity {
     //Nenhum endereco cadastrados
     private Button btEndEmpty;
     private View viewEmptyEndereco;
+
+    //Status Conexão
+    private CoordinatorLayout snakeBarLayout;
+    private Snackbar snackbar;
+    private boolean statusConexao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -391,11 +400,13 @@ public class EnderecosActivity extends AppCompatActivity {
             finish();
 
         } else { //Usuário Logado
-
             verificarEnderecosCadastrados();
             buscarBairros(); //Buscar Bairros para posterior cadastro de enderecos
 
         }
+
+
+        verificaStatusDeConexao();
 
     }
 
@@ -573,6 +584,24 @@ public class EnderecosActivity extends AppCompatActivity {
                 // Transaction completed
             }
         });
+    }
+
+    public void verificaStatusDeConexao(){
+        snakeBarLayout = (CoordinatorLayout) findViewById(R.id.layout_snakebar_enderecos);
+
+        snackbar = Snackbar
+                .make(snakeBarLayout, "Sem conexão com a internet", Snackbar.LENGTH_INDEFINITE);
+
+        statusConexao = ConexaoUtil.verificaConectividade(this);
+
+        if (statusConexao){
+            snackbar.dismiss();
+        } else{
+            View snackView = snackbar.getView();
+            snackView.setBackgroundColor(ContextCompat.getColor(EnderecosActivity.this, R.color.snakebarColor));
+            snackbar.setActionTextColor(getResources().getColor(R.color.textColorPrimary));
+            snackbar.show();
+        }
     }
 
     public static class EnderecoViewHolder extends RecyclerView.ViewHolder {

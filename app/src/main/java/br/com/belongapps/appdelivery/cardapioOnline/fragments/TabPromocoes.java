@@ -108,6 +108,8 @@ public class TabPromocoes extends Fragment {
                         for (DataSnapshot item2 : item.getChildren()) {
                             ItemCardapio ic = item2.getValue(ItemCardapio.class);
                             if (ic.isStatus_promocao()) {
+                                String itemKey = item2.getKey();
+                                ic.setItemKey(itemKey);
                                 itensPromocaoAux.add(ic);
                             }
                         }

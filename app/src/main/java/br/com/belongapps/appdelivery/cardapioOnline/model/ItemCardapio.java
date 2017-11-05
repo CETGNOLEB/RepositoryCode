@@ -28,7 +28,10 @@ public class ItemCardapio {
     private double valor_pao_arabe;
     private double valor_pao_bola;
 
-    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, int status_item, boolean status_promocao, String categoria_id,
+    private String itemKey;
+
+    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, int status_item, boolean status_promocao,
+                        String categoria_id,String itemKey,
                         double promo_pizza_p, double promo_pizza_m, double promo_pizza_g, double valor_pizza_p, double valor_pizza_m, double valor_pizza_g,
                         double promo_pao_arabe, double promo_pao_bola, double valor_pao_arabe, double valor_pao_bola) {
 
@@ -40,7 +43,9 @@ public class ItemCardapio {
         this.qtd_recheios = qtd_recheios;
         this.status_item = status_item;
         this.status_promocao = status_promocao;
+
         this.categoria_id = categoria_id;
+        this.itemKey = itemKey;
 
         //PARA PIZZAS
         this.promo_pizza_p = promo_pizza_p;
@@ -123,6 +128,14 @@ public class ItemCardapio {
 
     public void setCategoria_id(String categoria_id) {
         this.categoria_id = categoria_id;
+    }
+
+    public String getItemKey() {
+        return itemKey;
+    }
+
+    public void setItemKey(String itemKey) {
+        this.itemKey = itemKey;
     }
 
     public boolean isStatus_promocao() {

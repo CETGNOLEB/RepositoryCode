@@ -31,7 +31,7 @@
         <activity android:name=".cardapioOnline.activitys.CarrinhoActivity" />
         //FINALIZAR PEDIDO
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoActivity" />
-        <activity android:name=".cardapioOnline.activitys.FinalizarPedidoRetiradaActivity" />
+        <activity android:name=".cardapioOnline.activitys.FinalizarPedidoRetiradaActivity"/>
         <activity android:name=".cardapioOnline.activitys.PedidoEnviadoActivity"/>
         //SOBRE/AJUDA
         <activity android:name=".helpAbout.activities.SobreActivity" >

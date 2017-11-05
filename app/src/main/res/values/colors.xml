@@ -14,6 +14,8 @@
     <color name="dialogBackground">#616161</color>
     <color name="loginBackground">@color/colorPrimary</color>
 
+    <color name="snakebarColor">#212121</color>
+
     <color name="nonactiveDot">#FFCB2C</color>
 
     <!--ALEX-->

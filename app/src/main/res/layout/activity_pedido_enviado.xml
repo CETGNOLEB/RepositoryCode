@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.belongapps.appdelivery.helpAbout.activities.SobreAplicativoActivity">
+    tools:context="br.com.belongapps.appdelivery.cardapioOnline.activitys.PedidoEnviadoActivity">
 
     <include
         android:id="@+id/toolbar_pedido_enviado"
@@ -61,7 +61,18 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_gravity="center"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pronto em: 30 a 40 minutos"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

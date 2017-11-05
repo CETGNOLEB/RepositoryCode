@@ -119,8 +119,6 @@ public class TabPizzas extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if(FinalizarPedidoDAO.temUsuarioLogado()) {
-
                             if (statusEstabelecimento == false) {
 
                                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -173,13 +171,6 @@ public class TabPizzas extends Fragment {
                             } else {
                                 selecionarItem(model);
                             }
-
-
-                        } else{ //Sem usuario Logado
-                            Intent i = new Intent(getContext(), LoginActivity.class);
-                            startActivity(i);
-                            ((Activity)getContext()).finish();
-                        }
                     }
                 });
             }
@@ -214,6 +205,7 @@ public class TabPizzas extends Fragment {
                 intent.putExtra("TamPizza", model.getNome());
                 intent.putExtra("TipoPizza", tipodaPizza(tipoPizzaSelecionada));
                 startActivity(intent);
+                getActivity().finish();
             }
         });
 

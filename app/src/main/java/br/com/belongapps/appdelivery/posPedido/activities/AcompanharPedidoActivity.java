@@ -2,6 +2,9 @@ package br.com.belongapps.appdelivery.posPedido.activities;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,15 +26,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
-import br.com.belongapps.appdelivery.posPedido.PedidoKey;
 import br.com.belongapps.appdelivery.posPedido.adapters.ItensdoPedidoAdapter;
+import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
 
 public class AcompanharPedidoActivity extends AppCompatActivity {
@@ -76,6 +78,11 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
     private Button chamarAtendente;
 
     private DatabaseReference database;
+
+    //Status Conexão
+    private CoordinatorLayout snakeBarLayout;
+    private Snackbar snackbar;
+    private boolean statusConexao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -352,5 +359,30 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
         finish();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        verificaStatusDeConexao();
+
+    }
+
+    public void verificaStatusDeConexao(){
+        snakeBarLayout = (CoordinatorLayout) findViewById(R.id.layout_snakebar_acompanhar_pedido);
+
+        snackbar = Snackbar
+                .make(snakeBarLayout, "Sem conexão com a internet", Snackbar.LENGTH_INDEFINITE);
+
+        statusConexao = ConexaoUtil.verificaConectividade(this);
+
+        if (statusConexao){
+            snackbar.dismiss();
+        } else{
+            View snackView = snackbar.getView();
+            snackView.setBackgroundColor(ContextCompat.getColor(AcompanharPedidoActivity.this, R.color.snakebarColor));
+            snackbar.setActionTextColor(getResources().getColor(R.color.textColorPrimary));
+            snackbar.show();
+        }
+    }
 }
-;

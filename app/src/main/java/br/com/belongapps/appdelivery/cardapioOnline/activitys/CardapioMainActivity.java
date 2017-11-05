@@ -1,7 +1,10 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -53,6 +56,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSalgados;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSanduiches;
 import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
+import br.com.belongapps.appdelivery.util.ConexaoUtil;
 
 public class CardapioMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,6 +76,9 @@ public class CardapioMainActivity extends AppCompatActivity
     private NavigationView navigationView;
 
     private String nomeUsuario;
+
+    //Conectividade
+    private boolean statusConexao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,10 +155,10 @@ public class CardapioMainActivity extends AppCompatActivity
 
     }
 
-    public void verificarSeVeioDoLogin(){
+    public void verificarSeVeioDoLogin() {
 
         String bemVindo = getIntent().getStringExtra("login");
-        if (bemVindo != null){
+        if (bemVindo != null) {
             Toast.makeText(this, bemVindo, Toast.LENGTH_SHORT).show();
         }
     }
@@ -185,7 +192,7 @@ public class CardapioMainActivity extends AppCompatActivity
         MenuItem menuItem = menu.getItem(0);
 
         //buscar tamanho da lista do carrinho
-        /*CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
+        CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
         List<ItemPedido> itens_pedido = crud.getAllItens();
         int size = itens_pedido.size();
 
@@ -210,7 +217,7 @@ public class CardapioMainActivity extends AppCompatActivity
             menuItem.setIcon(R.drawable.ic_cart_nine);
         } else {
             menuItem.setIcon(R.drawable.ic_action_cart);
-        }*/
+        }
 
         return true;
     }
@@ -404,15 +411,14 @@ public class CardapioMainActivity extends AppCompatActivity
                 statusEstabelecimento = status;
 
                 snackbar = Snackbar
-                        .make(layout, "Desculpe, nosso estabelecimento está fechado!", 4000)
-                        .setAction("Action", null);
+                        .make(layout, "Desculpe, nosso estabelecimento está fechado!", 4000);
 
                 if (statusEstabelecimento == true) {
                     snackbar.dismiss();
                 } else {
 
                     View snackView = snackbar.getView();
-                    snackView.setBackgroundColor(ContextCompat.getColor(CardapioMainActivity.this, R.color.colorPrimary));
+                    snackView.setBackgroundColor(ContextCompat.getColor(CardapioMainActivity.this, R.color.snakebarColor));
                     snackbar.show();
                 }
 
@@ -424,26 +430,36 @@ public class CardapioMainActivity extends AppCompatActivity
             }
         });
 
-       /* //VERIFICA CONEXÃO
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    Toast.makeText(CardapioMainActivity.this, "Conectado", Toast.LENGTH_SHORT).show();
-                    System.out.println("connected");
-                } else {
-                    Toast.makeText(CardapioMainActivity.this, "Não Conectado", Toast.LENGTH_SHORT).show();
-                }
-            }
+        //VERIFICA CONEXÃO
+        snackbar = Snackbar
+                .make(layout, "Sem Conexão", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Recarregar",new MyUndoListener() );
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                System.err.println("Listener was cancelled");
-            }
-        });*/
+        statusConexao = ConexaoUtil.verificaConectividade(this);
 
+        if (statusConexao){
+            snackbar.dismiss();
+        } else{
+            View snackView = snackbar.getView();
+            snackView.setBackgroundColor(ContextCompat.getColor(CardapioMainActivity.this, R.color.snakebarColor));
+            snackbar.setActionTextColor(getResources().getColor(R.color.textColorPrimary));
+            snackbar.show();
+        }
+
+    }
+
+    public Boolean getStatusEstabelecimento() {
+        return statusEstabelecimento;
+    }
+
+    public class MyUndoListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(CardapioMainActivity.this, CardapioMainActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 
 }

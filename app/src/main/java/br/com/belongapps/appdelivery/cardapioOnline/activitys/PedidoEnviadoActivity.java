@@ -43,6 +43,9 @@ public class PedidoEnviadoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_enviado);
 
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_pedido_enviado);
+        mToolbar.setTitle("Pedido Enviado");
+
         initViews();
     }
 
@@ -66,7 +69,7 @@ public class PedidoEnviadoActivity extends AppCompatActivity {
                 i.putExtra("StatusTempo",statusTempo);
 
                 ArrayList<ItemPedido> itens = new ArrayList<>();
-                for (ItemPedido item : itens) {
+                for (ItemPedido item : itensdoPedido) {
                     itens.add(item);
                 }
 

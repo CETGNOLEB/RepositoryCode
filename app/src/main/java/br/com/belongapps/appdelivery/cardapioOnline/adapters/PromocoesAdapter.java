@@ -136,6 +136,8 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
         itemPedido.setDescricao(item.getDescricao());
         itemPedido.setCategoria(item.getCategoria_id());
 
+        itemPedido.setKeyItem(item.getItemKey());
+
         if (item.isStatus_promocao() == true) {
             itemPedido.setValor_unit(item.getPreco_promocional());
         } else {

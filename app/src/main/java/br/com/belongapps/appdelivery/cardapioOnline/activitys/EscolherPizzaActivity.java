@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +36,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.PizzaAdapter;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 
 import static android.content.ContentValues.TAG;
 
@@ -45,6 +48,8 @@ public class EscolherPizzaActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
 
     private DatabaseReference mDatabaseReference;
+    private FirebaseAuth mAuth;
+    private FirebaseUser usuarioLogado;
 
     //Parametros Recebidos
     private String paramTamPizza;
@@ -64,6 +69,8 @@ public class EscolherPizzaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escolher_pizza);
+
+        mAuth = FirebaseAuth.getInstance();
 
         paramTamPizza = getIntent().getStringExtra("TamPizza");
         paramTipoPizza = getIntent().getStringExtra("TipoPizza");
@@ -102,69 +109,79 @@ public class EscolherPizzaActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar_escolher_sabor_pizza);
+        usuarioLogado = mAuth.getCurrentUser();
 
-        paramTamPizza = getIntent().getStringExtra("TamPizza");
-        paramTipoPizza = getIntent().getStringExtra("TipoPizza");
+        if (usuarioLogado == null) {
+            Intent i = new Intent(EscolherPizzaActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }else {
 
-        Log.println(Log.ERROR, "TAMANHO DA PIZZA", paramTamPizza);
+            mProgressBar = (ProgressBar) findViewById(R.id.progressbar_escolher_sabor_pizza);
 
-        itemPedido = new ItemPedido();
+            paramTamPizza = getIntent().getStringExtra("TamPizza");
+            paramTipoPizza = getIntent().getStringExtra("TipoPizza");
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio");
-        mDatabaseReference.keepSynced(true);
+            Log.println(Log.ERROR, "TAMANHO DA PIZZA", paramTamPizza);
 
-        mListViewPizzas = (RecyclerView) findViewById(R.id.list_sabor_pizzas);
-        mListViewPizzas.setHasFixedSize(true);
-        mListViewPizzas.setLayoutManager(new LinearLayoutManager(this));
+            itemPedido = new ItemPedido();
 
-        pizzasAux = new ArrayList<>();
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio");
+            mDatabaseReference.keepSynced(true);
 
-        final int tamPizza = getTamanho();
+            mListViewPizzas = (RecyclerView) findViewById(R.id.list_sabor_pizzas);
+            mListViewPizzas.setHasFixedSize(true);
+            mListViewPizzas.setLayoutManager(new LinearLayoutManager(this));
 
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            pizzasAux = new ArrayList<>();
 
-                try {
-                    for (DataSnapshot item : dataSnapshot.getChildren()) {
-                        ItemCardapio ic = item.getValue(ItemCardapio.class);
+            final int tamPizza = getTamanho();
 
-                        if (tamPizza == 0) {
-                            if (ic.getValor_pizza_p() != 0.0) {
-                                pizzasAux.add(ic);
-                            }
-                        } else if (tamPizza == 1) {
+            ValueEventListener postListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            if (ic.getValor_pizza_m() != 0.0) {
-                                pizzasAux.add(ic);
-                            }
-                        } else if (tamPizza == 2) {
-                            if (ic.getValor_pizza_g() != 0.0) {
-                                pizzasAux.add(ic);
+                    try {
+                        for (DataSnapshot item : dataSnapshot.getChildren()) {
+                            ItemCardapio ic = item.getValue(ItemCardapio.class);
+
+                            if (tamPizza == 0) {
+                                if (ic.getValor_pizza_p() != 0.0) {
+                                    pizzasAux.add(ic);
+                                }
+                            } else if (tamPizza == 1) {
+
+                                if (ic.getValor_pizza_m() != 0.0) {
+                                    pizzasAux.add(ic);
+                                }
+                            } else if (tamPizza == 2) {
+                                if (ic.getValor_pizza_g() != 0.0) {
+                                    pizzasAux.add(ic);
+                                }
                             }
                         }
+
+                    } catch (Exception n) {
                     }
 
-                } catch (Exception n){ }
+                    pizzas = new ArrayList<>();
+                    pizzas.addAll(pizzasAux);
+                    pizzasAux = new ArrayList<>();
 
-                pizzas = new ArrayList<>();
-                pizzas.addAll(pizzasAux);
-                pizzasAux = new ArrayList<>();
+                    countMetades = 1;
+                    ItemPedido itemPedido = new ItemPedido();
+                    adapter = new PizzaAdapter(pizzas, itemPedido, EscolherPizzaActivity.this, mProgressBar, tamPizza, paramTipoPizza, countMetades);
+                    mListViewPizzas.setAdapter(adapter);
+                }
 
-                countMetades = 1;
-                ItemPedido itemPedido = new ItemPedido();
-                adapter = new PizzaAdapter(pizzas, itemPedido, EscolherPizzaActivity.this, mProgressBar, tamPizza, paramTipoPizza, countMetades);
-                mListViewPizzas.setAdapter(adapter);
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                }
+            };
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-
-        mDatabaseReference.child("5").addValueEventListener(postListener);
+            mDatabaseReference.child("5").addValueEventListener(postListener);
+        }
 
     }
 

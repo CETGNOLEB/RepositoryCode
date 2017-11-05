@@ -66,9 +66,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private Button finalizarPedido;
     private double taxadeEntrega;
 
-    //Dialogs
-    AlertDialog.Builder mBilder;
-
     private double totaldoPedido; //parâmetro recebido
 
     //ESCOLHER FORMA DE PAGAMENTO
@@ -230,8 +227,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         pedido.setPagamento(pagamento);
 
-        View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_pedido_finalizado, null); //Init Dialog pedido enviado
-        FinalizarPedidoDAO finalizarPedidoDAO = new FinalizarPedidoDAO(this, mProgressDialog, layoutDialog);
+        FinalizarPedidoDAO finalizarPedidoDAO = new FinalizarPedidoDAO(this, mProgressDialog);
         finalizarPedidoDAO.salvarPedido(pedido, diaPedido);
 
     }
