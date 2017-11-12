@@ -55,24 +55,24 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tempo_pronto_ou_entrega"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tempo de Entrega: 30 a 40 minutos"
+                android:text="Tempo de Entrega: 20 a 40 minutos"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_gravity="center"
-                android:textAlignment="center"
-                android:visibility="gone"/>
+                android:textAlignment="center"/>
 
-            <TextView
+           <!-- <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pronto em: 30 a 40 minutos"
+                android:text="Pronto em: 20 a 40 minutos"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:visibility="gone"/>
+                android:visibility="gone"/>-->
 
         </LinearLayout>
 

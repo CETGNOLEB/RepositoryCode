@@ -43,7 +43,7 @@
             android:paddingBottom="6dp"
             android:paddingLeft="10dp"
             android:paddingTop="6dp"
-            android:text="Formas de Pagamento ao Receber"
+            android:text="Formas de Pagamento"
             android:textSize="15sp" />
 
         <TextView
@@ -124,7 +124,7 @@
                         android:layout_below="@+id/tv_desc_time"
                         android:layout_marginLeft="5dp"
                         android:layout_toRightOf="@+id/img_time"
-                        android:text="30 - 40 Minutos" />
+                        android:text="20 - 40 Minutos" />
 
                 </RelativeLayout>
 

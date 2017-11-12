@@ -30,7 +30,7 @@ public class RecheioAdapter extends ArrayAdapter<ItemCardapio> {
         View listItemView = convertView;
 
         if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.card_item_recheios, parent, false);
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_icon_recheios, parent, false);
         }
 
         ItemCardapio recheio = getItem(position);

@@ -1,6 +1,7 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +44,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.KeyPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
+import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
 
 import static android.content.ContentValues.TAG;
@@ -126,13 +129,36 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
         finalizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                openProgressDialog();
-                iniciarEnvioDoPedido();
-
+                /*Sem Conexão*/
+                if (!ConexaoUtil.verificaConectividade(FinalizarPedidoRetiradaActivity.this)) {
+                    exibirDialogSemConexao();
+                } else {
+                    openProgressDialog();
+                    iniciarEnvioDoPedido();
+                }
             }
         });
 
+    }
+
+    private void exibirDialogSemConexao() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoRetiradaActivity.this, R.style.MyDialogTheme);
+        View layoutDialog = inflater.inflate(R.layout.dialog_sem_conexao, null);
+
+        Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_sem_conexao);
+
+        mBilder.setView(layoutDialog);
+        final AlertDialog dialogSemConexao = mBilder.create();
+        dialogSemConexao.show();
+
+        btEntendi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSemConexao.dismiss();
+            }
+        });
     }
 
     private String setTextFormaRecebimento() {
@@ -196,7 +222,6 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
     }
 
     private void buscarDadosdoCliente() {
-
 
         String userID = usuarioLogado.getUid();
 

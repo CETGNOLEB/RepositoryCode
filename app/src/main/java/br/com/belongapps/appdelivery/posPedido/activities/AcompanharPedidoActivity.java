@@ -156,6 +156,12 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         mRecyclerViewItensdoPedido.setLayoutManager(new LinearLayoutManager(this));
 
         chamarAtendente = (Button) findViewById(R.id.bt_ligar_atendente);
+
+        //SnakeBar Conexão
+        snakeBarLayout = (CoordinatorLayout) findViewById(R.id.layout_snakebar_acompanhar_pedido);
+
+        snackbar = Snackbar
+                .make(snakeBarLayout, "Sem conexão com a internet", Snackbar.LENGTH_INDEFINITE);
     }
 
     private void setViewInfoDoPedido(){
@@ -343,12 +349,21 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.adicionar_endereco:
-                atualizarAcompanhamento(keyPedido);
+                /*Verifica Conexao*/
+                if(!ConexaoUtil.verificaConectividade(AcompanharPedidoActivity.this)){
+                    snackbar = Snackbar
+                            .make(snakeBarLayout, "Sem conexão com a internet", Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+                } else { //Conectado
+                    snackbar.dismiss();
+                    atualizarAcompanhamento(keyPedido);
+                }
 
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -359,7 +374,6 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
         finish();
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -369,10 +383,6 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
     }
 
     public void verificaStatusDeConexao(){
-        snakeBarLayout = (CoordinatorLayout) findViewById(R.id.layout_snakebar_acompanhar_pedido);
-
-        snackbar = Snackbar
-                .make(snakeBarLayout, "Sem conexão com a internet", Snackbar.LENGTH_INDEFINITE);
 
         statusConexao = ConexaoUtil.verificaConectividade(this);
 

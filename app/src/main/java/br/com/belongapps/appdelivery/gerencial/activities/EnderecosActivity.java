@@ -1,13 +1,14 @@
 package br.com.belongapps.appdelivery.gerencial.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -79,6 +80,9 @@ public class EnderecosActivity extends AppCompatActivity {
     private Snackbar snackbar;
     private boolean statusConexao;
 
+    //Dialog de Progresso
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +111,7 @@ public class EnderecosActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_enderecos, menu);
-
+//        MenuItem menuAddEndereco = menu.getItem(0);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -257,18 +261,10 @@ public class EnderecosActivity extends AppCompatActivity {
 
     public void salvarEndereco(final AlertDialog dialogCadastrarEndereco, final Endereco endereco) {
 
-        openProgressBar();
+        openProgressDialog("Cadastrando Endereço", "Aguarde, estamos cadastrando o endereço...");
 
         final String userID = usuarioLogado.getUid();
-        final DatabaseReference clienteRef = mDatabaseReference.child("clientes").child(userID); //PEGAR ID DO USUÁRIO LOGADO
-
-        //SALVA ENDEREÇO
-        String key = clienteRef.child("enderecos").push().getKey();
-        Map<String, Object> enderecoValues = endereco.toMap();
-        Map<String, Object> childUpdatesEndereco = new HashMap<>();
-        childUpdatesEndereco.put(key, enderecoValues);
-
-        clienteRef.child("enderecos").updateChildren(childUpdatesEndereco);
+        final DatabaseReference clienteRef = mDatabaseReference.child("clientes").child(userID);
 
         clienteRef.runTransaction(new Transaction.Handler() {
             @Override
@@ -294,7 +290,17 @@ public class EnderecosActivity extends AppCompatActivity {
             public void onComplete(DatabaseError databaseError, boolean b,
                                    DataSnapshot dataSnapshot) {
 
+                //SALVA ENDEREÇO
+                String key = clienteRef.child("enderecos").push().getKey();
+                Map<String, Object> enderecoValues = endereco.toMap();
+                Map<String, Object> childUpdatesEndereco = new HashMap<>();
+                childUpdatesEndereco.put(key, enderecoValues);
+                clienteRef.child("enderecos").updateChildren(childUpdatesEndereco);
+
+                closeProgressDialog();
+
                 dialogCadastrarEndereco.dismiss();
+
                 Toast.makeText(EnderecosActivity.this, "Endereço cadastrado com sucesso", Toast.LENGTH_SHORT).show();
 
                 buscarEndereços();
@@ -316,7 +322,7 @@ public class EnderecosActivity extends AppCompatActivity {
         mDatabaseReference.updateChildren(childUpdatesEndereco);
     }
 
-    public void excluirEndereco(final String key) {
+    public void excluirEndereco(final String keyEndereco) {
 
         final String userID = usuarioLogado.getUid();
 
@@ -326,6 +332,7 @@ public class EnderecosActivity extends AppCompatActivity {
         View layoutDialog = inflater.inflate(R.layout.dialog_cofirm_delete_endereco, null);
 
         Button btConfirmar = (Button) layoutDialog.findViewById(R.id.bt_confirmar_excluir_endereco);
+        Button btCancelar = (Button) layoutDialog.findViewById(R.id.bt_cancel_excluir_endereco);
 
         mBilder.setView(layoutDialog);
         final AlertDialog dialogExcluirEndereco = mBilder.create();
@@ -334,15 +341,17 @@ public class EnderecosActivity extends AppCompatActivity {
         btConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDatabaseReference.child("clientes").child(userID).child("enderecos").child(key).removeValue(); //PEGAR ID DO USUÁRIO LOGADO
-                Toast.makeText(EnderecosActivity.this, "Endereço deletado com sucesso", Toast.LENGTH_SHORT).show();
-
-                decrementarTotaldeEnderecos(userID);
-
+                decrementarTotaldeEnderecosEExcluir(userID, keyEndereco);
                 dialogExcluirEndereco.dismiss();
             }
         });
 
+        btCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogExcluirEndereco.dismiss();
+            }
+        });
 
     }
 
@@ -368,6 +377,9 @@ public class EnderecosActivity extends AppCompatActivity {
 
             }
         });
+
+        /*Dialog de Progresso*/
+        mProgressDialog = new ProgressDialog(this);
     }
 
     public void prencherViews(Endereco endereco) {
@@ -405,7 +417,6 @@ public class EnderecosActivity extends AppCompatActivity {
 
         }
 
-
         verificaStatusDeConexao();
 
     }
@@ -427,6 +438,8 @@ public class EnderecosActivity extends AppCompatActivity {
 
                 Integer totalEnderecos = dataSnapshot.child("total_enderecos").getValue(Integer.class);
 
+                Log.println(Log.ERROR, "TOTAL END: ", "" + totalEnderecos);
+
                 if (totalEnderecos != null) {
                     if (totalEnderecos == 0) { //Não tem nenhum endereço cadastrado
 
@@ -436,7 +449,7 @@ public class EnderecosActivity extends AppCompatActivity {
                         btEndEmpty.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(EnderecosActivity.this, "Abrir diálogo Cad Endereço", Toast.LENGTH_SHORT).show();
+                                exibirDilogAddEndereco();
                             }
                         });
                     } else { //Existem endereços cadastrados
@@ -550,8 +563,10 @@ public class EnderecosActivity extends AppCompatActivity {
         mDatabaseReference.child("configuracoes").child("bairro_taxa").addValueEventListener(bairroListener);
     }
 
-    public void decrementarTotaldeEnderecos(String userID){
-        openProgressBar();
+    public void decrementarTotaldeEnderecosEExcluir(final String userID, final String keyEndereco) {
+
+
+        openProgressDialog("Excluindo", "Aguarde, estamos excluindo o endereço");
 
         DatabaseReference clienteRef = mDatabaseReference.child("clientes").child(userID);
 
@@ -579,6 +594,12 @@ public class EnderecosActivity extends AppCompatActivity {
             public void onComplete(DatabaseError databaseError, boolean b,
                                    DataSnapshot dataSnapshot) {
 
+                /*EXCLUIR ENDEREÇO*/
+                mDatabaseReference.child("clientes").child(userID).child("enderecos").child(keyEndereco).removeValue();
+                Toast.makeText(EnderecosActivity.this, "Endereço deletado com sucesso", Toast.LENGTH_SHORT).show();
+
+                closeProgressDialog();
+
                 verificarEnderecosCadastrados();
 
                 // Transaction completed
@@ -586,7 +607,7 @@ public class EnderecosActivity extends AppCompatActivity {
         });
     }
 
-    public void verificaStatusDeConexao(){
+    public void verificaStatusDeConexao() {
         snakeBarLayout = (CoordinatorLayout) findViewById(R.id.layout_snakebar_enderecos);
 
         snackbar = Snackbar
@@ -594,9 +615,9 @@ public class EnderecosActivity extends AppCompatActivity {
 
         statusConexao = ConexaoUtil.verificaConectividade(this);
 
-        if (statusConexao){
+        if (statusConexao) {
             snackbar.dismiss();
-        } else{
+        } else {
             View snackView = snackbar.getView();
             snackView.setBackgroundColor(ContextCompat.getColor(EnderecosActivity.this, R.color.snakebarColor));
             snackbar.setActionTextColor(getResources().getColor(R.color.textColorPrimary));
@@ -657,6 +678,26 @@ public class EnderecosActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void exibirButtonAdicionar(MenuItem menuAddEndereco) {
+        menuAddEndereco.setVisible(true);
+    }
+
+    private void ocultarButtonAdicionar(MenuItem menuAddEndereco) {
+        menuAddEndereco.setVisible(false);
+    }
+
+    private void openProgressDialog(String title, String msg) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle(title);
+        mProgressDialog.setMessage(msg);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+    }
+
+    private void closeProgressDialog() {
+        mProgressDialog.dismiss();
     }
 
     private void openProgressBar() {

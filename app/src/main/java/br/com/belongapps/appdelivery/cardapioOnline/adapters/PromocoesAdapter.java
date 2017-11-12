@@ -26,6 +26,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActi
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherRecheioActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.util.StringUtil;
 
 
 public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.ViewHolder> {
@@ -195,13 +196,13 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
 
         public void setValorUnitario(double valor_unit) {
             TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_item_promo);
-            item_valor_unit.setText(" R$ " + String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+            item_valor_unit.setText(StringUtil.formatToMoeda(valor_unit));
             item_valor_unit.setPaintFlags(item_valor_unit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
         public void setValorPromo(double valor_unit) {
             TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_promo_valor_unit_item_promo);
-            item_valor_unit.setText(" R$ " + String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+            item_valor_unit.setText(StringUtil.formatToMoeda(valor_unit));
         }
 
 

@@ -31,13 +31,15 @@
         <activity android:name=".cardapioOnline.activitys.CarrinhoActivity" />
         //FINALIZAR PEDIDO
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoActivity" />
-        <activity android:name=".cardapioOnline.activitys.FinalizarPedidoRetiradaActivity"/>
-        <activity android:name=".cardapioOnline.activitys.PedidoEnviadoActivity"/>
+        <activity android:name=".cardapioOnline.activitys.FinalizarPedidoRetiradaActivity" />
+        <activity android:name=".cardapioOnline.activitys.PedidoEnviadoActivity" />
         //SOBRE/AJUDA
-        <activity android:name=".helpAbout.activities.SobreActivity" >
+        <activity android:name=".helpAbout.activities.SobreActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SENDTO" />
+
                 <data android:scheme="mailto" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -56,7 +58,8 @@
         //PÓS-PEDIDO
         <activity android:name=".posPedido.activities.MeusPedidosActivity" />
         <activity android:name=".posPedido.activities.AcompanharPedidoActivity" />
-        <activity android:name=".helpAbout.activities.SobreAplicativoActivity"></activity>
+        <activity android:name=".helpAbout.activities.SobreAplicativoActivity" />
+        <activity android:name=".cardapioOnline.activitys.MontagemAcaiActivity"></activity>
     </application>
 
 </manifest>

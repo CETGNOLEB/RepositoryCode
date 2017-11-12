@@ -38,6 +38,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class TabSalgados extends Fragment {
 
@@ -246,12 +247,12 @@ public class TabSalgados extends Fragment {
             TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_salgado);
 
             if (status_promocao == true) {
-                item_valor_promo.setText(" R$ " + String.format(Locale.US, "%.2f", valor_promocional).replace(".", ","));
-                item_valor_unit.setText(" R$ " + String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+                item_valor_promo.setText(StringUtil.formatToMoeda(valor_promocional));
+                item_valor_unit.setText(StringUtil.formatToMoeda(valor_unit));
                 item_valor_unit.setPaintFlags(item_valor_unit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 item_valor_unit.setVisibility(View.VISIBLE);
             } else {
-                item_valor_promo.setText(" R$ " + String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+                item_valor_promo.setText(StringUtil.formatToMoeda(valor_unit));
             }
 
         }

@@ -25,6 +25,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
+import br.com.belongapps.appdelivery.util.Print;
 
 public class DetalhesdoItemActivity extends AppCompatActivity {
 
@@ -101,7 +102,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
                 observacao = observacaoDetalheProduto.getText().toString();
 
-                if (!observacao.isEmpty()){
+                if (!observacao.isEmpty()) {
                     itemPedido.setObservacao(observacao);
                 }
 
@@ -114,6 +115,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
                 //Salvar Item no Carrinho
                 Log.println(Log.ERROR, "RESULT: ", crud.salvarItem(itemPedido));
+
+                Print.log("ITEMPEDIDO KEY: " + itemPedido.getKeyItem());
 
                 startActivity(intent);
                 finish();
@@ -140,10 +143,26 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
-                startActivity(intent);
-                finish();
+                if (telaAnterior != null) {
+                    if (telaAnterior.equals("MontagemAcai")) {
+                        Intent intent = new Intent(DetalhesdoItemActivity.this, MontagemAcaiActivity.class);
+                        intent.putExtra("acaiNome", itemPedido.getNome());
+                        intent.putExtra("acaiImg", itemPedido.getRef_img());
+                        intent.putExtra("acaiKey", itemPedido.getKeyItem());
+                        intent.putExtra("acaiTotal", itemPedido.getValor_unit());
 
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                } else {
+                    Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
         }
 
         return super.onOptionsItemSelected(item);
@@ -153,9 +172,26 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
-        startActivity(intent);
-        finish();
+        if (telaAnterior != null) {
+            if (telaAnterior.equals("MontagemAcai")) {
+                Intent intent = new Intent(DetalhesdoItemActivity.this, MontagemAcaiActivity.class);
+                intent.putExtra("acaiNome", itemPedido.getNome());
+                intent.putExtra("acaiImg", itemPedido.getRef_img());
+                intent.putExtra("acaiKey", itemPedido.getKeyItem());
+                intent.putExtra("acaiTotal", itemPedido.getValor_unit());
+
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else {
+            Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void getParametros() {
@@ -212,16 +248,16 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         //nome, descricao e valor
         nomeDetalheProduto.setText(itemPedido.getNome());
 
-        if (itemPedido.getDescricao() != null){ // Ocultar campo descrição se em branco
+        if (itemPedido.getDescricao() != null) { // Ocultar campo descrição se em branco
             descDetalheProduto.setText(itemPedido.getDescricao());
-        } else{
+        } else {
             descDetalheProduto.setVisibility(View.GONE);
         }
 
         valorDetalheProduto.setText(" R$ " + String.format(Locale.US, "%.2f", itemPedido.getValor_unit()).replace(".", ","));
         qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
 
-        if (categoria != null){
+        if (categoria != null) {
             if (categoria.equals("Sanduiche")) {
                 cardTipoPaoItem.setVisibility(View.VISIBLE);
             }

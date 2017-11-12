@@ -131,7 +131,7 @@ public class EscolherRecheioActivity extends AppCompatActivity {
         mListViewRecheios.setLayoutManager(new LinearLayoutManager(this));
 
         final FirebaseRecyclerAdapter<ItemCardapio, EscolherRecheioActivity.RecheiosViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<ItemCardapio, RecheiosViewHolder>(
-                ItemCardapio.class, R.layout.card_item_recheios, EscolherRecheioActivity.RecheiosViewHolder.class, mDatabaseReference
+                ItemCardapio.class, R.layout.list_icon_recheios, EscolherRecheioActivity.RecheiosViewHolder.class, mDatabaseReference
         ) {
 
             @Override
@@ -190,7 +190,7 @@ public class EscolherRecheioActivity extends AppCompatActivity {
             super(itemView);
 
             mView = itemView;
-            card_recheio = (CardView) mView.findViewById(R.id.card_item_recheio);
+            card_recheio = (CardView) mView.findViewById(R.id.card_adicionais);
             selected_item = (ImageView) mView.findViewById(R.id.item_selecionado_recheio_um);
 
         }

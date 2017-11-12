@@ -3,7 +3,6 @@ package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +28,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.Pagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.gerencial.model.Bairro;
 import br.com.belongapps.appdelivery.gerencial.model.Endereco;
-import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
+import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
@@ -167,26 +167,32 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void validarEnvioDoPedido() {
 
-        boolean frmPagValida = verificarFormadePagamento();
+        /*Verificar Conexão*/
+        if (!ConexaoUtil.verificaConectividade(FinalizarPedidoActivity.this)) {
+            exibirDilogSemConexao();
+        } else { //Conectado
 
-        //verificar o endereço
-        if (frmPagValida && endereco != null) {
+            boolean frmPagValida = verificarFormadePagamento();
 
-            try {
-                openProgressDialog(); //Exibir status de envio
-                iniciarEnvioDoPedido();
-                //new exibirDialogdeEnvio().execute((Void[]) null); //Executar dialog de status de envio]
-            } catch (Exception e) {
-                e.printStackTrace();
-                //Exibir Dialog de Erro ao enviar o pedido
-                exibirErroAoEnviarPedido();
+            //verificar se endereço e form pag. selecionados
+            if (frmPagValida && endereco != null) {
+                try {
+                    openProgressDialog(); //Exibir status de envio
+                    iniciarEnvioDoPedido();
+                    //new exibirDialogdeEnvio().execute((Void[]) null); //Executar dialog de status de envio]
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    //Exibir Dialog de Erro ao enviar o pedido
+                    exibirErroAoEnviarPedido();
+                }
+            } else {
+                naoEnviarPedido(frmPagValida);
             }
-        } else {
-            naoEnviarPedido(frmPagValida);
         }
+
     }
 
-    private void openProgressDialog(){
+    private void openProgressDialog() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle("Enviando");
         mProgressDialog.setMessage("Aguarde, estamos enviando seu pedido...");
@@ -230,6 +236,26 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         FinalizarPedidoDAO finalizarPedidoDAO = new FinalizarPedidoDAO(this, mProgressDialog);
         finalizarPedidoDAO.salvarPedido(pedido, diaPedido);
 
+    }
+
+    private void exibirDilogSemConexao(){
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this, R.style.MyDialogTheme);
+        View layoutDialog = inflater.inflate(R.layout.dialog_sem_conexao, null);
+
+        Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_sem_conexao);
+
+        mBilder.setView(layoutDialog);
+        final AlertDialog dialogSemConexao = mBilder.create();
+        dialogSemConexao.show();
+
+        btEntendi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSemConexao.dismiss();
+            }
+        });
     }
 
     public void exibirErroAoEnviarPedido() {
@@ -334,9 +360,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     }
 
-    private void buscarDadosdoCliente(String userID){
+    private void buscarDadosdoCliente(String userID) {
 
-        Log.println(Log.ERROR, "USUARIO:" , userID);
+        Log.println(Log.ERROR, "USUARIO:", userID);
 
         ValueEventListener dadosClienteListener = new ValueEventListener() {
             @Override
@@ -498,13 +524,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
                     enderecoAux.setNome(nome.getText().toString());
 
-                    salvarEndereco(enderecoAux);
-
-                    endereco = enderecoAux;
-                    atualizarViewEnderecoeTaxa(endereco);
-
-                    dialogCadastrarEndereco.dismiss();
-                    Toast.makeText(FinalizarPedidoActivity.this, "Endereço cadastrado com sucesso", Toast.LENGTH_SHORT).show();
+                    salvarEndereco(enderecoAux, dialogCadastrarEndereco);
 
                 } else {
                     Toast.makeText(FinalizarPedidoActivity.this, "Informe " + campos, Toast.LENGTH_SHORT).show();
@@ -622,17 +642,65 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     }
 
-    public void salvarEndereco(Endereco endereco) {
+    public void salvarEndereco(final Endereco enderecoAux, final AlertDialog dialogCadastrarEndereco) {
+        openProgressDialog("Cadastrando Endereço", "Aguarde, estamos cadastrando o endereço...");
 
-        String userId = usuarioLogado.getUid();
+        final String userID = usuarioLogado.getUid();
+        final DatabaseReference clienteRef = database.child("clientes").child(userID);
+
+        clienteRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+
+                //ATUALIZA TOTAL DE ENDERECOS CADASTRADOS
+                Integer total = mutableData.child("total_enderecos").getValue(Integer.class);
+
+                if (total == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                total++;
+
+                Log.println(Log.ERROR, "TOTAL", "Total: " + total);
+
+                mutableData.child("total_enderecos").setValue(total);
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+
+                //SALVA ENDEREÇO
+                String key = clienteRef.child("enderecos").push().getKey();
+                Map<String, Object> enderecoValues = enderecoAux.toMap();
+                Map<String, Object> childUpdatesEndereco = new HashMap<>();
+                childUpdatesEndereco.put(key, enderecoValues);
+                clienteRef.child("enderecos").updateChildren(childUpdatesEndereco);
+
+                closeProgressDialog();
+
+                endereco = enderecoAux;
+                atualizarViewEnderecoeTaxa(enderecoAux);
+
+                dialogCadastrarEndereco.dismiss();
+
+                Toast.makeText(FinalizarPedidoActivity.this, "Endereço cadastrado com sucesso", Toast.LENGTH_SHORT).show();
+
+                // Transaction completed
+            }
+        });
+
+        /*String userId = usuarioLogado.getUid();
 
         DatabaseReference enderecoref = database.child("clientes").child(userId).child("enderecos"); //PEGAR ID DO USUÁRIO LOGADO
         String key = enderecoref.push().getKey();
-        Map<String, Object> enderecoValues = endereco.toMap();
+        Map<String, Object> enderecoValues = enderecoAux.toMap();
         Map<String, Object> childUpdatesEndereco = new HashMap<>();
-        childUpdatesEndereco.put("/clientes/" + userId +"/enderecos/" + key, enderecoValues); //PEGAR ID DO USUÁRIO LOGADO
+        childUpdatesEndereco.put("/clientes/" + userId + "/enderecos/" + key, enderecoValues); //PEGAR ID DO USUÁRIO LOGADO
 
-        database.updateChildren(childUpdatesEndereco);
+        database.updateChildren(childUpdatesEndereco);*/
     }
 
     public void atualizarViewEnderecoeTaxa(Endereco endereco) {
@@ -851,5 +919,18 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //OPEN/CLOSE PROGRESS DIALOG
+    private void openProgressDialog(String title, String msg) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle(title);
+        mProgressDialog.setMessage(msg);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+    }
+
+    private void closeProgressDialog() {
+        mProgressDialog.dismiss();
     }
 }

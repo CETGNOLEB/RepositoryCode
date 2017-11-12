@@ -34,9 +34,12 @@ import com.squareup.picasso.Picasso;
 import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherRecheioActivity;
+import br.com.belongapps.appdelivery.cardapioOnline.activitys.MontagemAcaiActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class TabAcai extends Fragment {
 
@@ -189,27 +192,23 @@ public class TabAcai extends Fragment {
     }
 
     public void selecionarItem(final ItemCardapio model, String key) {
-        itemPedido.setNome(model.getNome());
-        itemPedido.setDescricao(model.getDescricao());
-        itemPedido.setRef_img(model.getRef_img());
-        itemPedido.setCategoria(model.getCategoria_id());
+
+        Intent intent = new Intent(getActivity(), MontagemAcaiActivity.class);
+        intent.putExtra("acaiKey", key);
+        intent.putExtra("acaiNome", model.getNome());
 
         if (model.isStatus_promocao() == true) {
-            itemPedido.setValor_unit(model.getPreco_promocional());
-        } else {
-            itemPedido.setValor_unit(model.getValor_unit());
+            intent.putExtra("acaiTotal", model.getPreco_promocional());
+        }else {
+            intent.putExtra("acaiTotal", model.getValor_unit());
         }
 
-        itemPedido.setKeyItem(key);
-
-        Intent intent = new Intent(getActivity(), EscolherRecheioActivity.class);
-        intent.putExtra("ItemPedido", itemPedido);
-
-        intent.putExtra("qtd_recheios_item_cardapio", model.getQtd_recheios());
+        intent.putExtra("acaiImg", model.getRef_img());
 
         startActivity(intent);
-
         getActivity().finish();
+
+
     }
 
     public static class AcaiViewHolder extends RecyclerView.ViewHolder {
@@ -244,12 +243,12 @@ public class TabAcai extends Fragment {
             TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_acai);
 
             if (status_promocao == true) {
-                item_valor_promo.setText(" R$ " + String.format(Locale.US, "%.2f", valor_promocional).replace(".", ","));
-                item_valor_unit.setText(" R$ " + String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+                item_valor_promo.setText(StringUtil.formatToMoeda(valor_promocional));
+                item_valor_unit.setText(StringUtil.formatToMoeda(valor_unit));
                 item_valor_unit.setPaintFlags(item_valor_unit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 item_valor_unit.setVisibility(View.VISIBLE);
             } else {
-                item_valor_promo.setText(" R$ " + String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+                item_valor_promo.setText(StringUtil.formatToMoeda(valor_unit));
             }
 
         }

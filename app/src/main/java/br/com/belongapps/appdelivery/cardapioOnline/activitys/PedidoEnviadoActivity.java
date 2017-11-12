@@ -34,9 +34,10 @@ public class PedidoEnviadoActivity extends AppCompatActivity {
     private List<ItemPedido> itensdoPedido;
     private String keyPedido;
 
-    //Buttons
+    //View
     private Button btAcompanharPedidoEnviado;
     private Button btVoltarPedidoEnviado;
+    private TextView tempoProntoOuEntrega;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +47,20 @@ public class PedidoEnviadoActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_pedido_enviado);
         mToolbar.setTitle("Pedido Enviado");
 
+        getParametros();
         initViews();
     }
 
     private void initViews(){
+
+        tempoProntoOuEntrega = (TextView) findViewById(R.id.tempo_pronto_ou_entrega);
+
+        if (tipoEntrega == 0 ){
+            tempoProntoOuEntrega.setText("Tempo para entrega: 30 a 40 minutos");
+        } else{
+            tempoProntoOuEntrega.setText("Fica pronto em: 30 a 40 minutos");
+        }
+
         btAcompanharPedidoEnviado = (Button) findViewById(R.id.bt_acompanhar_pedido_enviado);
         btVoltarPedidoEnviado = (Button) findViewById(R.id.bt_voltar_pedido_enviado);
 

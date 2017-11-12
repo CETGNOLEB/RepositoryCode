@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.FormadePagamento;
+import br.com.belongapps.appdelivery.util.MoedaUtil;
 import br.com.belongapps.appdelivery.util.SimpleTextListenerUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
@@ -170,6 +171,11 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
         final TextView valorTotalPedido = (TextView) layoutDialog.findViewById(R.id.valor_pedido_dinheiro_cartao);
         valorTotalPedido.setText(txtTotalPedido);
 
+        /*MENSAGEM DE ERRO*/
+        final ImageView imgError = (ImageView) layoutDialog.findViewById(R.id.img_error);
+        final TextView valorTotalInvalido = (TextView) layoutDialog.findViewById(R.id.valor_total_invalido);
+
+        /*EDITs VALORES*/
         final EditText valorComDinheiro = (EditText) layoutDialog.findViewById(R.id.valor_pgm_dinheiro);
         final EditText valorComCartao = (EditText) layoutDialog.findViewById(R.id.valor_pgm_cartao);
 
@@ -202,13 +208,31 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
         bt_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dinheiroeCartao.setValorDinheiro(StringUtil.formatMoedaToDouble(valorComDinheiro.getText().toString()));
-                dinheiroeCartao.setValorCartao(StringUtil.formatMoedaToDouble(valorComCartao.getText().toString()));
 
-                ativarFormadePagamento(dinheiroeCartao);
+                /*Verificar se a soma dos valores é maior que o total do pedido*/
+                if (MoedaUtil.somarValoresDeEditeTexts(valorComDinheiro, valorComCartao) < totalPedido) {
+                    imgError.setVisibility(View.VISIBLE);
+                    valorTotalInvalido.setText("A soma dos valores deve ser igual ou maior que o total do pedido!");
+                    valorTotalInvalido.setVisibility(View.VISIBLE);
 
-                notifyDataSetChanged();
-                dialogFormadePagamento.dismiss();
+                /*Verifica se o valor com Cartão é maior que o totalPedido do pedido*/
+                } else if(StringUtil.formatMoedaToDouble(valorComCartao.getText().toString()) > totalPedido){
+                    imgError.setVisibility(View.VISIBLE);
+                    valorTotalInvalido.setText("O valor no Cartão deve ser menor que o total do pedido!");
+                    valorTotalInvalido.setVisibility(View.VISIBLE);
+                } else {
+                    imgError.setVisibility(View.GONE);
+                    valorTotalInvalido.setVisibility(View.GONE);
+
+                    dinheiroeCartao.setValorDinheiro(StringUtil.formatMoedaToDouble(valorComDinheiro.getText().toString()));
+                    dinheiroeCartao.setValorCartao(StringUtil.formatMoedaToDouble(valorComCartao.getText().toString()));
+
+                    ativarFormadePagamento(dinheiroeCartao);
+
+                    notifyDataSetChanged();
+                    dialogFormadePagamento.dismiss();
+
+                }
             }
         });
 

@@ -392,14 +392,6 @@ public class CardapioMainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-/*
-        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
-
-        if (usuarioLogado == null) {
-            Intent i = new Intent(CardapioMainActivity.this, LoginActivity.class);
-            startActivity(i);
-            finish();
-        }*/
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 

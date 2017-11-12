@@ -37,6 +37,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.util.StringUtil;
 
 
 public class TabSanduiches extends Fragment {
@@ -117,7 +118,7 @@ public class TabSanduiches extends Fragment {
 
                 viewHolder.setNome(model.getNome());
                 viewHolder.setDescricao(model.getDescricao());
-                viewHolder.setValorUnitarioEPromocao(model.getValor_pao_bola(), model.isStatus_promocao(), model.getPromo_pao_bola());
+                viewHolder.setValorUnitarioEPromocao(model.getValor_unit(), model.isStatus_promocao(), model.getPreco_promocional());
                 viewHolder.setImagem(getContext(), model.getRef_img());
                 viewHolder.setStatus(model.getStatus_item());
 
@@ -199,9 +200,9 @@ public class TabSanduiches extends Fragment {
             itemPedido.setCategoria(model.getCategoria_id());
 
             if (model.isStatus_promocao() == true) {
-                itemPedido.setValor_unit(model.getPromo_pao_bola());
+                itemPedido.setValor_unit(model.getPreco_promocional());
             } else {
-                itemPedido.setValor_unit(model.getValor_pao_bola());
+                itemPedido.setValor_unit(model.getValor_unit());
             }
 
             itemPedido.setKeyItem(key);
@@ -249,12 +250,12 @@ public class TabSanduiches extends Fragment {
             TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_sanduiche);
 
             if (status_promocao == true) {
-                item_valor_promo.setText(" R$ " + String.format(Locale.US, "%.2f", valor_promocional).replace(".", ","));
-                item_valor_unit.setText(" R$ " + String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+                item_valor_promo.setText(StringUtil.formatToMoeda(valor_promocional));
+                item_valor_unit.setText(StringUtil.formatToMoeda(valor_unit));
                 item_valor_unit.setPaintFlags(item_valor_unit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 item_valor_unit.setVisibility(View.VISIBLE);
             } else {
-                item_valor_promo.setText(" R$ " + String.format(Locale.US, "%.2f", valor_unit).replace(".", ","));
+                item_valor_promo.setText(StringUtil.formatToMoeda(valor_unit));
             }
 
         }

@@ -107,7 +107,7 @@
             android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/valor_dinheiro_invalido"
+            android:id="@+id/valor_total_invalido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/img_error"
@@ -116,7 +116,7 @@
             android:layout_centerVertical="true"
             android:textSize="12sp"
             android:textColor="@color/colorPrimary"
-            android:text="Insira um valor igual ou maior que o total do pedido!"
+            android:text="A soma dos valores deve ser igual ou maior que o total do pedido!"
             android:visibility="gone"/>
 
     </RelativeLayout>
