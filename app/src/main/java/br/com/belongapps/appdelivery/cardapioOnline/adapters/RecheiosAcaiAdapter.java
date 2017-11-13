@@ -94,8 +94,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
             @Override
             public void onClick(View view) {
                 recheio.setQtd(viewHolder.aumentarQuantidadeDoItem(recheio));
-                boolean mostrarAcressimo = incrementeValorTotalProduto(recheio);
-                viewHolder.mostrarOcultarValorDoItem(mostrarAcressimo);
+                //viewHolder.mostrarOcultarValorDoItem(mostrarAcressimo);
             }
         });
 
@@ -103,8 +102,9 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
             @Override
             public void onClick(View view) {
                 recheio.setQtd(viewHolder.diminuirQuantidadeDoItem(recheio));
-                boolean mostrarAcressimo = decrementeValorTotalProduto(recheio);
-                viewHolder.mostrarOcultarValorDoItem(mostrarAcressimo);
+
+               /* boolean mostrarAcressimo = decrementeValorTotalProduto(recheio);
+                viewHolder.mostrarOcultarValorDoItem(mostrarAcressimo);*/
 
             }
         });
@@ -124,7 +124,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         return todosRecheios.size();
     }
 
-    public static class RecheioViewHolder extends RecyclerView.ViewHolder {
+    public class RecheioViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
         CardView card_recheio;
@@ -177,46 +177,76 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         }
 
         public int diminuirQuantidadeDoItem(RecheioAcai recheio) {
-            int qtd = Integer.valueOf(qtdItem.getText().toString());
+            boolean mostrarAcressimo = true;
+            int qtd = Integer.valueOf(qtdItem.getText().toString()); //Recupera qtd  selecionada
 
             if (qtd > 0) {
+
+                Integer qtdPadraoRecheio = buscarQtdPadrao(recheio); //recupera qtd padrao do item no açai
+
+                double valorUnit = (qtd - qtdPadraoRecheio) * recheio.getValor_unit();
+                valorAcressimoAdicionais.setText("+ " + StringUtil.formatToMoeda(valorUnit));
+
+                if (qtd > qtdPadraoRecheio) {
+                    //Incrementar Valor do Produto
+                    valorTotal = valorTotal - recheio.getValor_unit();
+                    tvTotalAcai.setText("Total: " + StringUtil.formatToMoeda(valorTotal));
+                }
+
                 qtd--;
+
+                Print.log("QTD P: " + qtdPadraoRecheio);
+                Print.log("QTD: " + qtd);
+
+                if (qtd <= qtdPadraoRecheio) {
+                    mostrarAcressimo = false;
+                }
+
+                mostrarOcultarValorDoItem(mostrarAcressimo);
+
+                qtdItem.setText(String.valueOf(qtd)); // set qtd na view
+
             }
-
-            qtdItem.setText(String.valueOf(qtd));
-
-            Integer qtdPadraoRecheio = buscarQtdPadrao(recheio);
-
-            double valorUnit = (qtd - qtdPadraoRecheio) * recheio.getValor_unit();
-            valorAcressimoAdicionais.setText("+ " + StringUtil.formatToMoeda(valorUnit));
 
             return qtd;
         }
 
         public int aumentarQuantidadeDoItem(RecheioAcai recheio) {
-            int qtd = Integer.valueOf(qtdItem.getText().toString());
+            boolean mostrarValorDeAcressimo = false;
+
+            int qtd = Integer.valueOf(qtdItem.getText().toString()); //Recupera qtd
             qtd++;
 
-            qtdItem.setText(String.valueOf(qtd));
+            qtdItem.setText(String.valueOf(qtd)); //Set Qtd na View
 
-            Integer qtdPadraoRecheio = buscarQtdPadrao(recheio);
+            Integer qtdPadraoRecheio = buscarQtdPadrao(recheio); //Buscar qtd padrão do Açai
 
-            double valorUnit = (qtd - qtdPadraoRecheio) * recheio.getValor_unit();
-            valorAcressimoAdicionais.setText("+ " + StringUtil.formatToMoeda(valorUnit));
+            if (qtdPadraoRecheio < qtd) {
+                double valorUnit = (qtd - qtdPadraoRecheio) * recheio.getValor_unit(); //Calcula valor do acressimo
+                valorAcressimoAdicionais.setText("+ " + StringUtil.formatToMoeda(valorUnit)); //set valor do acressimo na view
+
+                //Incrementar Valor do Produto
+                valorTotal = valorTotal + recheio.getValor_unit();
+                tvTotalAcai.setText("Total: " + StringUtil.formatToMoeda(valorTotal));
+
+                mostrarValorDeAcressimo = true; //Mostra valor do acressimo
+            }
+
+            mostrarOcultarValorDoItem(mostrarValorDeAcressimo);
 
             return qtd;
         }
 
-        public void mostrarOcultarValorDoItem(boolean mostrar){
+        public void mostrarOcultarValorDoItem(boolean mostrar) {
             LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(nomeAdicionais.getLayoutParams());
 
-            if (mostrar){
+            if (mostrar) {
                 //SET MARGENS - NOME
-                marginParams.setMargins(10, 10, 0,0);
+                marginParams.setMargins(10, 10, 0, 0);
                 nomeAdicionais.setLayoutParams(marginParams);
                 valorAcressimoAdicionais.setVisibility(View.VISIBLE);
-            } else{
-                marginParams.setMargins(20, 40, 0,0);
+            } else {
+                marginParams.setMargins(20, 40, 0, 0);
                 nomeAdicionais.setLayoutParams(marginParams);
                 valorAcressimoAdicionais.setVisibility(View.GONE);
             }
@@ -250,7 +280,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
             }
         }
 
-        if (descricao.equals("")){
+        if (descricao.equals("")) {
             return "Açai puro";
         }
 
@@ -265,7 +295,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         return "";
     }
 
-    private boolean incrementeValorTotalProduto(RecheioAcai recheio) {
+   /* private boolean incrementeValorTotalProduto(RecheioAcai recheio) {
         boolean incrementado = false;
 
         Integer qtdPadraoRecheio = buscarQtdPadrao(recheio);
@@ -281,7 +311,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         tvTotalAcai.setText("Total: " + StringUtil.formatToMoeda(valorTotal));
 
         return incrementado;
-    }
+    }*/
 
     private boolean decrementeValorTotalProduto(RecheioAcai recheio) {
         boolean mostrarAcressimo = true;
@@ -295,7 +325,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
             valorTotal = valorTotal - recheio.getValor_unit();
         }
 
-        if (recheio.getQtd() <= qtdPadraoRecheio){
+        if (recheio.getQtd() <= qtdPadraoRecheio) {
             mostrarAcressimo = false;
         }
 
