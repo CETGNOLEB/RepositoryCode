@@ -460,7 +460,7 @@ public class EnderecosActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
+                // Getting Post failed, logError a message
             }
         };
 
@@ -556,7 +556,7 @@ public class EnderecosActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
+                // Getting Post failed, logError a message
             }
         };
 

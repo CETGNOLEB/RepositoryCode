@@ -72,7 +72,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/card_tipo_pao_item"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/card_detalhes_item"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -95,15 +95,16 @@
                     android:textStyle="bold" />
 
                 <RadioGroup
+                    android:id="@+id/radio_group_pao"
                     android:layout_below="@+id/txt_tipo_pao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checkedButton="@+id/radio_tipo_pao_bola"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
 
-                    <RadioButton
+                   <!-- <RadioButton
                         android:id="@+id/radio_tipo_pao_bola"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -116,9 +117,16 @@
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/colorPrimary"
                         android:text="Pão Árabe" />
+
+                    <RadioButton
+                        android:id="@+id/radio_tipo_pao_de_forma"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/colorPrimary"
+                        android:text="Pão de Forma" />-->
                 </RadioGroup>
 
-            </RelativeLayout>
+'            </RelativeLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView

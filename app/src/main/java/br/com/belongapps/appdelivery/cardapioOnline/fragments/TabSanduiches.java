@@ -212,6 +212,7 @@ public class TabSanduiches extends Fragment {
             intent.putExtra("ItemPedido", itemPedido);
             intent.putExtra("Categoria" , "Sanduiche");
             intent.putExtra("TelaAnterior", "TabSanduiches");
+            intent.putExtra("sanduiche", key);
             startActivity(intent);
 
             getActivity().finish();

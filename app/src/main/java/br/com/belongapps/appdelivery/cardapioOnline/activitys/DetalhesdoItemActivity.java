@@ -10,22 +10,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.cardapioOnline.model.Pao;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.Print;
+import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class DetalhesdoItemActivity extends AppCompatActivity {
 
@@ -33,27 +43,33 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     //Parâmetros
-    ItemPedido itemPedido; //Pedido
-    String tipoDoPedido;
-    String observacao = ""; //enviar
-    int quantidade = 1; //enviar
-    String telaAnterior = "";
-    String tamPizza = "";
-    String tipoPizza = "";
-    String categoria = "";
+    private ItemPedido itemPedido; //Pedido
+    private String tipoDoPedido;
+    private String observacao = ""; //enviar
+    private int quantidade = 1; //enviar
+    private String telaAnterior = "";
+    private String tamPizza = "";
+    private String tipoPizza = "";
+    private String categoria = "";
 
     //Views
-    ImageView imgDetalheProduto;
-    TextView nomeDetalheProduto;
-    TextView descDetalheProduto;
-    TextView valorDetalheProduto;
-    TextView observacaoDetalheProduto;
-    TextView qtdProdutoDetalheProduto;
-    Button btAumentarQtd;
-    Button btDiminuirQtd;
-    CardView cardTipoPaoItem;
+    private ImageView imgDetalheProduto;
+    private TextView nomeDetalheProduto;
+    private TextView descDetalheProduto;
+    private TextView valorDetalheProduto;
+    private TextView observacaoDetalheProduto;
+    private TextView qtdProdutoDetalheProduto;
+    private Button btAumentarQtd;
+    private Button btDiminuirQtd;
+
+    //Sanduiche
+    private CardView cardTipoPaoItem;
+    private RadioGroup radioGroupPao;
+    private List<RadioButton> opcoesDePaes;
 
     private FirebaseAuth mAuth;
+
+    private double valorTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,32 +114,64 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
+                if(!opcaoDePaoSelecionado()){ //Pão não selecionado
+                    Toast.makeText(DetalhesdoItemActivity.this, "Selecione uma tipo de pão!", Toast.LENGTH_SHORT).show();
+                }else {
 
-                observacao = observacaoDetalheProduto.getText().toString();
+                    CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
 
-                if (!observacao.isEmpty()) {
-                    itemPedido.setObservacao(observacao);
+                    observacao = observacaoDetalheProduto.getText().toString();
+
+                    if (!observacao.isEmpty()) {
+                        itemPedido.setObservacao(observacao);
+                    }
+
+                    itemPedido.setQuantidade(quantidade);
+
+                    Double totalProduto = calcularValorTotalDoItem(itemPedido.getQuantidade(), valorTotal);
+                    itemPedido.setValor_total(totalProduto); //Seta o total no pedido
+                    itemPedido.setValor_unit(totalProduto); //Seta o total no item
+
+                    //SET DESC SANDUICHE
+                    String desc = itemPedido.getDescricao();
+                    itemPedido.setDescricao(desc += " (" + paoSelecionado() + ")");
+
+                    Intent intent = new Intent(DetalhesdoItemActivity.this, CarrinhoActivity.class);
+
+                    //Salvar Item no Carrinho
+                    Log.println(Log.ERROR, "RESULT: ", crud.salvarItem(itemPedido));
+
+                    Print.logError("ITEMPEDIDO KEY: " + itemPedido.getKeyItem());
+
+                    startActivity(intent);
+                    finish();
                 }
-
-                itemPedido.setQuantidade(quantidade);
-
-                Double totalProduto = calcularValorToralDoItem(itemPedido.getQuantidade(), itemPedido.getValor_unit());
-                itemPedido.setValor_total(totalProduto); //Seta o total no pedido
-
-                Intent intent = new Intent(DetalhesdoItemActivity.this, CarrinhoActivity.class);
-
-                //Salvar Item no Carrinho
-                Log.println(Log.ERROR, "RESULT: ", crud.salvarItem(itemPedido));
-
-                Print.log("ITEMPEDIDO KEY: " + itemPedido.getKeyItem());
-
-                startActivity(intent);
-                finish();
             }
         });
 
     }
+
+    private boolean opcaoDePaoSelecionado() {
+        for (RadioButton opcao : opcoesDePaes) {
+            if (opcao.isChecked()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    private String paoSelecionado() {
+        for (RadioButton opcao : opcoesDePaes) {
+            if (opcao.isChecked()) {
+                return opcao.getText().toString();
+            }
+        }
+
+        return "Pão Bola";
+    }
+
 
     @Override
     protected void onStart() {
@@ -137,6 +185,130 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             finish();
         }
 
+        //Verifica se o pedido é de Sanduíche
+        boolean isPedidoSanduiche = isPedidoSanduiche();
+        if (isPedidoSanduiche) {
+            buscarKeysPaesdoSanduiche();
+        }
+    }
+
+    private boolean isPedidoSanduiche() {
+        Print.logError("SANDUICHE SELECIONADO: " + getIntent().getStringExtra("sanduiche"));
+
+        if (getIntent().getStringExtra("sanduiche") != null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void buscarKeysPaesdoSanduiche() {
+        Print.logError("BUSCANDO PÃES...");
+
+        final List<String> keyPaesSanduiche = new ArrayList<>();
+
+        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+        mDatabaseReference = mDatabaseReference.child("itens_cardapio").child("7");
+
+        ValueEventListener paesValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    String keyPao = data.getValue(String.class);
+                    keyPaesSanduiche.add(keyPao);
+                }
+
+                buscarPaesDoSanduiche(keyPaesSanduiche);
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mDatabaseReference.child(getIntent().getStringExtra("sanduiche")).child("paes_aceitos").addValueEventListener(paesValueEventListener);
+
+    }
+
+    private void buscarPaesDoSanduiche(final List<String> keysPaesSanduiche) {
+        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mDatabaseReference = mDatabaseReference.child("itens_cardapio").child("10");
+
+        final List<Pao> paesDoSanduiche = new ArrayList<>();
+
+        ValueEventListener paoesValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    for (String keyPaoSanduiche : keysPaesSanduiche) {
+                        if (keyPaoSanduiche.equals(data.getKey())) {
+                            Pao pao = data.getValue(Pao.class);
+                            Print.logError(pao.getNome());
+                            paesDoSanduiche.add(pao);
+                        }
+                    }
+                }
+
+                mostrarPaesParaEscolha(paesDoSanduiche);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mDatabaseReference.addValueEventListener(paoesValueEventListener);
+    }
+
+    private void mostrarPaesParaEscolha(List<Pao> paesDoSanduiche) {
+        initViews();
+
+        cardTipoPaoItem.setVisibility(View.VISIBLE); //Mostrar card dos paes
+        opcoesDePaes = new ArrayList<>();
+
+        for (final Pao pao : paesDoSanduiche) {
+            final RadioButton radioButton = new RadioButton(this);
+
+            if (!pao.getNome().equals("Pão Bola")) {
+                radioButton.setText(pao.getNome() + " (+ " + StringUtil.formatToMoeda(pao.getValor_unit()) + ")");
+            } else {
+                radioButton.setText(pao.getNome());
+            }
+
+            opcoesDePaes.add(radioButton);
+
+            radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!pao.getNome().equals("Pão Bola")){
+                        valorTotal = itemPedido.getValor_unit() + pao.getValor_unit();
+                        valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
+
+                    } else {
+                        valorTotal = itemPedido.getValor_unit();
+                        valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
+                    }
+                }
+            });
+
+            radioGroupPao.addView(radioButton);
+        }
+
+    }
+
+    private void checkedRadioButton(RadioButton radioSelecionado, List<RadioButton> opcoes){
+
+        for (RadioButton opcao: opcoes) {
+            if (radioSelecionado.getText().toString().equals(opcao.getText().toString())){
+                radioSelecionado.setChecked(true);
+            } else {
+                radioSelecionado.setChecked(false);
+            }
+        }
     }
 
     @Override
@@ -204,6 +376,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         tamPizza = getIntent().getStringExtra("TamPizza");
         tipoPizza = getIntent().getStringExtra("TipoPizza");
 
+        //SetValorTotal
+        valorTotal = itemPedido.getValor_unit();
     }
 
     public void initViews() {
@@ -228,7 +402,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         btAumentarQtd = (Button) findViewById(R.id.bt_aumentar_qtd_item_detalhe_produto);
         addAoCarrinho = (Button) findViewById(R.id.bt_add_ao_carrinho);
 
+
+        //PAO
         cardTipoPaoItem = (CardView) findViewById(R.id.card_tipo_pao_item);
+        radioGroupPao = (RadioGroup) findViewById(R.id.radio_group_pao);
+
     }
 
     public void pupulateViewDetalhes() {
@@ -254,17 +432,33 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             descDetalheProduto.setVisibility(View.GONE);
         }
 
-        valorDetalheProduto.setText(" R$ " + String.format(Locale.US, "%.2f", itemPedido.getValor_unit()).replace(".", ","));
+        valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
         qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
 
-        if (categoria != null) {
-            if (categoria.equals("Sanduiche")) {
-                cardTipoPaoItem.setVisibility(View.VISIBLE);
-            }
-        }
+        /*//SANDUICHES
+        if (getIntent().getStringExtra("sanduiche") != null) {
+            cardTipoPaoItem.setVisibility(View.VISIBLE);
+        }*/
     }
 
-    public double calcularValorToralDoItem(int quantidade, double valorProduto) {
+    public double calcularValorTotalDoItem(int quantidade, double valorProduto) {
         return quantidade * valorProduto;
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch (((RadioButton) view).getText().toString()) {
+            case "Pão Árabe":
+                if (checked)
+                    Print.logError("SELECIONOU O PÃO ÁRABE");
+                    break;
+            case "Pão Bola":
+                if (checked)
+                    Print.logError("SELECIONOU O PÃO BOLA");
+                    break;
+        }
     }
 }

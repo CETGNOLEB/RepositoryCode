@@ -195,8 +195,8 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
 
                 qtd--;
 
-                Print.log("QTD P: " + qtdPadraoRecheio);
-                Print.log("QTD: " + qtd);
+                Print.logError("QTD P: " + qtdPadraoRecheio);
+                Print.logError("QTD: " + qtd);
 
                 if (qtd <= qtdPadraoRecheio) {
                     mostrarAcressimo = false;
@@ -261,7 +261,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         item.setNome(nomeAcai);
         item.setRef_img(imgAcai);
         item.setKeyItem(keyAcai);
-        Print.log("KEY DO AçAI: " + keyAcai);
+        Print.logError("KEY DO AçAI: " + keyAcai);
         item.setDescricao(getDescricaoAcai());
         item.setValor_unit(valorTotal);
         item.setCategoria("1"); //CATEGORIA NO CARDAPIO
