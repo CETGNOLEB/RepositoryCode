@@ -1,13 +1,9 @@
 package br.com.belongapps.appdelivery.posPedido.adapters;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +11,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherRecheioActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.posPedido.PedidoKey;
 import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
-import br.com.belongapps.appdelivery.util.DataUtil;
 
 
 public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealizadosAdapter.ViewHolder> {

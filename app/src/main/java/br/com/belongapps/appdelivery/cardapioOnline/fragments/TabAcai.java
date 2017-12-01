@@ -31,11 +31,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 
-import java.util.Locale;
-
 import br.com.belongapps.appdelivery.R;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherRecheioActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.MontagemAcaiActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;

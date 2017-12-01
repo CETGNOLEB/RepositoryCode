@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -81,7 +82,7 @@ public class CarrinhoActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_carrinho);
         mToolbar.setTitle("Meu Carrinho");
-        mToolbar.setNavigationIcon(R.drawable.ic_action_cart);
+        //mToolbar.setNavigationIcon(R.drawable.ic_action_cart);
         setSupportActionBar(mToolbar);
 
         //CARRINHO VAZIO
@@ -231,12 +232,14 @@ public class CarrinhoActivity extends AppCompatActivity {
                                         intent.putExtra("totalPedido", Double.parseDouble(textTotal.getText().toString().replace("R$ ", "").replace(",", ".")));
                                         intent.putExtra("tipoEntrega", tipoEntregaSelecionada);
                                         startActivity(intent);
+                                        finish();
                                     } else {
 
                                         Intent intent = new Intent(CarrinhoActivity.this, FinalizarPedidoRetiradaActivity.class);
                                         intent.putExtra("totalPedido", Double.parseDouble(textTotal.getText().toString().replace("R$ ", "").replace(",", ".")));
                                         intent.putExtra("tipoEntrega", tipoEntregaSelecionada);
                                         startActivity(intent);
+                                        finish();
                                     }
                                 }
 
@@ -300,6 +303,27 @@ public class CarrinhoActivity extends AppCompatActivity {
         Intent intent = new Intent(CarrinhoActivity.this, CardapioMainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    /*MENU*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_carrinho, menu);
+//        MenuItem menuAddEndereco = menu.getItem(0);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.adicionar_itens:
+                //abrir diálog
+                Intent i = new Intent(CarrinhoActivity.this, CardapioMainActivity.class);
+                startActivity(i);
+                finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private double calcularValorTotal() {

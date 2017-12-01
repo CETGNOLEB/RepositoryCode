@@ -1,5 +1,6 @@
 package br.com.belongapps.appdelivery.cardapioOnline.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -12,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -22,11 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemPizzaMMActivity;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherPizzaActivity2;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherPizzaActivity3;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherPizzaActivity4;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 
@@ -117,6 +113,7 @@ public class EditarPizzaAdapter extends RecyclerView.Adapter<EditarPizzaAdapter.
                     intent.putExtra("TamPizza", tamPizza);
                     intent.putExtra("TipoPizza", tipoPizza);
                     context.startActivity(intent);
+                    ((Activity) context).finish();
 
                 }
             });

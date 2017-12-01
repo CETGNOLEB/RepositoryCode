@@ -67,6 +67,7 @@ public class OpcoesPerfilAdapter extends RecyclerView.Adapter<OpcoesPerfilAdapte
                     FirebaseAuth.getInstance().signOut();
                     intent = new Intent(context, TelaInicialActivity.class);
                     context.startActivity(intent);
+                    ((Activity) context).finish();
                 }
             }
         });

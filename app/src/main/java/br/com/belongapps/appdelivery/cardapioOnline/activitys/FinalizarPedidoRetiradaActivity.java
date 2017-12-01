@@ -3,7 +3,6 @@ package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,31 +22,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.FinalizarPedidoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Cliente;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
-import br.com.belongapps.appdelivery.cardapioOnline.model.KeyPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
-import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
-
-import static android.content.ContentValues.TAG;
 
 public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
 

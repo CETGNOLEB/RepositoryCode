@@ -1,5 +1,6 @@
 package br.com.belongapps.appdelivery.cardapioOnline.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -96,6 +97,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                         intent.putExtra("ItemPedido", itemPedido);
                         intent.putExtra("TelaAnterior", "TabPizzas");
                         context.startActivity(intent);
+                        ((Activity) context).finish();
 
                     } else if (tipoPizza.equals("Metade-Metade")) {
 
@@ -111,6 +113,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+                            ((Activity) context).finish();
 
                             Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
@@ -126,6 +129,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+                            ((Activity) context).finish();
 
                             Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
@@ -145,6 +149,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+                            ((Activity) context).finish();
 
                             Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
@@ -160,6 +165,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+                            ((Activity) context).finish();
 
                             Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
@@ -175,6 +181,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+                            ((Activity) context).finish();
 
                             Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
@@ -193,6 +200,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+                            ((Activity) context).finish();
 
                             Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
@@ -208,6 +216,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+                            ((Activity) context).finish();
 
                             Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
@@ -223,6 +232,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+                            ((Activity) context).finish();
 
                             Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
 
@@ -238,6 +248,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
                             context.startActivity(intent);
+                            ((Activity) context).finish();
 
                             Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
                         }

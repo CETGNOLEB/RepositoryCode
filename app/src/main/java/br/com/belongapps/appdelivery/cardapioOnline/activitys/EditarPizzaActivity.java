@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.EditarPizzaAdapter;
-import br.com.belongapps.appdelivery.cardapioOnline.adapters.PizzaAdapter;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 

@@ -1,5 +1,6 @@
 package br.com.belongapps.appdelivery.cardapioOnline.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -19,11 +20,10 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherRecheioActivity;
+import br.com.belongapps.appdelivery.cardapioOnline.activitys.MontagemAcaiActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.util.StringUtil;
@@ -146,11 +146,16 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
         }
 
 
-        if (item.getCategoria_id().equals("1")) {
-            Intent intent = new Intent(context, EscolherRecheioActivity.class);
-            intent.putExtra("ItemPedido", itemPedido);
-            intent.putExtra("qtd_recheios_item_cardapio", item.getQtd_recheios());
+        if (item.getCategoria_id().equals("1")) { //Açai, direcionar para a montagem
+            Intent intent = new Intent(context, MontagemAcaiActivity.class);
+
+            intent.putExtra("acaiNome", item.getNome());
+            intent.putExtra("acaiImg", item.getRef_img());
+            intent.putExtra("acaiKey", item.getItemKey());
+            intent.putExtra("acaiTotal", item.getValor_unit());
+
             context.startActivity(intent);
+            ((Activity) context).finish();
         } else {
 
             Intent intent = new Intent(context, DetalhesdoItemActivity.class);
@@ -158,7 +163,7 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
             intent.putExtra("ItemPedido", itemPedido);
             intent.putExtra("TelaAnterior", "TabPromocoes");
             context.startActivity(intent);
-
+            ((Activity) context).finish();
         }
     }
 

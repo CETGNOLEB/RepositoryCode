@@ -4,22 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
-import br.com.belongapps.appdelivery.helpAbout.activities.SobreActivity;
-import br.com.belongapps.appdelivery.helpAbout.util.ComentarioUtil;
 import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
-import br.com.belongapps.appdelivery.util.DataUtil;
 
 public class PedidoEnviadoActivity extends AppCompatActivity {
 

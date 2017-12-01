@@ -5,7 +5,7 @@
     <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
     <application
         android:name=".util.FirebaseLearn"
-        android:icon="@mipmap/launch_icon_kisabor"
+        android:icon="@mipmap/ic_launcher_belong"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -17,8 +17,6 @@
         <activity android:name=".seguranca.activities.CadastrarUsuarioActivity" />
         //Módulo Cardapio Online
         <activity android:name=".cardapioOnline.activitys.CardapioMainActivity" />
-        <activity android:name=".cardapioOnline.activitys.EscolherRecheioActivity" />
-        <activity android:name=".cardapioOnline.activitys.EscolherAdicionalActivity" />
         <activity android:name=".cardapioOnline.activitys.DetalhesdoItemActivity" />
         //PIZZAS
         <activity android:name=".cardapioOnline.activitys.EscolherPizzaActivity" />

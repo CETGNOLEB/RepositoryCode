@@ -14,12 +14,34 @@
         android:theme="@style/MyProgressbarColor"
         android:id="@+id/progressbar_escolher_sanduiche" />
 
+    <!--<TextView
+        android:id="@+id/tvMontagem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Faça do seu jeito"
+        android:textSize="17sp" />
+
+    <Button
+        android:id="@+id/bt_montar_sanduiche"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvMontagem"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/border_button_white"
+        android:textColor="@color/textColorPrimary"
+        android:text="Montar meu sanduíche"/>-->
+
+
+    <!--android:layout_below="@+id/bt_montar_sanduiche"
+    android:layout_marginTop="10dp"-->
     <TextView
         android:id="@+id/textTabSanduiche"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="Escolha o seu"
+        android:text="Sanduíches deliciosos"
         android:textSize="17sp" />
 
     <android.support.v7.widget.RecyclerView

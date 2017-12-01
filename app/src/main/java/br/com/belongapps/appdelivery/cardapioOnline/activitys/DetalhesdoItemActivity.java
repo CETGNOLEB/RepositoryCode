@@ -69,7 +69,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private double valorTotal;
+    private double valorTotal;//
+    private double valorUnitario;//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,10 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 if (quantidade > 1) {
                     quantidade--;
                     qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
+
+                    valorTotal = valorTotal - valorUnitario;
+
+                    atualizarViewTotal();
                 }
             }
         });
@@ -105,6 +110,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             public void onClick(View v) {
                 quantidade++;
                 qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
+
+                valorTotal = quantidade * valorUnitario;
+
+                atualizarViewTotal();
+
             }
         });
 
@@ -114,41 +124,48 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(!opcaoDePaoSelecionado()){ //Pão não selecionado
-                    Toast.makeText(DetalhesdoItemActivity.this, "Selecione uma tipo de pão!", Toast.LENGTH_SHORT).show();
-                }else {
-
-                    CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
-
-                    observacao = observacaoDetalheProduto.getText().toString();
-
-                    if (!observacao.isEmpty()) {
-                        itemPedido.setObservacao(observacao);
+                if (isPedidoSanduiche()) {
+                    if (!opcaoDePaoSelecionado()) { //Pão não selecionado (Pedido de Sanduiches)
+                        Toast.makeText(DetalhesdoItemActivity.this, "Selecione uma tipo de pão!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        adicionarAoCarrinho();
                     }
-
-                    itemPedido.setQuantidade(quantidade);
-
-                    Double totalProduto = calcularValorTotalDoItem(itemPedido.getQuantidade(), valorTotal);
-                    itemPedido.setValor_total(totalProduto); //Seta o total no pedido
-                    itemPedido.setValor_unit(totalProduto); //Seta o total no item
-
-                    //SET DESC SANDUICHE
-                    String desc = itemPedido.getDescricao();
-                    itemPedido.setDescricao(desc += " (" + paoSelecionado() + ")");
-
-                    Intent intent = new Intent(DetalhesdoItemActivity.this, CarrinhoActivity.class);
-
-                    //Salvar Item no Carrinho
-                    Log.println(Log.ERROR, "RESULT: ", crud.salvarItem(itemPedido));
-
-                    Print.logError("ITEMPEDIDO KEY: " + itemPedido.getKeyItem());
-
-                    startActivity(intent);
-                    finish();
+                } else {
+                    adicionarAoCarrinho();
                 }
+
             }
         });
 
+    }
+
+    private void adicionarAoCarrinho() {
+        CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
+
+        observacao = observacaoDetalheProduto.getText().toString();
+
+        if (!observacao.isEmpty()) {
+            itemPedido.setObservacao(observacao);
+        }
+
+        itemPedido.setQuantidade(quantidade);
+        itemPedido.setValor_total(valorTotal); //Seta o total no pedido
+
+        if (isPedidoSanduiche()) {
+            //SET DESC SANDUICHE
+            String desc = itemPedido.getDescricao();
+            itemPedido.setDescricao(desc += " (" + paoSelecionado() + ")");
+        }
+
+        Intent intent = new Intent(DetalhesdoItemActivity.this, CarrinhoActivity.class);
+
+        //Salvar Item no Carrinho
+        Log.println(Log.ERROR, "RESULT: ", crud.salvarItem(itemPedido));
+
+        Print.logError("ITEMPEDIDO KEY: " + itemPedido.getKeyItem());
+
+        startActivity(intent);
+        finish();
     }
 
     private boolean opcaoDePaoSelecionado() {
@@ -172,6 +189,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         return "Pão Bola";
     }
 
+    public void atualizarViewTotal(){
+        valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
+    }
 
     @Override
     protected void onStart() {
@@ -284,7 +304,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!pao.getNome().equals("Pão Bola")){
+                    if (!pao.getNome().equals("Pão Bola")) {
                         valorTotal = itemPedido.getValor_unit() + pao.getValor_unit();
                         valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
 
@@ -300,10 +320,10 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
     }
 
-    private void checkedRadioButton(RadioButton radioSelecionado, List<RadioButton> opcoes){
+    private void checkedRadioButton(RadioButton radioSelecionado, List<RadioButton> opcoes) {
 
-        for (RadioButton opcao: opcoes) {
-            if (radioSelecionado.getText().toString().equals(opcao.getText().toString())){
+        for (RadioButton opcao : opcoes) {
+            if (radioSelecionado.getText().toString().equals(opcao.getText().toString())) {
                 radioSelecionado.setChecked(true);
             } else {
                 radioSelecionado.setChecked(false);
@@ -378,6 +398,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
         //SetValorTotal
         valorTotal = itemPedido.getValor_unit();
+
+        //Set Valor Unitario
+        valorUnitario = itemPedido.getValor_unit();
     }
 
     public void initViews() {
@@ -454,11 +477,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             case "Pão Árabe":
                 if (checked)
                     Print.logError("SELECIONOU O PÃO ÁRABE");
-                    break;
+                break;
             case "Pão Bola":
                 if (checked)
                     Print.logError("SELECIONOU O PÃO BOLA");
-                    break;
+                break;
         }
     }
 }

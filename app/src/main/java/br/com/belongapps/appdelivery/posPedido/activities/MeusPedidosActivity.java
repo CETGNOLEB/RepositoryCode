@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
-import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
 import br.com.belongapps.appdelivery.posPedido.fragments.TabCartaoFidelidade;
 import br.com.belongapps.appdelivery.posPedido.fragments.TabPedidosRealizados;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
