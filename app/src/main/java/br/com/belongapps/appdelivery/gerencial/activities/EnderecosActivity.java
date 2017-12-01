@@ -30,8 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +45,7 @@ import java.util.Map;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
+import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.gerencial.model.Bairro;
 import br.com.belongapps.appdelivery.gerencial.model.Endereco;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
@@ -68,9 +67,6 @@ public class EnderecosActivity extends AppCompatActivity {
     private EditText rua, numero, complemento, cep, nome;
     private Spinner bairroSpinner;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser usuarioLogado;
-
     //Nenhum endereco cadastrados
     private Button btEndEmpty;
     private View viewEmptyEndereco;
@@ -87,8 +83,6 @@ public class EnderecosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enderecos);
-
-        mAuth = FirebaseAuth.getInstance();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_enderecos);
         mToolbar.setTitle("Meus Endereços");
@@ -263,7 +257,7 @@ public class EnderecosActivity extends AppCompatActivity {
 
         openProgressDialog("Cadastrando Endereço", "Aguarde, estamos cadastrando o endereço...");
 
-        final String userID = usuarioLogado.getUid();
+        final String userID = FirebaseAuthApp.getUsuarioLogado().getUid();
         final DatabaseReference clienteRef = mDatabaseReference.child("clientes").child(userID);
 
         clienteRef.runTransaction(new Transaction.Handler() {
@@ -313,7 +307,7 @@ public class EnderecosActivity extends AppCompatActivity {
 
     public void editarEndereco(Endereco endereco, String key) {
 
-        String userID = usuarioLogado.getUid();
+        String userID = FirebaseAuthApp.getUsuarioLogado().getUid();
 
         Map<String, Object> enderecoValues = endereco.toMap();
         Map<String, Object> childUpdatesEndereco = new HashMap<>();
@@ -324,7 +318,7 @@ public class EnderecosActivity extends AppCompatActivity {
 
     public void excluirEndereco(final String keyEndereco) {
 
-        final String userID = usuarioLogado.getUid();
+        final String userID = FirebaseAuthApp.getUsuarioLogado().getUid();
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -404,9 +398,7 @@ public class EnderecosActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        usuarioLogado = mAuth.getCurrentUser();
-
-        if (usuarioLogado == null) {
+        if (FirebaseAuthApp.getUsuarioLogado() == null) {
             Intent i = new Intent(EnderecosActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
@@ -464,7 +456,7 @@ public class EnderecosActivity extends AppCompatActivity {
             }
         };
 
-        mDatabaseReference.child("clientes").child(usuarioLogado.getUid()).addListenerForSingleValueEvent(enderecoListener);
+        mDatabaseReference.child("clientes").child(FirebaseAuthApp.getUsuarioLogado().getUid()).addListenerForSingleValueEvent(enderecoListener);
 
     }
 
@@ -476,7 +468,7 @@ public class EnderecosActivity extends AppCompatActivity {
         mEnderecoList.setLayoutManager(new LinearLayoutManager(EnderecosActivity.this));
 
         final FirebaseRecyclerAdapter<Endereco, EnderecosActivity.EnderecoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Endereco, EnderecosActivity.EnderecoViewHolder>(
-                Endereco.class, R.layout.card_endereco, EnderecosActivity.EnderecoViewHolder.class, mDatabaseReference.child("clientes").child(usuarioLogado.getUid()).child("enderecos")
+                Endereco.class, R.layout.card_endereco, EnderecosActivity.EnderecoViewHolder.class, mDatabaseReference.child("clientes").child(FirebaseAuthApp.getUsuarioLogado().getUid()).child("enderecos")
         ) {
 
             @Override

@@ -15,8 +15,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +31,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pao;
+import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.Print;
 import br.com.belongapps.appdelivery.util.StringUtil;
@@ -67,8 +66,6 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     private RadioGroup radioGroupPao;
     private List<RadioButton> opcoesDePaes;
 
-    private FirebaseAuth mAuth;
-
     private double valorTotal;//
     private double valorUnitario;//
 
@@ -76,8 +73,6 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_item);
-
-        mAuth = FirebaseAuth.getInstance();
 
         getParametros(); //Setar parametros recebidos
 
@@ -197,9 +192,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
-
-        if (usuarioLogado == null) {
+        if (FirebaseAuthApp.getUsuarioLogado() == null) {
             Intent i = new Intent(DetalhesdoItemActivity.this, LoginActivity.class);
             startActivity(i);
             finish();

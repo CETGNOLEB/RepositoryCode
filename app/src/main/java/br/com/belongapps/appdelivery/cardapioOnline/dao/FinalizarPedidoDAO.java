@@ -34,6 +34,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemQtdPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.KeyPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
 import br.com.belongapps.appdelivery.util.DataUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
@@ -43,7 +44,6 @@ import static android.content.ContentValues.TAG;
 public class FinalizarPedidoDAO {
 
     private static DatabaseReference database;
-    private static FirebaseAuth mAuth;
     private static FirebaseUser usuarioLogado;
     private static Context context;
     private static ProgressDialog mProgressDialog;
@@ -52,8 +52,7 @@ public class FinalizarPedidoDAO {
         this.context = context;
         this.mProgressDialog = mProgressDialog;
         database = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-        usuarioLogado = mAuth.getCurrentUser();
+        usuarioLogado = FirebaseAuthApp.getUsuarioLogado();
     }
 
     //SALVAR PEDIDO

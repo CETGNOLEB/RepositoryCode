@@ -13,10 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,8 +27,8 @@ import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
-import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.posPedido.PedidoKey;
 import br.com.belongapps.appdelivery.posPedido.adapters.PedidosRealizadosAdapter;
 
@@ -53,9 +50,6 @@ public class TabPedidosRealizados extends Fragment {
     private List<PedidoKey> pedidosRealizados;
     List<PedidoKey> pedidosRealizadosAux;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser usuarioLogado;
-
     private View viewEmptyPedidos;
 
     @Override
@@ -71,7 +65,6 @@ public class TabPedidosRealizados extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -90,8 +83,6 @@ public class TabPedidosRealizados extends Fragment {
     }
 
     private void verificarSeTemPedidosRealizados() {
-
-        usuarioLogado = mAuth.getCurrentUser();
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference(); //Start database reference
         openProgressBar();
@@ -130,7 +121,7 @@ public class TabPedidosRealizados extends Fragment {
             }
         };
 
-        mDatabaseReference.child("clientes").child(usuarioLogado.getUid()).addListenerForSingleValueEvent(pedidosRealizadosListener);
+        mDatabaseReference.child("clientes").child(FirebaseAuthApp.getUsuarioLogado().getUid()).addListenerForSingleValueEvent(pedidosRealizadosListener);
 
     }
 
@@ -146,7 +137,7 @@ public class TabPedidosRealizados extends Fragment {
         keypedidosRealizados = new ArrayList<>();
         keypedidosRealizadosAux = new ArrayList<>();
 
-        final String userId = usuarioLogado.getUid(); //PEGAR ID DO USUÀRIO LOGADO
+        final String userId = FirebaseAuthApp.getUsuarioLogado().getUid(); //PEGAR ID DO USUÀRIO LOGADO
         mDatabaseReferenceClientes.child(userId).child("pedidos").addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override

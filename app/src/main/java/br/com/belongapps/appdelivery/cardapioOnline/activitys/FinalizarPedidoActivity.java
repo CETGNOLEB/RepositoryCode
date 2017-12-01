@@ -22,8 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,6 +47,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.FormadePagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.gerencial.model.Bairro;
 import br.com.belongapps.appdelivery.gerencial.model.Endereco;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
@@ -110,17 +109,12 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private TextView aeTvRuaEndereco, aeTvNumeroEndereco, aeTvBairroEndereco;
     private Spinner enderecoSpinner;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser usuarioLogado;
-
     private Cliente cliente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finalizar_pedido);
-
-        mAuth = FirebaseAuth.getInstance();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_enviar_pedido);
         mToolbar.setTitle("Finalizar Pedido");
@@ -645,7 +639,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     public void salvarEndereco(final Endereco enderecoAux, final AlertDialog dialogCadastrarEndereco) {
         openProgressDialog("Cadastrando Endereço", "Aguarde, estamos cadastrando o endereço...");
 
-        final String userID = usuarioLogado.getUid();
+        final String userID = FirebaseAuthApp.getUsuarioLogado().getUid();
         final DatabaseReference clienteRef = database.child("clientes").child(userID);
 
         clienteRef.runTransaction(new Transaction.Handler() {
@@ -775,8 +769,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        usuarioLogado = mAuth.getCurrentUser();
-
         bairrosNomes = new ArrayList<>();
         totaldoPedido = getIntent().getDoubleExtra("totalPedido", 0);
 
@@ -784,7 +776,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         buscarEnderecosdoUsuario();
         buscarBairros();
         populateFormasdePagamento();
-        buscarDadosdoCliente(usuarioLogado.getUid());
+        buscarDadosdoCliente(FirebaseAuthApp.getUsuarioLogado().getUid());
 
     }
 
@@ -861,7 +853,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void buscarEnderecosdoUsuario() {
 
-        String userId = usuarioLogado.getUid();
+        String userId = FirebaseAuthApp.getUsuarioLogado().getUid();
 
         btAlterarEndereco = (Button) findViewById(R.id.bt_alterar_endereco);
         glEndereco = (GridLayout) findViewById(R.id.gl_endereco);

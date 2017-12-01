@@ -11,8 +11,6 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +23,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.PizzaAdapter;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 
 import static android.content.ContentValues.TAG;
@@ -37,8 +36,6 @@ public class EscolherPizzaActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
 
     private DatabaseReference mDatabaseReference;
-    private FirebaseAuth mAuth;
-    private FirebaseUser usuarioLogado;
 
     //Parametros Recebidos
     private String paramTamPizza;
@@ -58,8 +55,6 @@ public class EscolherPizzaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escolher_pizza);
-
-        mAuth = FirebaseAuth.getInstance();
 
         paramTamPizza = getIntent().getStringExtra("TamPizza");
         paramTipoPizza = getIntent().getStringExtra("TipoPizza");
@@ -98,9 +93,7 @@ public class EscolherPizzaActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        usuarioLogado = mAuth.getCurrentUser();
-
-        if (usuarioLogado == null) {
+        if (FirebaseAuthApp.getUsuarioLogado() == null) {
             Intent i = new Intent(EscolherPizzaActivity.this, LoginActivity.class);
             startActivity(i);
             finish();

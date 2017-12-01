@@ -19,8 +19,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +33,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.ItemCarrinhoAdapter;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 
@@ -65,14 +64,10 @@ public class CarrinhoActivity extends AppCompatActivity {
     private boolean statusEstabelecimento = true;
     RadioButton radioDelivery;
 
-    private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrinho);
-
-        mAuth = FirebaseAuth.getInstance();
 
         itens_pedido = new ArrayList<>();
         CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
@@ -257,9 +252,7 @@ public class CarrinhoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
-
-        if (usuarioLogado == null) {
+        if (FirebaseAuthApp.getUsuarioLogado() == null) {
             Intent i = new Intent(CarrinhoActivity.this, LoginActivity.class);
             startActivity(i);
             finish();

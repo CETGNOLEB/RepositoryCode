@@ -24,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +40,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabPromocoes;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSucos;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabVitaminas;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
 import br.com.belongapps.appdelivery.gerencial.activities.PerfilActivity;
 import br.com.belongapps.appdelivery.helpAbout.activities.AEmpresaActivity;
@@ -50,7 +50,6 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabAcai;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabCombos;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSalgados;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSanduiches;
-import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 
@@ -67,8 +66,6 @@ public class CardapioMainActivity extends AppCompatActivity
     private DatabaseReference mDatabaseReference;
     private Snackbar snackbar;
 
-    private FirebaseAuth mAuth;
-
     private NavigationView navigationView;
 
     private String nomeUsuario;
@@ -82,8 +79,6 @@ public class CardapioMainActivity extends AppCompatActivity
         setContentView(R.layout.activity_cardapio);
 
         verificarSeVeioDoLogin();
-
-        mAuth = FirebaseAuth.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF")); //Cor do Titulo da Tela
@@ -109,13 +104,11 @@ public class CardapioMainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         /*MOSTRAR NOME DO USUÁRIO E MOSTRAR/NÂO MOSTRAR ITENS MENU*/
-        FirebaseUser usuarioLogado = mAuth.getCurrentUser();
-
-        if (usuarioLogado != null) {
+        if (FirebaseAuthApp.getUsuarioLogado() != null) {
 
             View header = navigationView.getHeaderView(0);
             nomeusuario = (TextView) header.findViewById(R.id.nome_usuario);
-            buscarNomeUsuario(usuarioLogado.getUid());
+            buscarNomeUsuario(FirebaseAuthApp.getUsuarioLogado().getUid());
 
 
             hideItensMenuComUsuario();

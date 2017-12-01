@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +32,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.Cliente;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pagamento;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
+import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
 
@@ -50,7 +50,6 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
 
     private Pedido pedido;
     private Cliente cliente;
-    private FirebaseAuth mAuth;
     private FirebaseUser usuarioLogado;
     private ProgressDialog mProgressDialog;
 
@@ -66,8 +65,6 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mAuth = FirebaseAuth.getInstance();
 
         //Recebe Valor total do pedido
         Intent i = getIntent();
@@ -200,7 +197,7 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        usuarioLogado = mAuth.getCurrentUser();
+        usuarioLogado = FirebaseAuthApp.getUsuarioLogado();
 
         totaldoPedido = getIntent().getDoubleExtra("totalPedido", 0);
 

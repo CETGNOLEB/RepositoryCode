@@ -25,7 +25,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -154,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             Intent intent = new Intent(LoginActivity.this, CardapioMainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.putExtra("login", "Bem Vindo ao App da Kisabor!");
+                            intent.putExtra("login", "Bem Vindo ao Belong Delivery!");
                             startActivity(intent);
                             finish();
                         }
