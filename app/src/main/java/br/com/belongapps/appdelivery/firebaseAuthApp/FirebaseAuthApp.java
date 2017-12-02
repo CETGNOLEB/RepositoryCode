@@ -1,4 +1,4 @@
-package br.com.belongapps.appdelivery.firebaseService;
+package br.com.belongapps.appdelivery.firebaseAuthApp;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -11,4 +11,5 @@ public class FirebaseAuthApp {
 
         return mAuth.getInstance().getCurrentUser();
     }
+
 }

@@ -28,7 +28,7 @@ import java.util.List;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
-import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
+import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.posPedido.PedidoKey;
 import br.com.belongapps.appdelivery.posPedido.adapters.PedidosRealizadosAdapter;
 

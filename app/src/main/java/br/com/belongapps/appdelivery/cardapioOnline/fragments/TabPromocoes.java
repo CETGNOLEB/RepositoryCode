@@ -26,6 +26,8 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.PromocoesAdapter;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
+import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
+import br.com.belongapps.appdelivery.util.Print;
 
 import static android.content.ContentValues.TAG;
 
@@ -39,6 +41,8 @@ public class TabPromocoes extends Fragment {
     private List<ItemCardapio> itensPromocaoAux;
     private boolean statusDelivery = true;
     private boolean statusEstabelecimento = true;
+
+    private boolean permissaoUsuarioFazerPedido = true;
 
     private View viewSemPromocoes;
 
@@ -93,6 +97,9 @@ public class TabPromocoes extends Fragment {
 
         buscarPromocoes();
 
+        //Buscar permissão do usuário para realizar pedidos
+        buscarPermissoesDoUsuario();
+
     }
 
     public void buscarPromocoes(){
@@ -142,6 +149,29 @@ public class TabPromocoes extends Fragment {
         };
 
         mDatabaseReference.child("itens_cardapio").addValueEventListener(postListener);
+    }
+
+    private void buscarPermissoesDoUsuario(){
+        mDatabaseReference.child("clientes").child(FirebaseAuthApp.getUsuarioLogado().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Integer permissao = dataSnapshot.child("permite_ped").getValue(Integer.class);
+
+                Print.logError("Permissão: " + permissao);
+
+                if (permissao == 0) {
+                    permissaoUsuarioFazerPedido = false;
+                } else {
+                    permissaoUsuarioFazerPedido = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void openProgressBar() {

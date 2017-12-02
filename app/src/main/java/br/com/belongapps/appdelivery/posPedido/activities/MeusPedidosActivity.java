@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
-import br.com.belongapps.appdelivery.firebaseService.FirebaseAuthApp;
+import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.posPedido.fragments.TabCartaoFidelidade;
 import br.com.belongapps.appdelivery.posPedido.fragments.TabPedidosRealizados;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
