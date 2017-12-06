@@ -40,6 +40,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabPromocoes;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSucos;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabVitaminas;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.cardapioOnline.pedidoDePizza.TabPizza;
 import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
 import br.com.belongapps.appdelivery.gerencial.activities.PerfilActivity;

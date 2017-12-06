@@ -95,7 +95,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
 
                         Intent intent = new Intent(context, DetalhesdoItemActivity.class);
                         intent.putExtra("ItemPedido", itemPedido);
-                        intent.putExtra("TelaAnterior", "TabPizzas");
+                        intent.putExtra("TelaAnterior", "TabPizza");
                         context.startActivity(intent);
                         ((Activity) context).finish();
 

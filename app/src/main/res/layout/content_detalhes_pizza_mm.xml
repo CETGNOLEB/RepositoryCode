@@ -19,7 +19,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
@@ -86,7 +86,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="2dp"/>
+                        android:layout_marginLeft="2dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -146,8 +146,8 @@
                             android:id="@+id/button_editar_metade1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:layout_marginRight="4dp"
                             android:text="EDITAR"
                             android:textColor="@color/colorPrimary"
@@ -194,8 +194,8 @@
                         android:id="@+id/img_metade2"
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
                         android:layout_marginLeft="2dp" />
 
                     <LinearLayout
@@ -256,8 +256,8 @@
                             android:id="@+id/button_editar_metade2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:layout_marginRight="4dp"
                             android:text="EDITAR"
                             android:textColor="@color/colorPrimary"
@@ -368,8 +368,8 @@
                             android:id="@+id/button_editar_metade3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:layout_marginRight="4dp"
                             android:text="EDITAR"
                             android:textColor="@color/colorPrimary"
@@ -398,7 +398,7 @@
                     android:paddingTop="6dp"
                     android:text="SABOR 04:"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -418,8 +418,8 @@
                         android:id="@+id/img_metade4"
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
                         android:layout_marginLeft="2dp" />
 
                     <LinearLayout
@@ -480,8 +480,8 @@
                             android:id="@+id/button_editar_metade4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:layout_marginRight="4dp"
                             android:text="EDITAR"
                             android:textColor="@color/colorPrimary"
@@ -550,9 +550,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_observacoes_pizza"
+                android:layout_marginBottom="55dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="55dp"
                 android:layout_marginTop="10dp">
 
                 <LinearLayout

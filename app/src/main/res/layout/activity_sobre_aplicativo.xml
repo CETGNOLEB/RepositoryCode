@@ -21,11 +21,11 @@
 
             <ImageView
                 android:id="@+id/logo_app"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/logo_belong" />
+                android:src="@drawable/ic_logo_belong_blue" />
 
             <TextView
                 android:id="@+id/title_app"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/logo_app"
                 android:layout_centerHorizontal="true"
-                android:text="Nome da Solução"
+                android:text="Belong Delivery Solution"
                 android:textColor="#212121"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -66,7 +66,7 @@
                 android:layout_below="@+id/direitos_app_two"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:text="O Nome do Aplicativo usa Google Firebase"
+                android:text="O Belong Delivery Solution usa Google Firebase"
                 android:textColor="#212121"
                 android:textSize="16sp" />
 

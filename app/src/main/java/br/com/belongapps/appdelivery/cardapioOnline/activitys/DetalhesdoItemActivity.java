@@ -60,11 +60,14 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     private TextView qtdProdutoDetalheProduto;
     private Button btAumentarQtd;
     private Button btDiminuirQtd;
+    private Button btVoltar;
 
     //Sanduiche
     private CardView cardTipoPaoItem;
     private RadioGroup radioGroupPao;
     private List<RadioButton> opcoesDePaes;
+    private double valorDoPao = 0.0;//
+    private String paoSelecinado = "";
 
     private double valorTotal;//
     private double valorUnitario;//
@@ -93,7 +96,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                     quantidade--;
                     qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
 
-                    valorTotal = valorTotal - valorUnitario;
+                    valorTotal = valorTotal - (valorUnitario + valorDoPao);
 
                     atualizarViewTotal();
                 }
@@ -106,7 +109,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 quantidade++;
                 qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
 
-                valorTotal = quantidade * valorUnitario;
+                valorTotal = quantidade * (valorUnitario + valorDoPao);
 
                 atualizarViewTotal();
 
@@ -132,6 +135,15 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             }
         });
 
+        btVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
     }
 
     private void adicionarAoCarrinho() {
@@ -139,17 +151,19 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
         observacao = observacaoDetalheProduto.getText().toString();
 
+
         if (!observacao.isEmpty()) {
             itemPedido.setObservacao(observacao);
         }
-
         itemPedido.setQuantidade(quantidade);
         itemPedido.setValor_total(valorTotal); //Seta o total no pedido
 
         if (isPedidoSanduiche()) {
+            itemPedido.setValor_unit(valorTotal); //Seta valor unitario final
+
             //SET DESC SANDUICHE
             String desc = itemPedido.getDescricao();
-            itemPedido.setDescricao(desc += " (" + paoSelecionado() + ")");
+            itemPedido.setDescricao(desc += " (" + paoSelecinado + ")");
         }
 
         Intent intent = new Intent(DetalhesdoItemActivity.this, CarrinhoActivity.class);
@@ -286,7 +300,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         for (final Pao pao : paesDoSanduiche) {
             final RadioButton radioButton = new RadioButton(this);
 
-            if (!pao.getNome().equals("Pão Bola")) {
+            if (pao.getValor_unit() > 0){
                 radioButton.setText(pao.getNome() + " (+ " + StringUtil.formatToMoeda(pao.getValor_unit()) + ")");
             } else {
                 radioButton.setText(pao.getNome());
@@ -297,31 +311,22 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!pao.getNome().equals("Pão Bola")) {
-                        valorTotal = itemPedido.getValor_unit() + pao.getValor_unit();
+                    /*if (!pao.getNome().equals("Pão Bola")) {*/
+                        valorTotal = quantidade * (itemPedido.getValor_unit() + pao.getValor_unit());
                         valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
-
-                    } else {
-                        valorTotal = itemPedido.getValor_unit();
+                        valorDoPao = pao.getValor_unit();
+                        paoSelecinado = pao.getNome();
+                   /* } else {
+                        valorTotal = quantidade * itemPedido.getValor_unit();
                         valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
-                    }
+                        valorDoPao = pao.getValor_unit();
+                    }*/
                 }
             });
 
             radioGroupPao.addView(radioButton);
         }
 
-    }
-
-    private void checkedRadioButton(RadioButton radioSelecionado, List<RadioButton> opcoes) {
-
-        for (RadioButton opcao : opcoes) {
-            if (radioSelecionado.getText().toString().equals(opcao.getText().toString())) {
-                radioSelecionado.setChecked(true);
-            } else {
-                radioSelecionado.setChecked(false);
-            }
-        }
     }
 
     @Override
@@ -416,8 +421,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         //Botoes
         btDiminuirQtd = (Button) findViewById(R.id.bt_diminuir_qtd_item_detalhe_produto);
         btAumentarQtd = (Button) findViewById(R.id.bt_aumentar_qtd_item_detalhe_produto);
-        addAoCarrinho = (Button) findViewById(R.id.bt_add_ao_carrinho);
-
+        addAoCarrinho = (Button) findViewById(R.id.bt_proximo_detalhes);
+        btVoltar = (Button) findViewById(R.id.bt_voltar_detalhes);
 
         //PAO
         cardTipoPaoItem = (CardView) findViewById(R.id.card_tipo_pao_item);
@@ -451,30 +456,6 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
         qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
 
-        /*//SANDUICHES
-        if (getIntent().getStringExtra("sanduiche") != null) {
-            cardTipoPaoItem.setVisibility(View.VISIBLE);
-        }*/
     }
 
-    public double calcularValorTotalDoItem(int quantidade, double valorProduto) {
-        return quantidade * valorProduto;
-    }
-
-    public void onRadioButtonClicked(View view) {
-        // Is the button now checked?
-        boolean checked = ((RadioButton) view).isChecked();
-
-        // Check which radio button was clicked
-        switch (((RadioButton) view).getText().toString()) {
-            case "Pão Árabe":
-                if (checked)
-                    Print.logError("SELECIONOU O PÃO ÁRABE");
-                break;
-            case "Pão Bola":
-                if (checked)
-                    Print.logError("SELECIONOU O PÃO BOLA");
-                break;
-        }
-    }
 }
