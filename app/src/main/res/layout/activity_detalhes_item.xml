@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".cardapioOnline.pedidoDePizza.PizzaMetade1Activity">
+    tools:context=".cardapioOnline.activitys.DetalhesdoItemActivity">
 
     <include
         android:id="@+id/toolbar_detalhes_item"
@@ -86,7 +86,8 @@
                 android:layout_below="@+id/card_detalhes_item"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -108,11 +109,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Leite, Granola, Morango" />
+                        android:text="" />
 
                     <Button
-                        android:id="@+id/bt_alterar_endereco"
-                        android:layout_width="180dp"
+                        android:id="@+id/bt_alterar_itens"
+                        android:layout_width="160dp"
                         android:layout_height="25dp"
                         android:layout_marginTop="15dp"
                         android:layout_gravity="right"

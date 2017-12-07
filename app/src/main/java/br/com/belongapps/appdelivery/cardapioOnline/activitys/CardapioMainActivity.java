@@ -394,7 +394,7 @@ public class CardapioMainActivity extends AppCompatActivity
                 statusEstabelecimento = status;
 
                 snackbar = Snackbar
-                        .make(layout, "Desculpe, nosso estabelecimento está fechado!", 4000);
+                        .make(layout, "Desculpe, nosso estabelecimento está fechado!", Snackbar.LENGTH_INDEFINITE);
 
                 if (statusEstabelecimento == true) {
                     snackbar.dismiss();

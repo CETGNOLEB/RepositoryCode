@@ -70,6 +70,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
                 Intent i = new Intent(context, DetalhesdoItemActivity.class);
                 i.putExtra("ItemPedido", item);
                 i.putExtra("TelaAnterior", "MontagemAcai");
+                i.putExtra("acai", "pedidoDeAcai");
                 context.startActivity(i);
                 ((Activity) context).finish();
             }

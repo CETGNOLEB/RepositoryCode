@@ -32,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.MontagemAcaiActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
@@ -189,7 +190,7 @@ public class TabAcai extends Fragment {
 
     public void selecionarItem(final ItemCardapio model, String key) {
 
-        Intent intent = new Intent(getActivity(), MontagemAcaiActivity.class);
+        /*Intent intent = new Intent(getActivity(), MontagemAcaiActivity.class);
         intent.putExtra("acaiKey", key);
         intent.putExtra("acaiNome", model.getNome());
 
@@ -200,8 +201,32 @@ public class TabAcai extends Fragment {
         }
 
         intent.putExtra("acaiImg", model.getRef_img());
+        intent.putExtra("acai", itemPedido);
 
         startActivity(intent);
+        getActivity().finish();*/
+
+
+        itemPedido.setNome(model.getNome());
+        itemPedido.setDescricao(model.getDescricao());
+        itemPedido.setRef_img(model.getRef_img());
+        itemPedido.setCategoria(model.getCategoria_id());
+
+        if (model.isStatus_promocao() == true) {
+            itemPedido.setValor_unit(model.getPreco_promocional());
+        } else {
+            itemPedido.setValor_unit(model.getValor_unit());
+        }
+
+        itemPedido.setKeyItem(key);
+
+        Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
+
+        intent.putExtra("ItemPedido", itemPedido);
+        intent.putExtra("TelaAnterior", "TabAcai");
+        intent.putExtra("acai", "pedidoDeAcai");
+        startActivity(intent);
+
         getActivity().finish();
 
 

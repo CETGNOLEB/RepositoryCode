@@ -2,10 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.belongapps.appdelivery">
 
-    <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
     <application
         android:name=".util.FirebaseLearn"
-        android:icon="@mipmap/ic_launcher_belong"
+        android:icon="@mipmap/launch_icon_kisabor"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -28,7 +27,7 @@
         <activity android:name=".cardapioOnline.activitys.EditarPizzaActivity" />
         <activity android:name=".cardapioOnline.activitys.CarrinhoActivity" />
         //ACAI
-        <activity android:name=".cardapioOnline.activitys.MontagemAcaiActivity"></activity>
+        <activity android:name=".cardapioOnline.activitys.MontagemAcaiActivity"/>
         //FINALIZAR PEDIDO
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoActivity" />
         <activity android:name=".cardapioOnline.activitys.FinalizarPedidoRetiradaActivity" />

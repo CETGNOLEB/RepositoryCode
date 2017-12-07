@@ -43,13 +43,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
     //Parâmetros
     private ItemPedido itemPedido; //Pedido
-    private String tipoDoPedido;
     private String observacao = ""; //enviar
     private int quantidade = 1; //enviar
     private String telaAnterior = "";
-    private String tamPizza = "";
-    private String tipoPizza = "";
-    private String categoria = "";
 
     //Views
     private ImageView imgDetalheProduto;
@@ -62,12 +58,22 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     private Button btDiminuirQtd;
     private Button btVoltar;
 
+    //Pizza
+    private String tamPizza = "";
+    private String tipoPizza = "";
+    private String categoria = "";
+
     //Sanduiche
     private CardView cardTipoPaoItem;
     private RadioGroup radioGroupPao;
     private List<RadioButton> opcoesDePaes;
     private double valorDoPao = 0.0;//
     private String paoSelecinado = "";
+
+    //Açai
+    private CardView cardItensAcai;
+    private TextView itensAcai;
+    private Button btAlterarItens;
 
     private double valorTotal;//
     private double valorUnitario;//
@@ -77,12 +83,12 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_item);
 
-        getParametros(); //Setar parametros recebidos
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar_detalhes_item);
         mToolbar.setTitle("Detalhes do Produto");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getParametros(); //Setar parametros recebidos
 
         initViews();
 
@@ -187,24 +193,15 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         return false;
     }
 
-
-    private String paoSelecionado() {
-        for (RadioButton opcao : opcoesDePaes) {
-            if (opcao.isChecked()) {
-                return opcao.getText().toString();
-            }
-        }
-
-        return "Pão Bola";
-    }
-
-    public void atualizarViewTotal(){
+    public void atualizarViewTotal() {
         valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        getParametros();
 
         if (FirebaseAuthApp.getUsuarioLogado() == null) {
             Intent i = new Intent(DetalhesdoItemActivity.this, LoginActivity.class);
@@ -213,16 +210,35 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         }
 
         //Verifica se o pedido é de Sanduíche
-        boolean isPedidoSanduiche = isPedidoSanduiche();
-        if (isPedidoSanduiche) {
+        if (isPedidoSanduiche()) {
             buscarKeysPaesdoSanduiche();
         }
+
+        //Verifica se o pedido é de Açai
+        if (isPedidoAcai()) {
+            cardItensAcai = (CardView) findViewById(R.id.card_itens_acai);
+            cardItensAcai.setVisibility(View.VISIBLE);
+
+            itensAcai = (TextView) findViewById(R.id.itens_acai);
+            itensAcai.setText(itemPedido.getDescricao());
+        }
+
     }
 
     private boolean isPedidoSanduiche() {
         Print.logError("SANDUICHE SELECIONADO: " + getIntent().getStringExtra("sanduiche"));
 
         if (getIntent().getStringExtra("sanduiche") != null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isPedidoAcai() {
+        Print.logError("ACAI SELECIONADO: " + getIntent().getStringExtra("acai"));
+
+        if (getIntent().getStringExtra("acai") != null) {
             return true;
         }
 
@@ -300,7 +316,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         for (final Pao pao : paesDoSanduiche) {
             final RadioButton radioButton = new RadioButton(this);
 
-            if (pao.getValor_unit() > 0){
+            if (pao.getValor_unit() > 0) {
                 radioButton.setText(pao.getNome() + " (+ " + StringUtil.formatToMoeda(pao.getValor_unit()) + ")");
             } else {
                 radioButton.setText(pao.getNome());
@@ -311,16 +327,10 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*if (!pao.getNome().equals("Pão Bola")) {*/
-                        valorTotal = quantidade * (itemPedido.getValor_unit() + pao.getValor_unit());
-                        valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
-                        valorDoPao = pao.getValor_unit();
-                        paoSelecinado = pao.getNome();
-                   /* } else {
-                        valorTotal = quantidade * itemPedido.getValor_unit();
-                        valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
-                        valorDoPao = pao.getValor_unit();
-                    }*/
+                    valorTotal = quantidade * (itemPedido.getValor_unit() + pao.getValor_unit());
+                    valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
+                    valorDoPao = pao.getValor_unit();
+                    paoSelecinado = pao.getNome();
                 }
             });
 
@@ -333,7 +343,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (telaAnterior != null) {
+               /* if (telaAnterior != null) {
                     if (telaAnterior.equals("MontagemAcai")) {
                         Intent intent = new Intent(DetalhesdoItemActivity.this, MontagemAcaiActivity.class);
                         intent.putExtra("acaiNome", itemPedido.getNome());
@@ -348,11 +358,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
-                } else {
+                } else {*/
                     Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
                     startActivity(intent);
                     finish();
-                }
+//                }
         }
 
         return super.onOptionsItemSelected(item);
@@ -362,7 +372,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        if (telaAnterior != null) {
+        /*if (telaAnterior != null) {
             if (telaAnterior.equals("MontagemAcai")) {
                 Intent intent = new Intent(DetalhesdoItemActivity.this, MontagemAcaiActivity.class);
                 intent.putExtra("acaiNome", itemPedido.getNome());
@@ -377,11 +387,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        } else {
+        } else {*/
             Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
             startActivity(intent);
             finish();
-        }
+//        }
     }
 
     public void getParametros() {
@@ -428,6 +438,28 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         cardTipoPaoItem = (CardView) findViewById(R.id.card_tipo_pao_item);
         radioGroupPao = (RadioGroup) findViewById(R.id.radio_group_pao);
 
+        //ACAI
+        cardItensAcai = (CardView) findViewById(R.id.card_itens_acai);
+        itensAcai = (TextView) findViewById(R.id.itens_acai);
+        btAlterarItens = (Button) findViewById(R.id.bt_alterar_itens);
+
+        btAlterarItens.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetalhesdoItemActivity.this, MontagemAcaiActivity.class);
+                intent.putExtra("acaiKey", itemPedido.getKeyItem());
+                intent.putExtra("acaiNome", itemPedido.getNome());
+
+                intent.putExtra("acaiTotal", itemPedido.getValor_unit());
+
+                intent.putExtra("acaiImg", itemPedido.getRef_img());
+                intent.putExtra("acai", itemPedido);
+
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     public void pupulateViewDetalhes() {
@@ -447,15 +479,19 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         //nome, descricao e valor
         nomeDetalheProduto.setText(itemPedido.getNome());
 
-        if (itemPedido.getDescricao() != null) { // Ocultar campo descrição se em branco
-            descDetalheProduto.setText(itemPedido.getDescricao());
-        } else {
+        if (itemPedido.getDescricao() == null || isPedidoAcai()) { // Ocultar campo descrição se em branco ou pedido açai
             descDetalheProduto.setVisibility(View.GONE);
+        } else {
+            descDetalheProduto.setText(itemPedido.getDescricao());
         }
 
         valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
         qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
 
+        if (isPedidoAcai()){
+            cardItensAcai.setVisibility(View.VISIBLE);
+            itensAcai.setText(itemPedido.getDescricao());
+        }
     }
 
 }

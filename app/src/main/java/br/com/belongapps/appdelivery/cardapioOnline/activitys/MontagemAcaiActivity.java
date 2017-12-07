@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.adapters.RecheiosAcaiAdapter;
+import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.RecheioAcai;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
@@ -43,6 +45,8 @@ public class MontagemAcaiActivity extends AppCompatActivity {
     private String acaiImg;
     private String acaiKey;
     private Double acaiTotal;
+    private String telaAnterior;
+    private ItemPedido itemPedido;
 
     //LISTAS
     private List<RecheioAcai> todosRecheios;
@@ -55,8 +59,11 @@ public class MontagemAcaiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_montagem_acai);
 
         getParametros();
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar_montagem_acai);
         mToolbar.setTitle(acaiNome);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -69,10 +76,24 @@ public class MontagemAcaiActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(MontagemAcaiActivity.this, DetalhesdoItemActivity.class);
+                intent.putExtra("acai", "pedidoDeAcai");
+                intent.putExtra("ItemPedido", itemPedido);
+                startActivity(intent);
+                finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent intent = new Intent(MontagemAcaiActivity.this, CardapioMainActivity.class);
+        Intent intent = new Intent(MontagemAcaiActivity.this, DetalhesdoItemActivity.class);
         startActivity(intent);
 
         finish();
@@ -95,6 +116,9 @@ public class MontagemAcaiActivity extends AppCompatActivity {
         acaiImg = getIntent().getStringExtra("acaiImg");
         acaiKey = getIntent().getStringExtra("acaiKey");
         acaiTotal = getIntent().getDoubleExtra("acaiTotal", 0);
+        itemPedido = getIntent().getParcelableExtra("acai");
+
+        telaAnterior = getIntent().getStringExtra("telaAnterior");
     }
 
     private void buscarTodosRecheios() {
@@ -121,7 +145,7 @@ public class MontagemAcaiActivity extends AppCompatActivity {
                     for (String keysRecheiosdoAcai : recheiosAcaiKey) {
                         if (keysRecheiosdoAcai.equals(recheio.getItemKey())) {
                             recheio.setQtd(1);
-                        } else{
+                        } else {
                             recheio.setQtd(0);
                         }
                     }
