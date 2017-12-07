@@ -22,8 +22,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_detalhes_item"
@@ -80,10 +80,56 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/card_itens_acai"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_below="@+id/card_detalhes_item"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_itens"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Recheios:"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/itens_acai"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Leite, Granola, Morango" />
+
+                    <Button
+                        android:id="@+id/bt_alterar_endereco"
+                        android:layout_width="180dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/border_button"
+                        android:text="Adicionar/Remover"
+                        android:textColor="@color/textColorSecundary" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:id="@+id/card_tipo_pao_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/card_detalhes_item"
+                android:layout_below="@+id/card_itens_acai"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
@@ -112,8 +158,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"
-                        android:orientation="vertical">
-                    </RadioGroup>
+                        android:orientation="vertical"></RadioGroup>
 
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
@@ -168,7 +213,6 @@
 
                 </LinearLayout>
 
-
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -176,16 +220,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_observacoes_item"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginTop="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/txt_quantidade_produto_detalhe_item"
