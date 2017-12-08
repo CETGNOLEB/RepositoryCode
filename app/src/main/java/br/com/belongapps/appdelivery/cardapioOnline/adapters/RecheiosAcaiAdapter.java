@@ -20,6 +20,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
@@ -66,11 +67,18 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         this.btProximo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                ArrayList<RecheioAcai> recheiosSelecionados = new ArrayList<>();
+                for (RecheioAcai item : todosRecheios) {
+                    recheiosSelecionados.add(item);
+                }
+
                 ItemPedido item = createItemPedido();
                 Intent i = new Intent(context, DetalhesdoItemActivity.class);
                 i.putExtra("ItemPedido", item);
                 i.putExtra("TelaAnterior", "MontagemAcai");
                 i.putExtra("acai", "pedidoDeAcai");
+                i.putParcelableArrayListExtra("recheiosSelecionados", recheiosSelecionados);
                 context.startActivity(i);
                 ((Activity) context).finish();
             }
@@ -116,7 +124,6 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
                 recheio.setQtd(1);
                 viewHolder.setQtdInicialRecheio(1);
             }
-
         }
     }
 

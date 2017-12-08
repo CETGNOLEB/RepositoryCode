@@ -59,6 +59,8 @@ public class CarrinhoActivity extends AppCompatActivity {
     private TextView descCarrinhoVazio;
     /*TIPO DE RECEBIMENTO*/
     private int tipoEntregaSelecionada = 5;
+
+    //PERMISSÔES
     private boolean statusDelivery = true;
     private boolean statusEstabelecimento = true;
     RadioButton radioDelivery;
@@ -172,6 +174,26 @@ public class CarrinhoActivity extends AppCompatActivity {
                         View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
 
                         Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
+
+                        mBilder.setView(layoutDialog);
+                        final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
+                        dialogEstabelecimentoFechado.show();
+
+                        btEntendi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialogEstabelecimentoFechado.dismiss();
+                            }
+                        });
+
+                    } else if (!FirebaseAuthApp.podeFazerPedidos()) {
+
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                        AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
+                        View layoutDialog = inflater.inflate(R.layout.dialog_nao_pode_pedir, null);
+
+                        Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_nao_pode_pedir);
 
                         mBilder.setView(layoutDialog);
                         final AlertDialog dialogEstabelecimentoFechado = mBilder.create();

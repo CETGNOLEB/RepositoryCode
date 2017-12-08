@@ -31,6 +31,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.Pao;
+import br.com.belongapps.appdelivery.cardapioOnline.model.RecheioAcai;
 import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.Print;
@@ -74,6 +75,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     private CardView cardItensAcai;
     private TextView itensAcai;
     private Button btAlterarItens;
+    private ArrayList<RecheioAcai> recheiosSelecionados;
 
     private double valorTotal;//
     private double valorUnitario;//
@@ -359,9 +361,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                         finish();
                     }
                 } else {*/
-                    Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
-                    startActivity(intent);
-                    finish();
+                Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
+                startActivity(intent);
+                finish();
 //                }
         }
 
@@ -372,26 +374,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        /*if (telaAnterior != null) {
-            if (telaAnterior.equals("MontagemAcai")) {
-                Intent intent = new Intent(DetalhesdoItemActivity.this, MontagemAcaiActivity.class);
-                intent.putExtra("acaiNome", itemPedido.getNome());
-                intent.putExtra("acaiImg", itemPedido.getRef_img());
-                intent.putExtra("acaiKey", itemPedido.getKeyItem());
-                intent.putExtra("acaiTotal", itemPedido.getValor_unit());
-
-                startActivity(intent);
-                finish();
-            } else {
-                Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        } else {*/
-            Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
-            startActivity(intent);
-            finish();
-//        }
+        Intent intent = new Intent(DetalhesdoItemActivity.this, CardapioMainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void getParametros() {
@@ -403,6 +388,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         //Pizzas
         tamPizza = getIntent().getStringExtra("TamPizza");
         tipoPizza = getIntent().getStringExtra("TipoPizza");
+
+        //Acai
+        recheiosSelecionados = getIntent().getParcelableArrayListExtra("recheiosSelecionados");
 
         //SetValorTotal
         valorTotal = itemPedido.getValor_unit();
@@ -455,6 +443,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 intent.putExtra("acaiImg", itemPedido.getRef_img());
                 intent.putExtra("acai", itemPedido);
 
+                intent.putParcelableArrayListExtra("recheiosSelecionados", recheiosSelecionados);
+
                 startActivity(intent);
                 finish();
             }
@@ -488,7 +478,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         valorDetalheProduto.setText(StringUtil.formatToMoeda(valorTotal));
         qtdProdutoDetalheProduto.setText(String.valueOf(quantidade));
 
-        if (isPedidoAcai()){
+        if (isPedidoAcai()) {
             cardItensAcai.setVisibility(View.VISIBLE);
             itensAcai.setText(itemPedido.getDescricao());
         }

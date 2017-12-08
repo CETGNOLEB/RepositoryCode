@@ -1,20 +1,23 @@
 package br.com.belongapps.appdelivery.cardapioOnline.model;
 
-public class RecheioAcai {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class RecheioAcai implements Parcelable {
 
     String categoria_id;
     String nome;
     String ref_img;
-    Integer status_item;
-    Integer tipo_recheio;
+    int status_item;
+    int tipo_recheio;
     Double valor_unit;
 
     Integer qtd;
 
     private String itemKey;
 
-    public RecheioAcai(String categoria_id, String nome, String ref_img, Integer status_item,
-                       Integer tipo_recheio, Double valor_unit, Integer qtd, String itemKey) {
+    public RecheioAcai(String categoria_id, String nome, String ref_img, int status_item,
+                       int tipo_recheio, Double valor_unit, Integer qtd, String itemKey) {
         this.categoria_id = categoria_id;
         this.nome = nome;
         this.ref_img = ref_img;
@@ -26,7 +29,49 @@ public class RecheioAcai {
         this.itemKey = itemKey;
     }
 
-    public RecheioAcai(){}
+    public RecheioAcai() {
+
+    }
+
+    private RecheioAcai(Parcel in) {
+        categoria_id = in.readString();
+        nome = in.readString();
+        ref_img = in.readString();
+        status_item = in.readInt();
+        tipo_recheio = in.readInt();
+        valor_unit = in.readDouble();
+        qtd = in.readInt();
+        itemKey = in.readString();
+    }
+
+    public static final Parcelable.Creator<RecheioAcai> CREATOR
+            = new Parcelable.Creator<RecheioAcai>() {
+        public RecheioAcai createFromParcel(Parcel in) {
+            return new RecheioAcai(in);
+        }
+
+        public RecheioAcai[] newArray(int size) {
+            return new RecheioAcai[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(categoria_id);
+        dest.writeString(nome);
+        dest.writeString(ref_img);
+        dest.writeInt(status_item);
+        dest.writeInt(tipo_recheio);
+        dest.writeDouble(valor_unit);
+        dest.writeInt(qtd);
+        dest.writeString(itemKey);
+    }
 
     public String getCategoria_id() {
         return categoria_id;
@@ -52,19 +97,19 @@ public class RecheioAcai {
         this.ref_img = ref_img;
     }
 
-    public Integer getStatus_item() {
+    public int getStatus_item() {
         return status_item;
     }
 
-    public void setStatus_item(Integer status_item) {
+    public void setStatus_item(int status_item) {
         this.status_item = status_item;
     }
 
-    public Integer getTipo_recheio() {
+    public int getTipo_recheio() {
         return tipo_recheio;
     }
 
-    public void setTipo_recheio(Integer tipo_recheio) {
+    public void setTipo_recheio(int tipo_recheio) {
         this.tipo_recheio = tipo_recheio;
     }
 

@@ -94,6 +94,7 @@ public class MontagemAcaiActivity extends AppCompatActivity {
         super.onBackPressed();
 
         Intent intent = new Intent(MontagemAcaiActivity.this, DetalhesdoItemActivity.class);
+        intent.putExtra("ItemPedido", itemPedido);
         startActivity(intent);
 
         finish();
@@ -107,7 +108,13 @@ public class MontagemAcaiActivity extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         getParametros();
-        buscarRecheiosDoAcai();
+
+        if (recheiosPadrao == null){
+            buscarRecheiosDoAcai();
+        } else {
+            buscarRecheiosComPadroesDefinido();
+        }
+
         buscarTodosRecheios();
     }
 
@@ -118,11 +125,14 @@ public class MontagemAcaiActivity extends AppCompatActivity {
         acaiTotal = getIntent().getDoubleExtra("acaiTotal", 0);
         itemPedido = getIntent().getParcelableExtra("acai");
 
+        recheiosPadrao = getIntent().getParcelableArrayListExtra("recheiosSelecionados");
+
         telaAnterior = getIntent().getStringExtra("telaAnterior");
+
     }
 
     private void buscarTodosRecheios() {
-//        openProgressBar();
+
         mRecheiosList = (RecyclerView) findViewById(R.id.recheios);
         mRecheiosList.setHasFixedSize(true);
         mRecheiosList.setLayoutManager(new LinearLayoutManager(this));
@@ -133,6 +143,8 @@ public class MontagemAcaiActivity extends AppCompatActivity {
         ValueEventListener recheiosListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                closeProgressBar();
+
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     RecheioAcai recheio = data.getValue(RecheioAcai.class);
                     recheio.setItemKey(data.getKey());
@@ -153,6 +165,8 @@ public class MontagemAcaiActivity extends AppCompatActivity {
                     recheiosPadrao.add(recheio);
                 }
 
+                //DEFINIR RECHEIOS PADRÕES
+
                 adapter = new RecheiosAcaiAdapter(acaiNome, acaiImg, acaiTotal, acaiKey, todosRecheios, recheiosAcaiKey, recheiosPadrao, btProximo, tvTotalAcai, MontagemAcaiActivity.this);
                 mRecheiosList.setAdapter(adapter);
             }
@@ -167,6 +181,8 @@ public class MontagemAcaiActivity extends AppCompatActivity {
     }
 
     private void buscarRecheiosDoAcai() {
+
+        openProgressBar();
 
         recheiosAcaiKey = new ArrayList<>();
 
@@ -188,6 +204,19 @@ public class MontagemAcaiActivity extends AppCompatActivity {
         };
 
         mDatabaseReference.child("itens_cardapio").child("1").child(acaiKey).child("recheios_iniciais").addValueEventListener(recheiosListener);
+    }
+
+    private void buscarRecheiosComPadroesDefinido() {
+
+        recheiosAcaiKey = new ArrayList<>();
+
+        for (RecheioAcai recheio: recheiosPadrao) {
+            if (recheio.getQtd() > 0) {
+                String recheioKey = recheio.getItemKey();
+                recheiosAcaiKey.add(recheioKey);
+            }
+        }
+
     }
 
     private void openProgressBar() {
