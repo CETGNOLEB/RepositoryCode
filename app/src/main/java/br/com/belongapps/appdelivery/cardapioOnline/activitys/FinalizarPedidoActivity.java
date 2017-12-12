@@ -109,6 +109,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private TextView aeTvRuaEndereco, aeTvNumeroEndereco, aeTvBairroEndereco;
     private Spinner enderecoSpinner;
 
+    private Button btVoltarFinalizar;
+
     private Cliente cliente;
 
     @Override
@@ -133,6 +135,16 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 validarEnvioDoPedido();
+            }
+        });
+
+        btVoltarFinalizar = (Button) findViewById(R.id.bt_voltar_finalizar);
+        btVoltarFinalizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(FinalizarPedidoActivity.this, CardapioMainActivity.class);
+                startActivity(i);
+                finish();
             }
         });
 

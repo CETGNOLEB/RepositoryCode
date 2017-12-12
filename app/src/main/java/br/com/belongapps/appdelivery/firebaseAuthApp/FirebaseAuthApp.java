@@ -1,7 +1,5 @@
 package br.com.belongapps.appdelivery.firebaseAuthApp;
 
-import android.view.View;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -12,35 +10,39 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseAuthApp {
 
-    public static FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private static Integer permite_pedidos = 1;
 
-    public static FirebaseUser getUsuarioLogado(){
+    public static FirebaseUser getUsuarioLogado() {
 
         return mAuth.getInstance().getCurrentUser();
     }
 
-    public static boolean podeFazerPedidos(){
-
-        final boolean[] retorno = {true};
+    public static boolean podeFazerPedidos() {
 
         DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        mDatabaseReference.child("clientes").child(getUsuarioLogado().getUid()).addValueEventListener(new ValueEventListener() {
+
+        ValueEventListener permisaoValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Boolean status = Boolean.parseBoolean(dataSnapshot.child("permite_ped").getValue().toString());
-
-                retorno[0] = status;
+                Integer permisao = dataSnapshot.child("permite_ped").getValue(Integer.class);
+                permite_pedidos = permisao;
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
 
-        return retorno[0];
+        mDatabaseReference.child("clientes").child(getUsuarioLogado().getUid()).addValueEventListener(permisaoValueEventListener);
+
+        if (permite_pedidos == 0){
+            return false;
+        }
+
+        return true;
     }
 
 }

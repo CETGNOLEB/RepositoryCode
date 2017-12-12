@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void startSingInEmailESenha(String email, String senha) {
 
-        mAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email.trim(), senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {

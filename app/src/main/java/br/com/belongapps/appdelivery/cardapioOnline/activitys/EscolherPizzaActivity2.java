@@ -1,5 +1,6 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -73,28 +74,28 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar_escolher_sabor_2_pizza);
     }
 
-    public String getTamanho(){
+    public String getTamanho() {
         String retorno = "";
 
-        if (paramTamPizza == 0){
+        if (paramTamPizza == 0) {
             retorno = "Pizza Pequena";
-        } else if (paramTamPizza == 1){
+        } else if (paramTamPizza == 1) {
             retorno = "Pizza Média";
-        } else if(paramTamPizza == 2){
+        } else if (paramTamPizza == 2) {
             retorno = "Pizza Grande";
         }
 
         return retorno;
     }
 
-    public String getStage(){
+    public String getStage() {
         String retorno = "";
 
-        if (paramTipoPizza.equals("Metade-Metade")){
+        if (paramTipoPizza.equals("Metade-Metade")) {
             retorno += " (2/2)";
-        } else if(paramTipoPizza.equals("Três Sabores")){
+        } else if (paramTipoPizza.equals("Três Sabores")) {
             retorno += " (2/3)";
-        } else if(paramTipoPizza.equals("Quatro Sabores")) {
+        } else if (paramTipoPizza.equals("Quatro Sabores")) {
             retorno += " (2/4)";
         }
 
@@ -145,7 +146,8 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
                         }
                     }
 
-                } catch (Exception n){ }
+                } catch (Exception n) {
+                }
 
                 pizzas = new ArrayList<>();
                 pizzas.addAll(pizzasAux);
@@ -170,14 +172,15 @@ public class EscolherPizzaActivity2 extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                /*Intent intent = new Intent(EscolherPizzaActivity2.this, DetalhesdoItemPizzaActivity.class);
-                intent.putExtra("TipoPizza", paramTipoPizza);
+                Intent intent = new Intent(EscolherPizzaActivity2.this, EscolherPizzaActivity.class);
                 intent.putExtra("TamPizza", paramTamPizza);
+                intent.putExtra("TipoPizza", paramTipoPizza);
+                intent.putExtra("CountMetades", countMetades);
                 intent.putExtra("ItemPedido", itemPedido);
 
                 startActivity(intent);
 
-                finish();*/
+                finish();
         }
 
         return super.onOptionsItemSelected(item);

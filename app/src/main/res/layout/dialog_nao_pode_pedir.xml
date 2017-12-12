@@ -22,7 +22,7 @@
         android:layout_marginTop="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="O estabelecimento o impediu de relizar pedidos, favor o procure para prosseguir pedindo!"/>
+        android:text="O estabelecimento o impediu de relizar pedidos, favor o procure-o para prosseguir pedindo!"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -18,6 +18,7 @@ import java.util.Locale;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.FormadePagamento;
 import br.com.belongapps.appdelivery.util.MoedaUtil;
+import br.com.belongapps.appdelivery.util.Print;
 import br.com.belongapps.appdelivery.util.SimpleTextListenerUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
@@ -281,6 +282,9 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
 
         public void setDescForma(String descricao) {
             descForma.setText(descricao);
+
+            Print.logError("DESCRIÇÃO: " + descricao.replace("Troco para ", ""));
+            Print.logError("TOTAAAL: " + StringUtil.formatToMoeda(totalPedido));
 
             if (descricao.replace("Troco para ", "").equals(StringUtil.formatToMoeda(totalPedido))) {
                 descForma.setText("Sem Troco");

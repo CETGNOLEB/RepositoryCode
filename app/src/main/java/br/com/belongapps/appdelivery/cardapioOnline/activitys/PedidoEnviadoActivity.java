@@ -72,6 +72,7 @@ public class PedidoEnviadoActivity extends AppCompatActivity {
                 i.putExtra("StatusPedido", statusPedido);
                 i.putExtra("TipoEntrega", tipoEntrega);
                 i.putExtra("StatusTempo",statusTempo);
+                i.putExtra("keyPedido", keyPedido);
 
                 ArrayList<ItemPedido> itens = new ArrayList<>();
                 for (ItemPedido item : itensdoPedido) {

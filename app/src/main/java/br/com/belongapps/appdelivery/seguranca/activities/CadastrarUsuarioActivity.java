@@ -41,6 +41,8 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
     private TextView celular;
     private TextView dataNascimento;
     private Button btCadastrarUsuario;
+    private Button btVoltar;
+
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private DatePickerDialog dialogSelectDate;
@@ -138,6 +140,15 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             }
         });
 
+        btVoltar = (Button) findViewById(R.id.bt_voltar_cad_usuario);
+        btVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CadastrarUsuarioActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 

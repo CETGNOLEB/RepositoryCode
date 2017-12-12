@@ -64,13 +64,13 @@ public class FormadePagamento implements Comparator{
         String descricao = "";
 
         if (valorDinheiro != null){
-            descricao += "Troco para R$" + String.format(Locale.US, "%.2f", valorDinheiro).replace(".", ",");
+            descricao += "Troco para R$ " + String.format(Locale.US, "%.2f", valorDinheiro).replace(".", ",");
         }
 
         if (valorCartao != null){
             descricao = "";
-            descricao += "Cartão: R$" + String.format(Locale.US, "%.2f", valorCartao).replace(".", ",");
-            descricao += " Dinheiro: R$" + String.format(Locale.US, "%.2f", valorDinheiro).replace(".", ",");
+            descricao += "Cartão: R$ " + String.format(Locale.US, "%.2f", valorCartao).replace(".", ",");
+            descricao += " Dinheiro: R$ " + String.format(Locale.US, "%.2f", valorDinheiro).replace(".", ",");
         }
 
         return descricao;

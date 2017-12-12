@@ -115,7 +115,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
 
                         } else {
 
@@ -131,7 +131,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -151,7 +151,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
 
                         } else if (countMetadesSelecionadas == 1){
 
@@ -167,7 +167,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
 
                         } else{
 
@@ -183,7 +183,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
 
                         }
                     } else if (tipoPizza.equals("Quatro Sabores")) {
@@ -202,7 +202,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
 
                         } else if (countMetadesSelecionadas == 1){
 
@@ -218,7 +218,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
 
                         } else if (countMetadesSelecionadas == 2){
 
@@ -234,7 +234,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
 
                         } else {
 
@@ -250,7 +250,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                            Toast.makeText(context, "Pizza " + item.getNome() + " adiciona!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

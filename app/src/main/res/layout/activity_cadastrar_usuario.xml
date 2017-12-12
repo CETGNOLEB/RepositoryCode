@@ -1,119 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".seguranca.activities.CadastrarUsuarioActivity"
+    android:id="@+id/activity_pizza_metade1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".cardapioOnline.activitys.DetalhesdoItemActivity">
 
     <include
         android:id="@+id/toolbar_cadastar_usuario"
         layout="@layout/app_bar_layout" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_cad_usuario_nome"
+    <ScrollView
+        android:id="@+id/activity_detalhes_do_item_activity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_cadastar_usuario"
+        android:layout_marginBottom="50dp"
+        android:scrollbars="vertical">
 
-        <EditText
-            android:id="@+id/cad_usuario_nome"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nome Completo"
-            android:maxLines="1" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_cad_usuario_celular"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_cad_usuario_nome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp">
 
-        <EditText
-            android:id="@+id/cad_usuario_celular"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Celular"
-            android:inputType="phone"
-            android:maxLines="1" />
+                <EditText
+                    android:id="@+id/cad_usuario_nome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nome Completo"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_cad_usuario_celular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/input_cad_usuario_nome"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp">
 
+                <EditText
+                    android:id="@+id/cad_usuario_celular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Celular"
+                    android:inputType="phone"
+                    android:maxLines="1" />
 
-    <TextView
-        android:id="@+id/cad_usuario_data_nasc"
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/cad_usuario_data_nasc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/input_cad_usuario_celular"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Data de Nascimento"
+                android:textColor="#757575"
+                android:textSize="18sp" />
+
+            <View
+                android:id="@+id/view_dt_nascimento"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/cad_usuario_data_nasc"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/titleTextColor" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_cad_usuario_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view_dt_nascimento"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp">
+
+                <EditText
+                    android:id="@+id/cad_usuario_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="E-mail"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_cad_usuario_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/input_cad_usuario_email"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp">
+
+                <EditText
+                    android:id="@+id/cad_usuario_senha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Senha"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/buttons_tela_detalhes"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:text="Data de Nascimento"
-        android:textColor="#757575"
-        android:textSize="18sp"/>
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary">
 
-    <View
+        <Button
+            android:id="@+id/bt_cad_usuario"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:drawableRight="@drawable/icon_right"
+            android:text="CADASTRAR"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/bt_voltar_cad_usuario"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/bt_proximo_pizza_metade1"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/icon_left"
+            android:text="LOGIN"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".seguranca.activities.CadastrarUsuarioActivity"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/titleTextColor" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_cad_usuario_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp">
+        <include
+            android:id="@+id/toolbar_cadastar_usuario"
+            layout="@layout/app_bar_layout" />
 
-        <EditText
-            android:id="@+id/cad_usuario_email"
+
+
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_cad_usuario_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="E-mail"
-            android:inputType="textEmailAddress"
-            android:maxLines="1" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp">
 
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/cad_usuario_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="E-mail"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_cad_usuario_senha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/logo"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp">
-
-        <EditText
-            android:id="@+id/cad_usuario_senha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Senha"
-            android:inputType="textPassword"
-            android:maxLines="1" />
-
-    </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>
 
 
-    <Button
-        android:id="@+id/bt_cad_usuario"
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:layout_gravity="right"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/border_button_white"
-        android:text="CADASTRAR"
-        android:textColor="@android:color/white" />
 
 
-</LinearLayout>
+        <Button
+            android:id="@+id/bt_cad_usuario"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/border_button_white"
+            android:text="CADASTRAR"
+            android:textColor="@android:color/white" />
+
+
+
+    </LinearLayout>-->

@@ -38,7 +38,7 @@ public class EscolherPizzaActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
 
     //Parametros Recebidos
-    private String paramTamPizza;
+    private Integer paramTamPizza;
     private String paramTipoPizza;
     private int countMetades;
 
@@ -56,11 +56,11 @@ public class EscolherPizzaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escolher_pizza);
 
-        paramTamPizza = getIntent().getStringExtra("TamPizza");
+        paramTamPizza = getIntent().getIntExtra("TamPizza",0);
         paramTipoPizza = getIntent().getStringExtra("TipoPizza");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_escolher_pizzas);
-        mToolbar.setTitle(paramTamPizza + getStage());
+        mToolbar.setTitle(getTamanho() + getStage());
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -101,10 +101,10 @@ public class EscolherPizzaActivity extends AppCompatActivity {
 
             mProgressBar = (ProgressBar) findViewById(R.id.progressbar_escolher_sabor_pizza);
 
-            paramTamPizza = getIntent().getStringExtra("TamPizza");
+            paramTamPizza = getIntent().getIntExtra("TamPizza", 0);
             paramTipoPizza = getIntent().getStringExtra("TipoPizza");
 
-            Log.println(Log.ERROR, "TAMANHO DA PIZZA", paramTamPizza);
+            Log.println(Log.ERROR, "TAMANHO DA PIZZA", "TAMANHO: " + paramTamPizza);
 
             itemPedido = new ItemPedido();
 
@@ -117,8 +117,6 @@ public class EscolherPizzaActivity extends AppCompatActivity {
 
             pizzasAux = new ArrayList<>();
 
-            final int tamPizza = getTamanho();
-
             ValueEventListener postListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -127,16 +125,16 @@ public class EscolherPizzaActivity extends AppCompatActivity {
                         for (DataSnapshot item : dataSnapshot.getChildren()) {
                             ItemCardapio ic = item.getValue(ItemCardapio.class);
 
-                            if (tamPizza == 0) {
+                            if (paramTamPizza == 0) {
                                 if (ic.getValor_pizza_p() != 0.0) {
                                     pizzasAux.add(ic);
                                 }
-                            } else if (tamPizza == 1) {
+                            } else if (paramTamPizza == 1) {
 
                                 if (ic.getValor_pizza_m() != 0.0) {
                                     pizzasAux.add(ic);
                                 }
-                            } else if (tamPizza == 2) {
+                            } else if (paramTamPizza == 2) {
                                 if (ic.getValor_pizza_g() != 0.0) {
                                     pizzasAux.add(ic);
                                 }
@@ -152,7 +150,7 @@ public class EscolherPizzaActivity extends AppCompatActivity {
 
                     countMetades = 1;
                     ItemPedido itemPedido = new ItemPedido();
-                    adapter = new PizzaAdapter(pizzas, itemPedido, EscolherPizzaActivity.this, mProgressBar, tamPizza, paramTipoPizza, countMetades);
+                    adapter = new PizzaAdapter(pizzas, itemPedido, EscolherPizzaActivity.this, mProgressBar, paramTamPizza, paramTipoPizza, countMetades);
                     mListViewPizzas.setAdapter(adapter);
                 }
 
@@ -167,15 +165,15 @@ public class EscolherPizzaActivity extends AppCompatActivity {
 
     }
 
-    public int getTamanho(){
-        int retorno = 0;
+    public String getTamanho(){
+        String retorno = "";
 
-        if (paramTamPizza.equals("Pizza Pequena")){
-            retorno = 0;
-        } else if (paramTamPizza.equals("Pizza Média")){
-            retorno = 1;
-        } else if(paramTamPizza.equals("Pizza Grande")){
-            retorno = 2;
+        if (paramTamPizza == 0){
+            retorno = "Pizza Pequena";
+        } else if (paramTamPizza == 1){
+            retorno = "Pizza Média";
+        } else if(paramTamPizza == 2){
+            retorno = "Pizza Grande";
         }
 
         return retorno;
