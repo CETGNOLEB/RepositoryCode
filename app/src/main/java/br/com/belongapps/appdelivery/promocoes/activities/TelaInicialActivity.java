@@ -1,10 +1,14 @@
 package br.com.belongapps.appdelivery.promocoes.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -25,6 +29,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivi
 import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
 import br.com.belongapps.appdelivery.promocoes.adapter.ViewPagerAdapter;
 import br.com.belongapps.appdelivery.promocoes.model.Promocao;
+import br.com.belongapps.appdelivery.util.DataUtil;
 
 public class TelaInicialActivity extends AppCompatActivity {
     private Button btFazerPedido, btMeusPedidos;
@@ -44,35 +49,58 @@ public class TelaInicialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_inicial);
 
+        initViews();
+
+    }
+
+    private void initViews() {
         btFazerPedido = (Button) findViewById(R.id.bt_realizar_pedido);
 
         btFazerPedido.setOnClickListener(new View.OnClickListener() {
-                                             @Override
-                                             public void onClick(View v) {
-                                                 Intent i = new Intent(TelaInicialActivity.this, CardapioMainActivity.class);
-                                                 startActivity(i);
-                                                 finish();
-                                             }
-                                         }
+            @Override
+            public void onClick(View v) {
+                //Verificar se a data está automática e exibir dialog
+                if (DataUtil.horaAutomaticaAtivada(getContentResolver())) {
 
-        );
+                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                    AlertDialog.Builder mBilder = new AlertDialog.Builder(TelaInicialActivity.this, R.style.MyDialogTheme);
+                    View layoutDialog = inflater.inflate(R.layout.dialog_redefinir_data, null);
+
+                    Button btConfigData = (Button) layoutDialog.findViewById(R.id.bt_config_data);
+
+                    mBilder.setView(layoutDialog);
+                    final AlertDialog dialogConfigData = mBilder.create();
+                    dialogConfigData.show();
+
+                    btConfigData.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogConfigData.dismiss();
+                            startActivityForResult(new Intent(Settings.ACTION_DATE_SETTINGS), 0);
+                            finish();
+                        }
+                    });
+
+                } else {
+                    Intent i = new Intent(TelaInicialActivity.this, CardapioMainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+            }
+        });
+
 
         btMeusPedidos = (Button) findViewById(R.id.bt_meus_pedidos);
 
-        btMeusPedidos.setOnClickListener(new View.OnClickListener()
-
-                                         {
-                                             @Override
-                                             public void onClick(View v) {
-                                                 Intent i = new Intent(TelaInicialActivity.this, MeusPedidosActivity.class);
-                                                 startActivity(i);
-                                                 finish();
-                                             }
-                                         }
-
-        );
-
-
+        btMeusPedidos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TelaInicialActivity.this, MeusPedidosActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     @Override

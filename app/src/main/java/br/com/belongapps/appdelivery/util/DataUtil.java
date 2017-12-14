@@ -1,5 +1,8 @@
 package br.com.belongapps.appdelivery.util;
 
+import android.content.ContentResolver;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -80,5 +83,21 @@ public class DataUtil {
         Log.println(Log.ERROR, "DIA DA SEMANA:", nomedodia);
 
         return nomedodia;
+    }
+
+    public static boolean horaAutomaticaAtivada(ContentResolver contentResolver) {
+        int ativado;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            ativado = Settings.Global.getInt(contentResolver, Settings.Global.AUTO_TIME, 0);
+        } else {
+            ativado = Settings.System.getInt(contentResolver, Settings.System.AUTO_TIME, 0);
+        }
+
+        if (ativado == 1) {
+            return true;
+        }
+
+        return false;
     }
 }
