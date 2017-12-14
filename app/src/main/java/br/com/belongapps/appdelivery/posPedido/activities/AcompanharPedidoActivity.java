@@ -356,6 +356,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
                     snackbar.show();
                 } else { //Conectado
                     snackbar.dismiss();
+                    pegarParametros();
                     atualizarAcompanhamento(keyPedido);
                 }
 
