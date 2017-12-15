@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_pizza_metade1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".cardapioOnline.activitys.DetalhesdoItemActivity">
+
+    <include
+        android:id="@+id/toolbar_enviar_pedido_retirada"
+        layout="@layout/app_bar_layout" />
+
+    <ScrollView
+        android:id="@+id/activity_detalhes_do_item_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_enviar_pedido_retirada"
+        android:layout_alignBottom="@+id/desc_total_pedido_retirada"
+        android:scrollbars="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/desc_forma_recebimento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F5F5F5"
+                android:paddingBottom="6dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp"
+                android:text="Recebimento do Pedido"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_forma_recebimento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_forma_recebimento"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Retirada no Estabelecimento" />
+
+            <TextView
+                android:id="@+id/desc_pagamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_forma_recebimento"
+                android:background="#F5F5F5"
+                android:paddingBottom="6dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp"
+                android:text="Formas de Pagamento"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_formas_pagamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_pagamento"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Dinheiro e Cartões de Crédito" />
+
+            <TextView
+                android:id="@+id/desc_obs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_formas_pagamento"
+                android:background="#F5F5F5"
+                android:paddingBottom="6dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp"
+                android:text="Observações"
+                android:textSize="15sp" />
+
+
+            <TextView
+                android:id="@+id/tv_obs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_obs"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Acompanhe o andamento do pedido após o envio e compareça ao estabelecimento quando o pedido estiver pronto." />
+
+
+            <LinearLayout
+                android:id="@+id/layout_dados_estabelecimento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_obs"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_tempo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/img_time"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginLeft="5dp"
+                            android:src="@drawable/ic_tempo_pronto" />
+
+                        <TextView
+                            android:id="@+id/tv_desc_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@+id/img_time"
+                            android:text="Pronto em:"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_desc_time"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@+id/img_time"
+                            android:text="20 - 40 Minutos" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl_tempo"
+                        android:layout_marginTop="10dp">
+
+                        <ImageView
+                            android:id="@+id/img_phone"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="5dp"
+                            android:src="@drawable/ic_contact_phone" />
+
+                        <TextView
+                            android:id="@+id/tv_desc_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@+id/img_phone"
+                            android:text="Contato:"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_desc_phone"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@+id/img_phone"
+                            android:text="(88) 99865-4779" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_endereco"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl_phone"
+                        android:layout_marginTop="10dp">
+
+                        <ImageView
+                            android:id="@+id/img_endereco"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="5dp"
+                            android:src="@drawable/ic_local_estab" />
+
+                        <TextView
+                            android:id="@+id/tv_desc_endereco"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@+id/img_endereco"
+                            android:text="Nosso Endereço:"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_desc_endereco"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_toRightOf="@+id/img_endereco"
+                            android:text="Av. José Caetano, 872 - Lagoa" />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/desc_total_pedido_retirada"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp">
+
+        <TextView
+            android:id="@+id/valor_total_pedido_retirada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/taxa_de_entrega"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Sub Total: R$ 10,00"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttons_tela_finalizar_retirada"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:id="@+id/bt_finalizar_pedido_retirada"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:drawableRight="@drawable/icon_right"
+            android:text="FINALIZAR PEDIDO"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/bt_voltar_finalizar_pedido_retirada"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/icon_left"
+            android:text="CARDÁPIO"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+</RelativeLayout>

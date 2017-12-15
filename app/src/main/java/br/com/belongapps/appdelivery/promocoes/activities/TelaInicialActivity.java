@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -83,8 +84,8 @@ public class TelaInicialActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             dialogConfigData.dismiss();
+                            Toast.makeText(TelaInicialActivity.this, "Marque a data/hora como automático.", Toast.LENGTH_LONG).show();
                             startActivityForResult(new Intent(Settings.ACTION_DATE_SETTINGS), 0);
-                            finish();
                         }
                     });
 

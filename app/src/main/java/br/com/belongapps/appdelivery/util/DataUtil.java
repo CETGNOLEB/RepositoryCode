@@ -10,10 +10,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class DataUtil {
+
+    static Locale locale = new Locale("pt", "BR");
+
     public static String formatar(Date data, String formato) {
-        return new SimpleDateFormat(formato).format(data);
+        SimpleDateFormat format = new SimpleDateFormat(formato, locale);
+        format.setTimeZone(TimeZone.getTimeZone("America/Fortaleza"));
+        return format.format(data);
     }
 
     public static String formatarDiaMeseAnoDesc(Date data) {
@@ -51,9 +58,9 @@ public class DataUtil {
         return retorno;
     }
 
-    public static String getDiadaSemana(Date data) {
-        Calendar c = new GregorianCalendar();
-        c.setTime(data);
+    public static String getDiadaSemana() {
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo"));
+
         String nomedodia = "";
         int dia = c.get(c.DAY_OF_WEEK);
         switch (dia) {

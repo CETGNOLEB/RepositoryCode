@@ -27,6 +27,37 @@
         android:paddingRight="24dp"
         android:text="Escolha abaixo a forma que deseja receber seu pedido." />
 
+    <RelativeLayout
+        android:id="@+id/rl_sem_delivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/img_error"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/img_information"/>
+
+        <TextView
+            android:id="@+id/valor_dinheiro_invalido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_error"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimary"
+            android:text="Sem entragas no momento!"/>
+
+    </RelativeLayout>
+
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

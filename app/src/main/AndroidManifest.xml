@@ -61,7 +61,7 @@
 
         <!-- PEDIDO NOVO DE PIZZA -->
         <activity android:name=".cardapioOnline.pedidoDePizza.PizzaMetade1Activity" />
-
+        <activity android:name=".promocoes.activities.TesteActivity"></activity>
     </application>
 
 </manifest>

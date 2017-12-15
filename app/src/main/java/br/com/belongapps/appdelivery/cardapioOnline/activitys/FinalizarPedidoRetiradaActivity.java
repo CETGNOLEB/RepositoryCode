@@ -44,6 +44,7 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
     private TextView tvFormaRecebimento;
     private TextView txtTotalPedido;
     private Button finalizarPedido;
+    private Button btVoltarAoCardapio;
 
     private double totaldoPedido; //parâmetro recebido
     private int tipoEntrega; //parâmetro recebido
@@ -58,7 +59,7 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_finalizar_pedido_retirada);
+        setContentView(R.layout.activity_finalizar_pedido_r);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_enviar_pedido_retirada);
         mToolbar.setTitle("Finalizar Pedido");
@@ -120,6 +121,16 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
                     openProgressDialog();
                     iniciarEnvioDoPedido();
                 }
+            }
+        });
+
+        btVoltarAoCardapio = (Button) findViewById(R.id.bt_voltar_finalizar_pedido_retirada);
+        btVoltarAoCardapio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(FinalizarPedidoRetiradaActivity.this, CardapioMainActivity.class);
+                startActivity(i);
+                finish();
             }
         });
 

@@ -36,6 +36,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
 import br.com.belongapps.appdelivery.util.DataUtil;
+import br.com.belongapps.appdelivery.util.Print;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 import static android.content.ContentValues.TAG;
@@ -46,6 +47,8 @@ public class FinalizarPedidoDAO {
     private static FirebaseUser usuarioLogado;
     private static Context context;
     private static ProgressDialog mProgressDialog;
+
+    private static String keyDoPedido = null;
 
     public FinalizarPedidoDAO(Context context, ProgressDialog mProgressDialog) {
         this.context = context;
@@ -118,15 +121,18 @@ public class FinalizarPedidoDAO {
         Log.println(Log.ERROR, "DIA:", dataHoje);
 
         Map<String, Object> childUpdatesPedido = new HashMap<>();
-        childUpdatesPedido.put("/pedidos/" + mesPedido + "/" + dataHoje + "/" + keyPedido, pedidoValues);
+        String caminho = "/pedidos/" + mesPedido + "/" + dataHoje + "/" + keyPedido;
+        childUpdatesPedido.put(caminho, pedidoValues);
 
         database.updateChildren(childUpdatesPedido);
+
+        keyDoPedido = caminho;
+
     }
 
     //ATUALIZAR MÓDULO FINANCEIRO
     public static void atualizarPedidosNaSemana(String mesPedido) {
-        Date dataAtual = new Date();
-        String diaDaSemana = DataUtil.getDiadaSemana(dataAtual);
+        String diaDaSemana = DataUtil.getDiadaSemana();
 
         DatabaseReference numPedidoRef = database.child("financeiro").child("pedidos_semana").child(mesPedido).child(diaDaSemana);
         numPedidoRef.runTransaction(new Transaction.Handler() {
@@ -193,10 +199,11 @@ public class FinalizarPedidoDAO {
                 i.putExtra("NumeroPedido", pedido.getNumero_pedido());
                 i.putExtra("DataPedido", DataUtil.getDataPedido(pedido.getData()));
                 i.putExtra("HoraPedido", DataUtil.getHoraPedido(pedido.getData()));
-                i.putExtra("ValorPedido", pedido.getValor_total());
+                i.putExtra("ValorPedido", pedido.getPagamento().getValorTotal());
                 i.putExtra("StatusPedido", pedido.getStatus());
                 i.putExtra("TipoEntrega", pedido.getEntrega_retirada());
                 i.putExtra("StatusTempo", pedido.getStatus_tempo());
+                i.putExtra("KeyPedido", keyDoPedido);
 
                 ArrayList<ItemPedido> itens = new ArrayList<>();
                 for (ItemPedido item : pedido.getItens_pedido()) {

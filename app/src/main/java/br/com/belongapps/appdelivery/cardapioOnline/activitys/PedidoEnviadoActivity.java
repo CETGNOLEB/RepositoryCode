@@ -14,6 +14,7 @@ import java.util.List;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.posPedido.activities.AcompanharPedidoActivity;
+import br.com.belongapps.appdelivery.util.Print;
 
 public class PedidoEnviadoActivity extends AppCompatActivity {
 
@@ -72,7 +73,7 @@ public class PedidoEnviadoActivity extends AppCompatActivity {
                 i.putExtra("StatusPedido", statusPedido);
                 i.putExtra("TipoEntrega", tipoEntrega);
                 i.putExtra("StatusTempo",statusTempo);
-                i.putExtra("keyPedido", keyPedido);
+                i.putExtra("KeyPedido", keyPedido);
 
                 ArrayList<ItemPedido> itens = new ArrayList<>();
                 for (ItemPedido item : itensdoPedido) {
@@ -114,7 +115,7 @@ public class PedidoEnviadoActivity extends AppCompatActivity {
         tipoEntrega = intent.getIntExtra("TipoEntrega", 0);
         statusTempo = intent.getStringExtra("StatusTempo");
         itensdoPedido = intent.getParcelableArrayListExtra("ItensPedido");
-        keyPedido = intent.getStringExtra("keyPedido");
+        keyPedido = intent.getStringExtra("KeyPedido");
     }
 
     @Override

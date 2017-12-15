@@ -35,6 +35,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.posPedido.adapters.ItensdoPedidoAdapter;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
+import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class AcompanharPedidoActivity extends AppCompatActivity {
 
@@ -96,7 +97,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar_acompanhamento_pedido);
 
-        pegarParametros();
+        getParametros();
         initViews();
 
         //SET VIEWS INFO DO PEDIDO
@@ -111,7 +112,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
     }
 
-    private void pegarParametros() {
+    private void getParametros() {
         Intent intent = getIntent();
         numeroPedido = intent.getStringExtra("NumeroPedido");
         dataPedido = intent.getStringExtra("DataPedido");
@@ -121,7 +122,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         tipoEntrega = intent.getIntExtra("TipoEntrega", 0);
         statusTempo = intent.getStringExtra("StatusTempo");
         itensdoPedido = intent.getParcelableArrayListExtra("ItensPedido");
-        keyPedido = intent.getStringExtra("keyPedido");
+        keyPedido = intent.getStringExtra("KeyPedido");
 
         Log.println(Log.ERROR, "STATUS", "" + statusPedido);
     }
@@ -167,7 +168,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
     private void setViewInfoDoPedido(){
         txtNumPedido.setText("Pedido Nº " + numeroPedido);
         txtDiaHoraPedido.setText("Enviado em " + dataPedido + " as " + horaPedido);
-        txtValorPedido.setText("Valor do Pedido: R$ " + String.format(Locale.US, "%.2f", valorPedido).replace(".", ","));
+        txtValorPedido.setText("Valor do Pedido: R$ " + StringUtil.formatToMoeda(valorPedido));
     }
 
     private void definirStatus(int statusPedido, int tipoEntrega) {
@@ -288,6 +289,8 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance().getReference();
 
+        setViewInfoDoPedido();
+
         String mesAno = key.substring(0, 6);
         String dia = key.substring(7, 15);
         final String keyPedido = key.substring(16);
@@ -356,7 +359,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
                     snackbar.show();
                 } else { //Conectado
                     snackbar.dismiss();
-                    pegarParametros();
+                    getParametros();
                     atualizarAcompanhamento(keyPedido);
                 }
 
