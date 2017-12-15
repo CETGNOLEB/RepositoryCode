@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\fcrs1690\AndroidStudioProjects\RepositoryCode\MeuAcai.iml" filepath="C:\Users\fcrs1690\AndroidStudioProjects\RepositoryCode\MeuAcai.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RepositoryCode.iml" filepath="$PROJECT_DIR$/RepositoryCode.iml" />
-      <module fileurl="file://D:\BELONG TEC\Projeto Android\MeuAcai\RepositoryCode.iml" filepath="D:\BELONG TEC\Projeto Android\MeuAcai\RepositoryCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MeuAcai.iml" filepath="$PROJECT_DIR$/MeuAcai.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -62,10 +62,16 @@ public class TelaInicialActivity extends AppCompatActivity {
                 //Verificar se a data está automática e exibir dialog
                 if (DataUtil.horaAutomaticaAtivada(getContentResolver())) {
 
+                    Intent i = new Intent(TelaInicialActivity.this, CardapioMainActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+
                     LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                     AlertDialog.Builder mBilder = new AlertDialog.Builder(TelaInicialActivity.this, R.style.MyDialogTheme);
                     View layoutDialog = inflater.inflate(R.layout.dialog_redefinir_data, null);
+                    mBilder.setCancelable(false);
 
                     Button btConfigData = (Button) layoutDialog.findViewById(R.id.bt_config_data);
 
@@ -82,10 +88,6 @@ public class TelaInicialActivity extends AppCompatActivity {
                         }
                     });
 
-                } else {
-                    Intent i = new Intent(TelaInicialActivity.this, CardapioMainActivity.class);
-                    startActivity(i);
-                    finish();
                 }
             }
         });
