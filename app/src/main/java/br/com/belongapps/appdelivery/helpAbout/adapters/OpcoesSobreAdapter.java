@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.helpAbout.activities.PoliticaPrivacidadeActivity;
 import br.com.belongapps.appdelivery.helpAbout.activities.SobreAplicativoActivity;
 import br.com.belongapps.appdelivery.helpAbout.model.OpcoesSobre;
 
@@ -55,11 +56,13 @@ public class OpcoesSobreAdapter extends RecyclerView.Adapter<OpcoesSobreAdapter.
 
                 } else if (opcao.getNomeOpcao().equals("Política de privacidade")) {
 
-                    Toast.makeText(context, "Link para a Política de privacidade", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, PoliticaPrivacidadeActivity.class);
+                    context.startActivity(intent);
+                    ((Activity) context).finish();
 
                 } else if (opcao.getNomeOpcao().equals("Nosso site")) {
 
-                    Toast.makeText(context, "Link para o site", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Em breve!", Toast.LENGTH_SHORT).show();
 
                 } else { //Sair
                     Toast.makeText(context, "Link para a lista de Versão 1.0.0", Toast.LENGTH_SHORT).show();

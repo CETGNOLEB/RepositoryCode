@@ -30,9 +30,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
                 android:text="Copo 400ml"
-                android:textSize="20sp"
+                android:textSize="17sp"
                 android:textColor="@color/titleTextColor"/>
 
             <TextView
@@ -42,6 +43,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
+                android:textSize="14sp"
                 android:text="Descrição do produto do menu." />
 
             <RelativeLayout
@@ -50,31 +52,29 @@
 
                 <TextView
                     android:id="@+id/item_valor_unit_item_promo"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
                     android:layout_marginBottom="5dp"
+                    android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_above="@+id/item_promo_valor_unit_item_promo"
                     android:text="R$ 7,00"
-                    android:textAlignment="textEnd"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/item_promo_valor_unit_item_promo"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
                     android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:text="R$ 7,00"
-                    android:textAlignment="textEnd"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </RelativeLayout>
 
         </LinearLayout>

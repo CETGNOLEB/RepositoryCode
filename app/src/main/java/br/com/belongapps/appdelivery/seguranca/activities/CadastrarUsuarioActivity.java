@@ -30,6 +30,8 @@ import java.util.Date;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
+import br.com.belongapps.appdelivery.helpAbout.activities.PoliticaPrivacidadeActivity;
+import br.com.belongapps.appdelivery.seguranca.model.Usuario;
 import br.com.belongapps.appdelivery.util.DataUtil;
 
 public class CadastrarUsuarioActivity extends AppCompatActivity {
@@ -43,6 +45,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
     private Button btCadastrarUsuario;
     private Button btVoltar;
 
+    private TextView linkPolitica;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private DatePickerDialog dialogSelectDate;
@@ -51,6 +54,13 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseReference;
+
+    private Usuario usuario;
+
+    //DATA NASC
+    private int ano = 1998;
+    private int mes = 7;
+    private int dia = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,8 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        getParametros();
+
         initViews();
 
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -82,28 +94,40 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
         };
     }
 
-    public void initViews() {
+    private void getParametros(){
+        usuario = getIntent().getParcelableExtra("usuario");
+    }
+
+    private void initViews() {
         nome = (TextView) findViewById(R.id.cad_usuario_nome);
         email = (TextView) findViewById(R.id.cad_usuario_email);
         senha = (TextView) findViewById(R.id.cad_usuario_senha);
         celular = (TextView) findViewById(R.id.cad_usuario_celular);
         dataNascimento = (TextView) findViewById(R.id.cad_usuario_data_nasc);
 
+        if (usuario != null){
+            nome.setText(usuario.getNome());
+            email.setText(usuario.getEmail());
+            senha.setText(usuario.getSenha());
+            celular.setText(usuario.getCelular());
+        }
+
         //SELECIONAR DATA NASCIMENTO
         dataNascimento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Calendar mCalendar = Calendar.getInstance();
-                int ano = mCalendar.get(Calendar.YEAR);
-                int mes = mCalendar.get(Calendar.MONTH);
-                int dia = mCalendar.get(Calendar.DAY_OF_MONTH);
+                if (usuario != null){
+                    ano = usuario.getAno();
+                    mes = usuario.getMes();
+                    dia = usuario.getDia();
+                }
 
                 dialogSelectDate = new DatePickerDialog(
                         CadastrarUsuarioActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener,
-                        1998, 7, 15
+                        ano, mes, dia
                 );
 
                 dialogSelectDate.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -145,6 +169,19 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CadastrarUsuarioActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        linkPolitica = (TextView) findViewById(R.id.link_politica);
+        linkPolitica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Usuario usuario = new Usuario(nome.getText().toString(), email.getText().toString(), senha.getText().toString(), celular.getText().toString(), ano, mes , dia);
+
+                Intent intent = new Intent(CadastrarUsuarioActivity.this, PoliticaPrivacidadeActivity.class);
+                intent.putExtra("usuario", usuario);
                 startActivity(intent);
                 finish();
             }

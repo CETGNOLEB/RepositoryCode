@@ -18,8 +18,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +31,6 @@ import com.squareup.picasso.Picasso;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.MontagemAcaiActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.util.StringUtil;
@@ -105,7 +102,7 @@ public class TabAcai extends Fragment {
             public void onBindViewHolder(final AcaiViewHolder viewHolder, final int position) {
                 super.onBindViewHolder(viewHolder, position);
 
-                YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_acai);
+                //YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_acai);
             }
 
             @Override

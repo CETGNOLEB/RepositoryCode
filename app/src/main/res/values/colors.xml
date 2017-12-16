@@ -9,6 +9,8 @@
     <color name="textColorSecundary">#8f8f8f</color>
     <color name="titleTextColor">#424242</color>
 
+    <color name="linkTextColor">#1565C0</color>
+
     <!--OUTRAS CORES-->
     <color name="tabIndication">#FFCB2C</color>
     <color name="dialogBackground">#616161</color>

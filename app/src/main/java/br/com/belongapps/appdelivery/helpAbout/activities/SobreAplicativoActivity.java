@@ -38,7 +38,7 @@ public class SobreAplicativoActivity extends AppCompatActivity {
     private void initViews(){
 
         linkComentar = (TextView) findViewById(R.id.link_to_coment);
-        linkVisitarSite = (TextView) findViewById(R.id.link_to_site);
+//        linkVisitarSite = (TextView) findViewById(R.id.link_to_site);
 
         linkComentar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,12 +47,12 @@ public class SobreAplicativoActivity extends AppCompatActivity {
             }
         });
 
-        linkVisitarSite.setOnClickListener(new View.OnClickListener() {
+       /* linkVisitarSite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(SobreAplicativoActivity.this, "Link para o site", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
 

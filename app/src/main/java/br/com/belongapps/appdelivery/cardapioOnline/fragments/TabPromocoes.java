@@ -99,13 +99,13 @@ public class TabPromocoes extends Fragment {
         buscarPromocoes();
 
         //Buscar permissão do usuário para realizar pedidos
-        if(FirebaseAuthApp.getUsuarioLogado() != null) {
+        if (FirebaseAuthApp.getUsuarioLogado() != null) {
             buscarPermissoesDoUsuario();
         }
 
     }
 
-    public void buscarPromocoes(){
+    public void buscarPromocoes() {
 
         viewSemPromocoes = getActivity().findViewById(R.id.view_empty_promocoes);
 
@@ -113,14 +113,76 @@ public class TabPromocoes extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                //BUSCAR PRODUTOS EXCETO PIZZAS
                 try {
                     for (DataSnapshot item : dataSnapshot.getChildren()) {
                         for (DataSnapshot item2 : item.getChildren()) {
                             ItemCardapio ic = item2.getValue(ItemCardapio.class);
-                            if (ic.isStatus_promocao()) {
+                            if (ic.isStatus_promocao() && !ic.getCategoria_id().equals("5")) {
                                 String itemKey = item2.getKey();
                                 ic.setItemKey(itemKey);
+                                ic.setDescricao(getDescricaoMini(ic.getDescricao()));
                                 itensPromocaoAux.add(ic);
+                            }
+                        }
+                    }
+
+                    //BUSCAR PIZZAS PEQUENAS
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        for (DataSnapshot item2 : item.getChildren()) {
+                            ItemCardapio ic = item2.getValue(ItemCardapio.class);
+                            if (ic.isStatus_promocao() && ic.getCategoria_id().equals("5")) {
+
+                                if (ic.getPromo_pizza_p() != 0) {
+                                    String itemKey = item2.getKey();
+                                    ic.setItemKey(itemKey);
+                                    ic.setValor_unit(ic.getValor_pizza_p());
+                                    ic.setPreco_promocional(ic.getPromo_pizza_p());
+                                    ic.setNome(ic.getNome() + " Pequena");
+                                    ic.setDescricao(getDescricaoMini(ic.getDescricao()));
+                                    itensPromocaoAux.add(ic);
+                                }
+
+                            }
+                        }
+                    }
+
+                    //PIZZA MÉDIA
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        for (DataSnapshot item2 : item.getChildren()) {
+                            ItemCardapio ic = item2.getValue(ItemCardapio.class);
+                            if (ic.isStatus_promocao() && ic.getCategoria_id().equals("5")) {
+
+                                if (ic.getPromo_pizza_m() != 0) {
+                                    String itemKey = item2.getKey();
+                                    ic.setItemKey(itemKey);
+                                    ic.setValor_unit(ic.getValor_pizza_m());
+                                    ic.setPreco_promocional(ic.getPromo_pizza_m());
+                                    ic.setNome(ic.getNome() + " Média");
+                                    ic.setDescricao(getDescricaoMini(ic.getDescricao()));
+                                    itensPromocaoAux.add(ic);
+                                }
+
+                            }
+                        }
+                    }
+
+                    //PIZZA GRANDE
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        for (DataSnapshot item2 : item.getChildren()) {
+                            ItemCardapio ic = item2.getValue(ItemCardapio.class);
+                            if (ic.isStatus_promocao() && ic.getCategoria_id().equals("5")) {
+
+                                if (ic.getPromo_pizza_g() != 0) {
+                                    String itemKey = item2.getKey();
+                                    ic.setItemKey(itemKey);
+                                    ic.setValor_unit(ic.getValor_pizza_g());
+                                    ic.setPreco_promocional(ic.getPromo_pizza_g());
+                                    ic.setNome(ic.getNome() + " Grande");
+                                    ic.setDescricao(getDescricaoMini(ic.getDescricao()));
+                                    itensPromocaoAux.add(ic);
+                                }
+
                             }
                         }
                     }
@@ -132,12 +194,12 @@ public class TabPromocoes extends Fragment {
                 itensPromocao.addAll(itensPromocaoAux);
                 itensPromocaoAux = new ArrayList<>();
 
-                if (itensPromocao.size() > 0){
+                if (itensPromocao.size() > 0) {
                     mItemPromoList.setVisibility(View.VISIBLE);
                     viewSemPromocoes.setVisibility(View.GONE);
                     adapter = new PromocoesAdapter(itensPromocao, getContext(), mProgressBar, statusDelivery, statusEstabelecimento);
                     mItemPromoList.setAdapter(adapter);
-                } else{
+                } else {
                     closeProgressBar();
                     mItemPromoList.setVisibility(View.GONE);
                     viewSemPromocoes.setVisibility(View.VISIBLE);
@@ -154,7 +216,17 @@ public class TabPromocoes extends Fragment {
         mDatabaseReference.child("itens_cardapio").addValueEventListener(postListener);
     }
 
-    private void buscarPermissoesDoUsuario(){
+    private String getDescricaoMini(String descricao) {
+        String desc = descricao;
+
+        if (descricao != null && descricao.length() > 50){
+            return desc.substring(0, 30) + " ...";
+        }
+
+        return desc;
+    }
+
+    private void buscarPermissoesDoUsuario() {
         mDatabaseReference.child("clientes").child(FirebaseAuthApp.getUsuarioLogado().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

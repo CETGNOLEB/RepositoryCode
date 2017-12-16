@@ -76,12 +76,12 @@ public class SobreActivity extends AppCompatActivity {
         OpcoesSobre opcoesSobre1 = new OpcoesSobre(R.drawable.ic_alert_circle, "Sobre o aplicativo");
         OpcoesSobre opcoesSobre2 = new OpcoesSobre(R.drawable.ic_earth, "Nosso site");
         OpcoesSobre opcoesSobre3 = new OpcoesSobre(R.drawable.ic_file, "Política de privacidade");
-        OpcoesSobre opcoesSobre4 = new OpcoesSobre(R.drawable.ic_view_list, "Versão 1.0.0");
+       // OpcoesSobre opcoesSobre4 = new OpcoesSobre(R.drawable.ic_view_list, "Versão 1.0.0");
 
         listaDeOpcoesSobre.add(opcoesSobre1);
         listaDeOpcoesSobre.add(opcoesSobre2);
         listaDeOpcoesSobre.add(opcoesSobre3);
-        listaDeOpcoesSobre.add(opcoesSobre4);
+        //listaDeOpcoesSobre.add(opcoesSobre4);
 
         recyclerViewOpcoesSobre.setLayoutManager(new LinearLayoutManager(this));
 

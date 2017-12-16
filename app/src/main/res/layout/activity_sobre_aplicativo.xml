@@ -160,10 +160,11 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:text="Enviar Comentários"
+                android:layout_marginBottom="20dp"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
 
-            <TextView
+           <!-- <TextView
                 android:id="@+id/link_to_site"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -173,7 +174,7 @@
                 android:layout_marginTop="5dp"
                 android:text="Visite nosso site"
                 android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
+                android:textSize="16sp" />-->
 
         </RelativeLayout>
     </ScrollView>

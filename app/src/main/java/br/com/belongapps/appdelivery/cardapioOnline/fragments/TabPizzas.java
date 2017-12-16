@@ -1,6 +1,5 @@
 package br.com.belongapps.appdelivery.cardapioOnline.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,9 +30,7 @@ import com.squareup.picasso.Picasso;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherPizzaActivity;
-import br.com.belongapps.appdelivery.cardapioOnline.dao.FinalizarPedidoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.TamPizza;
-import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class TabPizzas extends Fragment {
@@ -104,7 +99,7 @@ public class TabPizzas extends Fragment {
             public void onBindViewHolder(final TamPizzaViewHolder viewHolder, final int position) {
                 super.onBindViewHolder(viewHolder, position);
 
-                YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_tam_pizza);
+                //YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_tam_pizza);
             }
 
             @Override

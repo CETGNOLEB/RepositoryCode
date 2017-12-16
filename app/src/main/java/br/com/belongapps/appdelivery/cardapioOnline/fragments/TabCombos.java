@@ -18,8 +18,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,8 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
-
-import java.util.Locale;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
@@ -107,7 +103,7 @@ public class TabCombos extends Fragment {
             public void onBindViewHolder(final ComboViewHolder viewHolder, final int position) {
                 super.onBindViewHolder(viewHolder, position);
 
-                YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_combo);
+                //YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_combo);
             }
 
             @Override

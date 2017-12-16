@@ -16,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -144,7 +142,7 @@ public class PizzaMetade1Activity extends AppCompatActivity {
             public void onBindViewHolder(final ViewHolderPizza viewHolder, final int position) {
                 super.onBindViewHolder(viewHolder, position);
 
-                YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_sabor_pizza);
+                //YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_sabor_pizza);
             }
 
             @Override

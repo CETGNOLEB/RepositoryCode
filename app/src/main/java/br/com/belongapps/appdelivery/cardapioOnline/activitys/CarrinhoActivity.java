@@ -2,6 +2,7 @@ package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.adapters.ItemCarrinhoAdapter
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
+import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
@@ -145,6 +147,27 @@ public class CarrinhoActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (!DataUtil.horaAutomaticaAtivada(getContentResolver())) {
+
+                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                    AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
+                    View layoutDialog = inflater.inflate(R.layout.dialog_redefinir_data, null);
+                    mBilder.setCancelable(false);
+
+                    Button btConfigData = (Button) layoutDialog.findViewById(R.id.bt_config_data);
+
+                    mBilder.setView(layoutDialog);
+                    final AlertDialog dialogConfigData = mBilder.create();
+                    dialogConfigData.show();
+
+                    btConfigData.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogConfigData.dismiss();
+                            Toast.makeText(CarrinhoActivity.this, "Marque a data/hora como automático.", Toast.LENGTH_LONG).show();
+                            startActivityForResult(new Intent(Settings.ACTION_DATE_SETTINGS), 0);
+                        }
+                    });
 
                     return;
                 }
