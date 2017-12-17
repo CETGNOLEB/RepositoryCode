@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_enviar_pedido"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="70dp"
+        android:layout_alignBottom="@+id/resumo_valores"
         android:scrollbars="vertical">
 
         <RelativeLayout
@@ -168,13 +169,12 @@
 
             </android.support.v7.widget.RecyclerView>
 
-
-
         </RelativeLayout>
 
     </ScrollView>
 
     <RelativeLayout
+        android:id="@+id/resumo_valores"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -187,7 +187,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:text="Valor do Pedido: R$ 9,00"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/taxa_de_entrega"
@@ -197,7 +197,7 @@
             android:layout_below="@+id/valor_pedido"
             android:layout_marginRight="10dp"
             android:text="Taxa de Entrega: R$ 1,00"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/valor_total_pedido"
@@ -209,7 +209,7 @@
             android:layout_marginBottom="10dp"
             android:text="Sub Total: R$ 10,00"
             android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
     </RelativeLayout>
 

@@ -50,19 +50,6 @@ public class TabVitaminas extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_vitaminas, container, false);
 
-        return rootView;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         mDatabaseReference.child("configuracoes").addValueEventListener(new ValueEventListener() {
@@ -85,10 +72,10 @@ public class TabVitaminas extends Fragment {
 
         itemPedido = new ItemPedido();
 
-        mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_escolher_vitaminas);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressbar_escolher_vitaminas);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("9");
 
-        mVitaminasList = (RecyclerView) getView().findViewById(R.id.list_vitaminas);
+        mVitaminasList = (RecyclerView) rootView.findViewById(R.id.list_vitaminas);
         mVitaminasList.setHasFixedSize(true);
         mVitaminasList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -181,6 +168,19 @@ public class TabVitaminas extends Fragment {
 
         mVitaminasList.setAdapter(firebaseRecyclerAdapter);
 
+        return rootView;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
     }
 
     public void selecionarItem(final ItemCardapio model, String key) {
@@ -245,6 +245,7 @@ public class TabVitaminas extends Fragment {
                 item_valor_unit.setVisibility(View.VISIBLE);
             } else {
                 item_valor_promo.setText(StringUtil.formatToMoeda(valor_unit));
+                item_valor_unit.setVisibility(View.INVISIBLE);
             }
 
         }
@@ -269,6 +270,8 @@ public class TabVitaminas extends Fragment {
 
             if (status == 0) { //Se Indisponível
                 item_status.setVisibility(View.VISIBLE);
+            } else{
+                item_status.setVisibility(View.INVISIBLE);
             }
 
         }

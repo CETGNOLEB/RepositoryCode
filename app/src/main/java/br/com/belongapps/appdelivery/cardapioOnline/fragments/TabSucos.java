@@ -245,6 +245,7 @@ public class TabSucos extends Fragment {
                 item_valor_unit.setVisibility(View.VISIBLE);
             } else {
                 item_valor_promo.setText(StringUtil.formatToMoeda(valor_unit));
+                item_valor_unit.setVisibility(View.INVISIBLE);
             }
 
         }
@@ -270,6 +271,8 @@ public class TabSucos extends Fragment {
 
             if (status == 0) { //Se Indisponível
                 item_status.setVisibility(View.VISIBLE);
+            } else{
+                item_status.setVisibility(View.INVISIBLE);
             }
 
         }
