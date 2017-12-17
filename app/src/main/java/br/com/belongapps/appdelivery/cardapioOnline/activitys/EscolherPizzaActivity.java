@@ -97,6 +97,7 @@ public class EscolherPizzaActivity extends AppCompatActivity {
             Intent i = new Intent(EscolherPizzaActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
+
         }else {
 
             mProgressBar = (ProgressBar) findViewById(R.id.progressbar_escolher_sabor_pizza);

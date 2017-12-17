@@ -57,7 +57,7 @@
                     android:text="Pizza Mussarela"
                     android:layout_toLeftOf="@+id/item_pizza_selecionado"
                     android:textColor="@color/titleTextColor"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/item_pizza_selecionado"
@@ -78,7 +78,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
-                android:text="Descrição do produto do menu." />
+                android:layout_marginRight="5dp"
+                android:text="Descrição do produto do menu."
+                android:textSize="14sp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

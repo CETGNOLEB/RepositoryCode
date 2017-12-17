@@ -197,7 +197,7 @@ public class TabPizzas extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), EscolherPizzaActivity.class);
-                intent.putExtra("TamPizza", model.getNome());
+                intent.putExtra("TamPizza", getTamPizza(model.getNome()));
                 intent.putExtra("TipoPizza", tipodaPizza(tipoPizzaSelecionada));
                 startActivity(intent);
                 getActivity().finish();
@@ -237,6 +237,16 @@ public class TabPizzas extends Fragment {
         });
     }
 
+    private int getTamPizza(String modelNome) {
+        if (modelNome.contains("Pequena")){
+            return 0;
+        } else if(modelNome.contains("Média")){
+            return 1;
+        } else{
+            return 2;
+        }
+    }
+
     public String tipodaPizza(int tipoPizzaSelecionada) {
         String tipo = "";
         if (tipoPizzaSelecionada == 0) {
@@ -274,7 +284,7 @@ public class TabPizzas extends Fragment {
 
         public void setApartirDe(double valor_unit) {
             TextView apartir_de = (TextView) mView.findViewById(R.id.apartir_de_pizza);
-            apartir_de.setText("Apartir de R$ " + StringUtil.formatToMoeda(valor_unit));
+            apartir_de.setText("A partir de " + StringUtil.formatToMoeda(valor_unit));
         }
 
         public void setImagem(final Context context, final String url) {
