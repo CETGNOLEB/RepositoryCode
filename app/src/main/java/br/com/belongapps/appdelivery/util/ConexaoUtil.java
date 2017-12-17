@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ConexaoUtil {
 
-    static boolean conectadoFire;
+    static boolean conectadoFire = true;
 
     public static boolean verificaConectividade(Context context) {
 
@@ -36,6 +36,7 @@ public class ConexaoUtil {
         });
 
         ConnectivityManager conectivtyManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
         if (conectivtyManager.getActiveNetworkInfo() != null
                 && conectivtyManager.getActiveNetworkInfo().isAvailable()
                 && conectivtyManager.getActiveNetworkInfo().isConnected() && conectadoFire) {

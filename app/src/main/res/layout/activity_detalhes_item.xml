@@ -121,7 +121,7 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/border_button"
                         android:text="Adicionar/Remover"
-                        android:textColor="@color/textColorSecundary" />
+                        android:textColor="@color/colorPrimary" />
 
                 </LinearLayout>
 

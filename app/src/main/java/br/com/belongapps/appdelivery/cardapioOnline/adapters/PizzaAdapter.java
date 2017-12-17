@@ -74,6 +74,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
 
         viewHolder.setNome(item.getNome());
         viewHolder.setDescricao(getDescMini(item.getDescricao()));
+        viewHolder.setStatus(item.getStatus_item());
 
         Print.logError("TAM PIZZA: " + tamPizza);
 
@@ -355,6 +356,17 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                     Picasso.with(context).load(url).into(item_ref_image);
                 }
             });
+        }
+
+        public void setStatus(int status) {
+            TextView item_status = (TextView) mView.findViewById(R.id.status_sabor_pizza);
+
+            if (status == 0) { //Se Indisponível
+                item_status.setVisibility(View.VISIBLE);
+            } else{
+                item_status.setVisibility(View.INVISIBLE);
+            }
+
         }
 
     }
