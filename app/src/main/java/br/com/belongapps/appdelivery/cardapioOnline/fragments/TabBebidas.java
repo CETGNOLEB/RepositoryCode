@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -116,11 +117,11 @@ public class TabBebidas extends Fragment {
                 viewHolder.setImagem(getContext(), model.getRef_img());
                 viewHolder.setStatus(model.getStatus_item());
 
-                if (model.getStatus_item() == 1) { //Disponível no Cardápio
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                        if (model.getStatus_item() == 1) { //Disponível no Cardápio
 
                             if (statusEstabelecimento == false) {
                                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -172,9 +173,11 @@ public class TabBebidas extends Fragment {
                                 selecionarItem(model, key);
                             }
 
+                        } else {
+                            Toast.makeText(getContext(), "Produto Indisponível!", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }
+                    }
+                });
             }
 
 
@@ -265,7 +268,7 @@ public class TabBebidas extends Fragment {
 
             if (status == 0) { //Se Indisponível
                 item_status.setVisibility(View.VISIBLE);
-            } else{
+            } else {
                 item_status.setVisibility(View.INVISIBLE);
             }
 

@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -117,68 +118,69 @@ public class TabSalgados extends Fragment {
                 viewHolder.setImagem(getContext(), model.getRef_img());
                 viewHolder.setStatus(model.getStatus_item());
 
-                if (model.getStatus_item() == 1) { //Disponível no Cardápio
-
                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
-                            if (statusEstabelecimento == false) {
+                            if (model.getStatus_item() == 1) { //Disponível no Cardápio
 
-                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                if (statusEstabelecimento == false) {
 
-                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                                View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
+                                    LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                                Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
+                                    AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+                                    View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
 
-                                mBilder.setView(layoutDialog);
-                                final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                                dialogEstabelecimentoFechado.show();
+                                    Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
 
-                                btEntendi.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogEstabelecimentoFechado.dismiss();
-                                    }
-                                });
+                                    mBilder.setView(layoutDialog);
+                                    final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
+                                    dialogEstabelecimentoFechado.show();
 
-                            } else if (statusDelivery == false){
+                                    btEntendi.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialogEstabelecimentoFechado.dismiss();
+                                        }
+                                    });
 
-                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                } else if (statusDelivery == false) {
 
-                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                                View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
+                                    LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                                Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
-                                Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
+                                    AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+                                    View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
 
-                                mBilder.setView(layoutDialog);
-                                final AlertDialog dialogDeliveryFechado = mBilder.create();
-                                dialogDeliveryFechado.show();
+                                    Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
+                                    Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
 
-                                btVoltar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogDeliveryFechado.dismiss();
-                                    }
-                                });
+                                    mBilder.setView(layoutDialog);
+                                    final AlertDialog dialogDeliveryFechado = mBilder.create();
+                                    dialogDeliveryFechado.show();
 
-                                btContinuar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogDeliveryFechado.dismiss();
-                                        selecionarItem(model, key);
-                                    }
-                                });
+                                    btVoltar.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialogDeliveryFechado.dismiss();
+                                        }
+                                    });
 
-                            } else{
-                                selecionarItem(model, key);
+                                    btContinuar.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialogDeliveryFechado.dismiss();
+                                            selecionarItem(model, key);
+                                        }
+                                    });
+
+                                } else {
+                                    selecionarItem(model, key);
+                                }
+                            } else {
+                                Toast.makeText(getContext(), "Produto Indisponível!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-                }
-
             }
 
         };

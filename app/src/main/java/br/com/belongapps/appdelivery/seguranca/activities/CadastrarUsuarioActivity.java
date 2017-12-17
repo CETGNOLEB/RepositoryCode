@@ -215,7 +215,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(CadastrarUsuarioActivity.this, CardapioMainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("login", "Bem Vindo ao App da Kisabor!");
+                    intent.putExtra("login", "Bem Vindo ao Kisabor Delivery!");
                     startActivity(intent);
                     finish();
                 } else {

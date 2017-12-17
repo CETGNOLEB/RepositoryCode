@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             Intent intent = new Intent(LoginActivity.this, CardapioMainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.putExtra("login", "Bem Vindo ao Belong Delivery!");
+                            intent.putExtra("login", "Bem Vindo ao Kisabor Delivery!");
                             startActivity(intent);
                             finish();
                         }

@@ -219,7 +219,7 @@ public class TabPromocoes extends Fragment {
     private String getDescricaoMini(String descricao) {
         String desc = descricao;
 
-        if (descricao != null && descricao.length() > 50){
+        if (descricao != null && descricao.length() > 30){
             return desc.substring(0, 30) + " ...";
         }
 

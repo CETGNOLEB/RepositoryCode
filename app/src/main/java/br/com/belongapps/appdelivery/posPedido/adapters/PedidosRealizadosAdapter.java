@@ -70,7 +70,7 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
                 intent.putExtra("StatusPedido", pedido.getStatus());
                 intent.putExtra("TipoEntrega", pedido.getEntrega_retirada());
                 intent.putExtra("StatusTempo", pedido.getStatus_tempo());
-                intent.putExtra("keyPedido", key);
+                intent.putExtra("KeyPedido", key);
 
                 ArrayList<ItemPedido> itensdoPedido = new ArrayList<>();
                 for (ItemPedido pedidoaux: pedido.getItens_pedido() ) {

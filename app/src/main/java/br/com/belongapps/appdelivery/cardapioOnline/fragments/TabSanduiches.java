@@ -118,11 +118,11 @@ public class TabSanduiches extends Fragment {
                 viewHolder.setImagem(getContext(), model.getRef_img());
                 viewHolder.setStatus(model.getStatus_item());
 
-                if (model.getStatus_item() == 1) { //Disponível no Cardápio
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                        if (model.getStatus_item() == 1) { //Disponível no Cardápio
 
                             if (statusEstabelecimento == false) {
 
@@ -177,8 +177,8 @@ public class TabSanduiches extends Fragment {
                                 selecionarItem(model, key);
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
 
         };
@@ -188,7 +188,7 @@ public class TabSanduiches extends Fragment {
     }
 
     public void selecionarItem(final ItemCardapio model, String key) {
-        if (model.getStatus_item() ==  1) { //Se Disponível
+        if (model.getStatus_item() == 1) { //Se Disponível
 
             itemPedido.setNome(model.getNome());
             itemPedido.setDescricao(model.getDescricao());
@@ -206,7 +206,7 @@ public class TabSanduiches extends Fragment {
             Intent intent = new Intent(getActivity(), DetalhesdoItemActivity.class);
 
             intent.putExtra("ItemPedido", itemPedido);
-            intent.putExtra("Categoria" , "Sanduiche");
+            intent.putExtra("Categoria", "Sanduiche");
             intent.putExtra("TelaAnterior", "TabSanduiches");
             intent.putExtra("sanduiche", key);
             startActivity(intent);
@@ -263,7 +263,7 @@ public class TabSanduiches extends Fragment {
 
             if (status == 0) { //Se Indisponível
                 item_status.setVisibility(View.VISIBLE);
-            } else{
+            } else {
                 item_status.setVisibility(View.INVISIBLE);
             }
 

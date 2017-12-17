@@ -123,7 +123,7 @@
             android:layout_toLeftOf="@+id/bt_alterar_endereco"
             android:background="@android:color/transparent"
             android:text="FECHAR"
-            android:textColor="@color/textColorSecundary"
+            android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 
         <Button
