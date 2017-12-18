@@ -205,7 +205,7 @@ public class TabCombos extends Fragment {
 
     public void selecionarItem(final ItemCardapio model, String key) {
 
-        itemPedido.setNome(model.getNome());
+        itemPedido.setNome("Combo " + model.getNome());
         itemPedido.setDescricao(model.getDescricao());
         itemPedido.setRef_img(model.getRef_img());
         itemPedido.setCategoria(model.getCategoria_id());

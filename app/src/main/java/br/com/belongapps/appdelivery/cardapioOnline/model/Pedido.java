@@ -26,7 +26,10 @@ public class Pedido{
     /*---PAGAMENTO---*/
     Pagamento pagamento = new Pagamento();
 
-    public Pedido(String data, String status_tempo, String numero_pedido, int status, int entrega_retirada, double valor_total, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento) {
+    /*CANCELAMENTO*/
+    private String motivo_cancel;
+
+    public Pedido(String data, String status_tempo, String numero_pedido, int status, int entrega_retirada, double valor_total, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento, String motivo_cancel) {
         this.data = data;
         this.status_tempo = status_tempo;
         this.numero_pedido = numero_pedido;
@@ -36,6 +39,7 @@ public class Pedido{
         this.itens_pedido = itens_pedido;
         this.cliente = cliente;
         this.pagamento = pagamento;
+        this.motivo_cancel = motivo_cancel;
     }
 
     public Pedido() {
@@ -49,6 +53,8 @@ public class Pedido{
         entrega_retirada = in.readInt();
         valor_total = in.readDouble();
         itens_pedido = in.createTypedArrayList(ItemPedido.CREATOR);
+
+        motivo_cancel = in.readString();
     }
 
     public Map<String, Object> toMap() {
@@ -149,5 +155,13 @@ public class Pedido{
 
     public void setPagamento(Pagamento pagamento) {
         this.pagamento = pagamento;
+    }
+
+    public String getMotivo_cancel() {
+        return motivo_cancel;
+    }
+
+    public void setMotivo_cancel(String motivo_cancel) {
+        this.motivo_cancel = motivo_cancel;
     }
 }

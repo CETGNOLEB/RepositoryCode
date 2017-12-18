@@ -71,6 +71,7 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
                 intent.putExtra("TipoEntrega", pedido.getEntrega_retirada());
                 intent.putExtra("StatusTempo", pedido.getStatus_tempo());
                 intent.putExtra("KeyPedido", key);
+                intent.putExtra("MotivoCancelamento", pedido.getMotivo_cancel());
 
                 ArrayList<ItemPedido> itensdoPedido = new ArrayList<>();
                 for (ItemPedido pedidoaux: pedido.getItens_pedido() ) {
@@ -178,6 +179,8 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
                 statusPedido.setText("SAIU DA COZINHA");
             } else if (status == 4) {
                 statusPedido.setText("SAIU P/ ENTREGA");
+            } else if (status == 7) {
+                statusPedido.setText("CANCELADO");
             } else {
                 statusPedido.setText("ENTREGUE");
             }
@@ -203,6 +206,8 @@ public class PedidosRealizadosAdapter extends RecyclerView.Adapter<PedidosRealiz
                 imgPedido.setImageResource(R.drawable.img_pedido_pronto);
             } else if (status == 4) {
                 imgPedido.setImageResource(R.drawable.img_pedido_saiu_entrega);
+            } else if (status == 7) {
+                imgPedido.setImageResource(R.drawable.ic_pedido_cancelado);
             } else {
                 imgPedido.setImageResource(R.drawable.ic_check_all);
             }

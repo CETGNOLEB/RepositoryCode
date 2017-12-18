@@ -158,6 +158,10 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
             ((Activity) context).finish();
         } else {
 
+            if (item.getCategoria_id().equals("5")){
+                itemPedido.setNome("Pizza " + item.getNome());
+            }
+
             Intent intent = new Intent(context, DetalhesdoItemActivity.class);
 
             intent.putExtra("ItemPedido", itemPedido);

@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,8 +16,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.Locale;
@@ -53,11 +58,14 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
     private String statusTempo;
     private List<ItemPedido> itensdoPedido;
     private String keyPedido;
+    private String motivoCancelamento;
 
     //Views
     private TextView txtNumPedido;
     private TextView txtDiaHoraPedido;
     private TextView txtValorPedido;
+
+    private TextView tvMotivoCancelamento;
 
     private TextView textStatusPedidoConfirmado;
     private ImageView imgStatusPedidoConfirmado;
@@ -73,6 +81,9 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
     private TextView textStatusPedidoEntregue;
     private ImageView imgStatusPedidoEntregue;
+
+    private GridLayout gridStatusPedido;
+    private RelativeLayout infoPedidoCancelado;
 
     private RecyclerView mRecyclerViewItensdoPedido;
     private RecyclerView.Adapter adapter;
@@ -105,7 +116,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         setViewInfoDoPedido();
 
         //DEFINIR STATUS DO PEDIDO
-        definirStatus(statusPedido, tipoEntrega);
+        setViewStatusPedido();
 
         //PREENCHER LISTA ITENS_PEDIDO
         populateItensdoPedido();
@@ -124,6 +135,8 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         statusTempo = intent.getStringExtra("StatusTempo");
         itensdoPedido = intent.getParcelableArrayListExtra("ItensPedido");
 
+        motivoCancelamento = intent.getStringExtra("MotivoCancelamento");
+
         if (keyPedido == null) {
             keyPedido = intent.getStringExtra("KeyPedido");
         }
@@ -135,6 +148,27 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         txtNumPedido = (TextView) findViewById(R.id.text_num_pedido);
         txtDiaHoraPedido = (TextView) findViewById(R.id.txt_dia_hora_pedido);
         txtValorPedido = (TextView) findViewById(R.id.txt_valor_pedido);
+
+        infoPedidoCancelado = (RelativeLayout) findViewById(R.id.info_pedido_cancelado);
+        gridStatusPedido = (GridLayout) findViewById(R.id.show_status_pedido);
+        tvMotivoCancelamento = (TextView) findViewById(R.id.motivo_cancelamento);
+
+        initViewsStatusPedido();
+
+        mRecyclerViewItensdoPedido = (RecyclerView) findViewById(R.id.list_itens_pedido);
+        mRecyclerViewItensdoPedido.setHasFixedSize(true);
+        mRecyclerViewItensdoPedido.setLayoutManager(new LinearLayoutManager(this));
+
+        chamarAtendente = (Button) findViewById(R.id.bt_ligar_atendente);
+
+        //SnakeBar Conexão
+        snakeBarLayout = (CoordinatorLayout) findViewById(R.id.layout_snakebar_acompanhar_pedido);
+
+        snackbar = Snackbar
+                .make(snakeBarLayout, "Sem conexão com a internet", Snackbar.LENGTH_INDEFINITE);
+    }
+
+    private void initViewsStatusPedido() {
 
         //CONFIRMADO
         textStatusPedidoConfirmado = (TextView) findViewById(R.id.text_status_pedido_confirmado);
@@ -156,23 +190,28 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
         textStatusPedidoEntregue = (TextView) findViewById(R.id.text_status_pedido_entregue);
         imgStatusPedidoEntregue = (ImageView) findViewById(R.id.img_status_pedido_entregue);
 
-        mRecyclerViewItensdoPedido = (RecyclerView) findViewById(R.id.list_itens_pedido);
-        mRecyclerViewItensdoPedido.setHasFixedSize(true);
-        mRecyclerViewItensdoPedido.setLayoutManager(new LinearLayoutManager(this));
-
-        chamarAtendente = (Button) findViewById(R.id.bt_ligar_atendente);
-
-        //SnakeBar Conexão
-        snakeBarLayout = (CoordinatorLayout) findViewById(R.id.layout_snakebar_acompanhar_pedido);
-
-        snackbar = Snackbar
-                .make(snakeBarLayout, "Sem conexão com a internet", Snackbar.LENGTH_INDEFINITE);
     }
 
-    private void setViewInfoDoPedido(){
+    private void setViewInfoDoPedido() {
         txtNumPedido.setText("Pedido Nº " + numeroPedido);
         txtDiaHoraPedido.setText("Enviado em " + dataPedido + " as " + horaPedido);
         txtValorPedido.setText("Valor do Pedido: R$ " + StringUtil.formatToMoeda(valorPedido));
+    }
+
+    private void setViewStatusPedido() {
+        //Se cancelado
+        if (statusPedido == 7) {
+            infoPedidoCancelado.setVisibility(View.VISIBLE);
+            gridStatusPedido.setVisibility(View.GONE);
+
+            tvMotivoCancelamento.setText(motivoCancelamento);
+
+        } else {
+            infoPedidoCancelado.setVisibility(View.GONE);
+            gridStatusPedido.setVisibility(View.VISIBLE);
+
+            definirStatus(statusPedido, tipoEntrega);
+        }
     }
 
     private void definirStatus(int statusPedido, int tipoEntrega) {
@@ -237,7 +276,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
     }
 
-    public void populateItensdoPedido(){
+    public void populateItensdoPedido() {
         adapter = new ItensdoPedidoAdapter(itensdoPedido, AcompanharPedidoActivity.this);
         mRecyclerViewItensdoPedido.setAdapter(adapter);
 
@@ -359,7 +398,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
                 break;
             case R.id.adicionar_endereco:
                 /*Verifica Conexao*/
-                if(!ConexaoUtil.verificaConectividade(AcompanharPedidoActivity.this)){
+                if (!ConexaoUtil.verificaConectividade(AcompanharPedidoActivity.this)) {
                     snackbar = Snackbar
                             .make(snakeBarLayout, "Sem conexão com a internet", Snackbar.LENGTH_INDEFINITE);
                     snackbar.show();
@@ -384,6 +423,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
         finish();
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -392,13 +432,13 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
     }
 
-    public void verificaStatusDeConexao(){
+    public void verificaStatusDeConexao() {
 
         statusConexao = ConexaoUtil.verificaConectividade(this);
 
-        if (statusConexao){
+        if (statusConexao) {
             snackbar.dismiss();
-        } else{
+        } else {
             View snackView = snackbar.getView();
             snackView.setBackgroundColor(ContextCompat.getColor(AcompanharPedidoActivity.this, R.color.snakebarColor));
             snackbar.setActionTextColor(getResources().getColor(R.color.textColorPrimary));
