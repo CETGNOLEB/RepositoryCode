@@ -1,8 +1,6 @@
 package br.com.belongapps.appdelivery.cardapioOnline.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,11 +18,9 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
-import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.RecheioAcai;
 import br.com.belongapps.appdelivery.util.Print;
@@ -34,8 +30,7 @@ import br.com.belongapps.appdelivery.util.StringUtil;
 public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapter.RecheioViewHolder> {
 
     private static List<RecheioAcai> todosRecheios;
-    private static List<RecheioAcai> recheiosPadrao;
-    private static List<String> recheiosAcaiKey;
+    private static List<RecheioAcai> todosRecheiosComPadrao;
     private static Button btProximo;
     private TextView tvTotalAcai;
     private static Context context;
@@ -47,8 +42,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
     private static String keyAcai;
 
     public RecheiosAcaiAdapter(String nomeAcai, String imgAcai, double valorTotal, String keyAcai,
-                               List<RecheioAcai> recheios, List<String> recheiosAcaiKey, List<RecheioAcai> recheiosPadrao,
-                               Button btProximo, TextView tvTotalAcai, final Context context) {
+                               List<RecheioAcai> recheios, Button btProximo, TextView tvTotalAcai, final Context context) {
 
         this.nomeAcai = nomeAcai;
         this.imgAcai = imgAcai;
@@ -56,15 +50,13 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         this.keyAcai = keyAcai;
 
         this.todosRecheios = recheios;
-        this.recheiosAcaiKey = recheiosAcaiKey;
-
-        this.recheiosPadrao = recheiosPadrao;
+        this.todosRecheiosComPadrao = recheios;
 
         this.btProximo = btProximo;
         this.tvTotalAcai = tvTotalAcai;
         this.context = context;
 
-        this.btProximo.setOnClickListener(new View.OnClickListener() {
+        /*this.btProximo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -82,7 +74,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
                 context.startActivity(i);
                 ((Activity) context).finish();
             }
-        });
+        });*/
     }
 
     @Override
@@ -97,6 +89,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
 
         viewHolder.setNome(recheio.getNome());
         viewHolder.setImagem(context, recheio.getRef_img());
+        viewHolder.setQtdInicialRecheio(recheio.getQtd());
 
         //Aumentar Quantidade
         viewHolder.aumentarQuantidade.setOnClickListener(new View.OnClickListener() {
@@ -118,13 +111,6 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
             }
         });
 
-        //DEFINE PADRÃO INICIAL NA LISTA
-        for (String recheioAcai : recheiosAcaiKey) {
-            if (recheio.getItemKey().equals(recheioAcai)) {
-                recheio.setQtd(1);
-                viewHolder.setQtdInicialRecheio(1);
-            }
-        }
     }
 
     @Override
@@ -190,7 +176,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
 
             if (qtd > 0) {
 
-                Integer qtdPadraoRecheio = buscarQtdPadrao(recheio); //recupera qtd padrao do item no açai
+                Integer qtdPadraoRecheio = buscarQtdDoRecheio(recheio); //recupera qtd padrao do item no açai
 
                 double valorUnit = (qtd - qtdPadraoRecheio) * recheio.getValor_unit();
                 valorAcressimoAdicionais.setText("+ " + StringUtil.formatToMoeda(valorUnit));
@@ -227,7 +213,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
 
             qtdItem.setText(String.valueOf(qtd)); //Set Qtd na View
 
-            Integer qtdPadraoRecheio = buscarQtdPadrao(recheio); //Buscar qtd padrão do Açai
+            Integer qtdPadraoRecheio = buscarQtdDoRecheio(recheio); //Buscar qtd padrão do Açai
 
             if (qtdPadraoRecheio < qtd) {
                 double valorUnit = (qtd - qtdPadraoRecheio) * recheio.getValor_unit(); //Calcula valor do acressimo
@@ -306,7 +292,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
    /* private boolean incrementeValorTotalProduto(RecheioAcai recheio) {
         boolean incrementado = false;
 
-        Integer qtdPadraoRecheio = buscarQtdPadrao(recheio);
+        Integer qtdPadraoRecheio = buscarQtdDoRecheio(recheio);
 
         Log.println(Log.ERROR, "DEC QTD INICIAL", "" + qtdPadraoRecheio);
         Log.println(Log.ERROR, "DEC QTD ATUAL", "" + recheio.getQtd());
@@ -324,7 +310,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
     private boolean decrementeValorTotalProduto(RecheioAcai recheio) {
         boolean mostrarAcressimo = true;
 
-        Integer qtdPadraoRecheio = buscarQtdPadrao(recheio);
+        Integer qtdPadraoRecheio = buscarQtdDoRecheio(recheio);
 
         Log.println(Log.ERROR, "DEC QTD INICIAL", "" + qtdPadraoRecheio);
         Log.println(Log.ERROR, "DEC QTD ATUAL", "" + recheio.getQtd());
@@ -342,15 +328,14 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         return mostrarAcressimo;
     }
 
-    private static Integer buscarQtdPadrao(RecheioAcai recheioAcai) {
-        for (String recheiosKey : recheiosAcaiKey) {
-            for (RecheioAcai r : recheiosPadrao) {
-                if (recheiosKey.equals(recheioAcai.getItemKey())) {
-                    return 1;
-                }
+    private static Integer buscarQtdDoRecheio(RecheioAcai recheioAcai) {
+        for (RecheioAcai recheioPadrao : todosRecheiosComPadrao) {
+            if (recheioPadrao.getItemKey().equals(recheioAcai.getItemKey())) {
+                return recheioPadrao.getQtd();
             }
         }
 
         return 0;
     }
+
 }
