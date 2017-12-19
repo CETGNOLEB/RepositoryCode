@@ -249,11 +249,12 @@ public class MontagemAcaiActivity extends AppCompatActivity {
     private void preencherRecyclerView() {
         closeProgressBar();
 
+
         mRecheiosList = (RecyclerView) findViewById(R.id.recheios);
         mRecheiosList.setHasFixedSize(true);
         mRecheiosList.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new RecheiosAcaiAdapter(acaiNome, acaiImg, acaiTotal, acaiKey, todosRecheios, btProximo, tvTotalAcai, MontagemAcaiActivity.this);
+        adapter = new RecheiosAcaiAdapter(acaiNome, acaiImg, acaiTotal, acaiKey, todosRecheios, recheiosDoAcai, btProximo, tvTotalAcai, MontagemAcaiActivity.this);
         mRecheiosList.setAdapter(adapter);
     }
 
