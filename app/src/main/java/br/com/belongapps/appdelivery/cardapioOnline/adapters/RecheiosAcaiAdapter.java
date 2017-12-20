@@ -1,6 +1,8 @@
 package br.com.belongapps.appdelivery.cardapioOnline.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,9 +20,11 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.cardapioOnline.model.RecheioAcai;
 import br.com.belongapps.appdelivery.util.Print;
@@ -56,7 +60,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         this.tvTotalAcai = tvTotalAcai;
         this.context = context;
 
-        /*this.btProximo.setOnClickListener(new View.OnClickListener() {
+        this.btProximo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -65,16 +69,22 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
                     recheiosSelecionados.add(item);
                 }
 
+                ArrayList<RecheioAcai> recheiosPadrao = new ArrayList<>();
+                for (RecheioAcai item : todosRecheiosComPadrao) {
+                    recheiosPadrao.add(item);
+                }
+
                 ItemPedido item = createItemPedido();
                 Intent i = new Intent(context, DetalhesdoItemActivity.class);
                 i.putExtra("ItemPedido", item);
                 i.putExtra("TelaAnterior", "MontagemAcai");
                 i.putExtra("acai", "pedidoDeAcai");
                 i.putParcelableArrayListExtra("recheiosSelecionados", recheiosSelecionados);
+                i.putParcelableArrayListExtra("recheiosPadrao", recheiosPadrao);
                 context.startActivity(i);
                 ((Activity) context).finish();
             }
-        });*/
+        });
     }
 
     @Override
@@ -90,6 +100,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         viewHolder.setNome(recheio.getNome());
         viewHolder.setImagem(context, recheio.getRef_img());
         viewHolder.setQtdInicialRecheio(recheio.getQtd());
+        viewHolder.podeMostrarOcultarValorDoItem(recheio);
 
         //Aumentar Quantidade
         viewHolder.aumentarQuantidade.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +187,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
 
             if (qtd > 0) {
 
-                Integer qtdPadraoRecheio = buscarQtdDoRecheio(recheio); //recupera qtd padrao do item no açai
+                Integer qtdPadraoRecheio = buscarQtdPadraoDoRecheio(recheio); //recupera qtd padrao do item no açai
 
                 double valorUnit = (qtd - qtdPadraoRecheio) * recheio.getValor_unit();
                 valorAcressimoAdicionais.setText("+ " + StringUtil.formatToMoeda(valorUnit));
@@ -214,7 +225,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
 
             qtdItem.setText(String.valueOf(qtd)); //Set Qtd na View
 
-            Integer qtdPadraoRecheio = buscarQtdDoRecheio(recheio); //Buscar qtd padrão do Açai
+            Integer qtdPadraoRecheio = buscarQtdPadraoDoRecheio(recheio); //Buscar qtd padrão do Açai
 
             Print.logError("QTD PADRAO: " + qtdPadraoRecheio);
 
@@ -248,6 +259,15 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
                 valorAcressimoAdicionais.setVisibility(View.GONE);
             }
             //setMa
+        }
+
+        public void podeMostrarOcultarValorDoItem(RecheioAcai recheioAcai){
+            Integer qtdInformada = Integer.parseInt(qtdItem.getText().toString());
+            Integer qtdPadrao = buscarQtdPadraoDoRecheio(recheioAcai);
+
+            if (qtdInformada > qtdPadrao){
+                mostrarOcultarValorDoItem(true);
+            }
         }
     }
 
@@ -295,7 +315,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
    /* private boolean incrementeValorTotalProduto(RecheioAcai recheio) {
         boolean incrementado = false;
 
-        Integer qtdPadraoRecheio = buscarQtdDoRecheio(recheio);
+        Integer qtdPadraoRecheio = buscarQtdPadraoDoRecheio(recheio);
 
         Log.println(Log.ERROR, "DEC QTD INICIAL", "" + qtdPadraoRecheio);
         Log.println(Log.ERROR, "DEC QTD ATUAL", "" + recheio.getQtd());
@@ -313,7 +333,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
     private boolean decrementeValorTotalProduto(RecheioAcai recheio) {
         boolean mostrarAcressimo = true;
 
-        Integer qtdPadraoRecheio = buscarQtdDoRecheio(recheio);
+        Integer qtdPadraoRecheio = buscarQtdPadraoDoRecheio(recheio);
 
         Log.println(Log.ERROR, "DEC QTD INICIAL", "" + qtdPadraoRecheio);
         Log.println(Log.ERROR, "DEC QTD ATUAL", "" + recheio.getQtd());
@@ -331,7 +351,7 @@ public class RecheiosAcaiAdapter extends RecyclerView.Adapter<RecheiosAcaiAdapte
         return mostrarAcressimo;
     }
 
-    private static Integer buscarQtdDoRecheio(RecheioAcai recheioAcai) {
+    private static Integer buscarQtdPadraoDoRecheio(RecheioAcai recheioAcai) {
         for (RecheioAcai recheioPadrao : todosRecheiosComPadrao) {
             if (recheioPadrao.getItemKey().equals(recheioAcai.getItemKey())) {
                 return recheioPadrao.getQtd();

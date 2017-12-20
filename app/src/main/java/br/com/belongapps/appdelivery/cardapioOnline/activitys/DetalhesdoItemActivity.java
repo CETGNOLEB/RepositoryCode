@@ -75,7 +75,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     private CardView cardItensAcai;
     private TextView itensAcai;
     private Button btAlterarItens;
-    private ArrayList<RecheioAcai> recheiosSelecionados;
+    private ArrayList<RecheioAcai> recheiosPadrao;
+    private ArrayList<RecheioAcai> todosRecheios;
 
     private double valorTotal;//
     private double valorUnitario;//
@@ -390,7 +391,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         tipoPizza = getIntent().getStringExtra("TipoPizza");
 
         //Acai
-        recheiosSelecionados = getIntent().getParcelableArrayListExtra("recheiosSelecionados");
+        todosRecheios = getIntent().getParcelableArrayListExtra("recheiosSelecionados");
+        recheiosPadrao = getIntent().getParcelableArrayListExtra("recheiosPadrao");
 
         //SetValorTotal
         valorTotal = itemPedido.getValor_unit();
@@ -437,13 +439,12 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetalhesdoItemActivity.this, MontagemAcaiActivity.class);
                 intent.putExtra("acaiKey", itemPedido.getKeyItem());
                 intent.putExtra("acaiNome", itemPedido.getNome());
-
                 intent.putExtra("acaiTotal", itemPedido.getValor_unit());
-
                 intent.putExtra("acaiImg", itemPedido.getRef_img());
                 intent.putExtra("acai", itemPedido);
 
-                intent.putParcelableArrayListExtra("recheiosSelecionados", recheiosSelecionados);
+                intent.putParcelableArrayListExtra("recheiosSelecionados", todosRecheios);
+                intent.putParcelableArrayListExtra("recheiosPadrao", recheiosPadrao);
 
                 startActivity(intent);
                 finish();

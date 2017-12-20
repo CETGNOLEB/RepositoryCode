@@ -1,11 +1,14 @@
 package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +42,7 @@ public class MontagemAcaiActivity extends AppCompatActivity {
     private RecyclerView mRecheiosList;
     private TextView tvTotalAcai;
     private Button btProximo;
+    private Button btVoltar;
 
     //PARAMETROS RECEBIDOS
     private String acaiNome;
@@ -72,17 +76,82 @@ public class MontagemAcaiActivity extends AppCompatActivity {
         tvTotalAcai.setText("Total: " + StringUtil.formatToMoeda(acaiTotal));
 
         btProximo = (Button) findViewById(R.id.bt_proximo_montagem_acai);
+        btVoltar = findViewById(R.id.bt_voltar_montagem);
+
+        btVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                AlertDialog.Builder mBilder = new AlertDialog.Builder(MontagemAcaiActivity.this, R.style.MyDialogTheme);
+                View layoutDialog = inflater.inflate(R.layout.dialog_cancal_mont_acai, null);
+
+                Button btVoltar = layoutDialog.findViewById(R.id.bt_fechar_dialog_montagem_acai);
+                Button btCancelarMontagem = layoutDialog.findViewById(R.id.bt_cancel_mont_acai);
+
+                mBilder.setView(layoutDialog);
+                final AlertDialog dialogCancelMontagemAcai = mBilder.create();
+                dialogCancelMontagemAcai.show();
+
+                btVoltar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogCancelMontagemAcai.dismiss();
+                    }
+                });
+
+                btCancelarMontagem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MontagemAcaiActivity.this, DetalhesdoItemActivity.class);
+                        intent.putExtra("acai", "pedidoDeAcai");
+                        intent.putExtra("ItemPedido", itemPedido);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                });
+
+
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(MontagemAcaiActivity.this, DetalhesdoItemActivity.class);
-                intent.putExtra("acai", "pedidoDeAcai");
-                intent.putExtra("ItemPedido", itemPedido);
-                startActivity(intent);
-                finish();
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                AlertDialog.Builder mBilder = new AlertDialog.Builder(MontagemAcaiActivity.this, R.style.MyDialogTheme);
+                View layoutDialog = inflater.inflate(R.layout.dialog_cancal_mont_acai, null);
+
+                Button btVoltar = layoutDialog.findViewById(R.id.bt_fechar_dialog_montagem_acai);
+                Button btCancelarMontagem = layoutDialog.findViewById(R.id.bt_cancel_mont_acai);
+
+                mBilder.setView(layoutDialog);
+                final AlertDialog dialogCancelMontagemAcai = mBilder.create();
+                dialogCancelMontagemAcai.show();
+
+                btVoltar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogCancelMontagemAcai.dismiss();
+                    }
+                });
+
+                btCancelarMontagem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MontagemAcaiActivity.this, DetalhesdoItemActivity.class);
+                        intent.putExtra("acai", "pedidoDeAcai");
+                        intent.putExtra("ItemPedido", itemPedido);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                });
         }
 
         return super.onOptionsItemSelected(item);
@@ -92,11 +161,38 @@ public class MontagemAcaiActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent intent = new Intent(MontagemAcaiActivity.this, DetalhesdoItemActivity.class);
-        intent.putExtra("ItemPedido", itemPedido);
-        startActivity(intent);
+        //Mostrar Diálog Cancelar montagem
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        finish();
+        AlertDialog.Builder mBilder = new AlertDialog.Builder(MontagemAcaiActivity.this, R.style.MyDialogTheme);
+        View layoutDialog = inflater.inflate(R.layout.dialog_cancal_mont_acai, null);
+
+        Button btVoltar = layoutDialog.findViewById(R.id.bt_fechar_dialog_montagem_acai);
+        Button btCancelarMontagem = layoutDialog.findViewById(R.id.bt_cancel_mont_acai);
+
+        mBilder.setView(layoutDialog);
+        final AlertDialog dialogCancelMontagemAcai = mBilder.create();
+        dialogCancelMontagemAcai.show();
+
+        btVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogCancelMontagemAcai.dismiss();
+            }
+        });
+
+        btCancelarMontagem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MontagemAcaiActivity.this, DetalhesdoItemActivity.class);
+                intent.putExtra("acai", "pedidoDeAcai");
+                intent.putExtra("ItemPedido", itemPedido);
+                startActivity(intent);
+                finish();
+            }
+
+        });
+
     }
 
     @Override
@@ -123,7 +219,8 @@ public class MontagemAcaiActivity extends AppCompatActivity {
         acaiTotal = getIntent().getDoubleExtra("acaiTotal", 0);
         itemPedido = getIntent().getParcelableExtra("acai");
 
-        recheiosDoAcai = getIntent().getParcelableArrayListExtra("recheiosSelecionados");
+        todosRecheios = getIntent().getParcelableArrayListExtra("recheiosSelecionados");
+        recheiosDoAcai = getIntent().getParcelableArrayListExtra("recheiosPadrao");
 
         telaAnterior = getIntent().getStringExtra("telaAnterior");
 
@@ -248,7 +345,6 @@ public class MontagemAcaiActivity extends AppCompatActivity {
 
     private void preencherRecyclerView() {
         closeProgressBar();
-
 
         mRecheiosList = (RecyclerView) findViewById(R.id.recheios);
         mRecheiosList.setHasFixedSize(true);
