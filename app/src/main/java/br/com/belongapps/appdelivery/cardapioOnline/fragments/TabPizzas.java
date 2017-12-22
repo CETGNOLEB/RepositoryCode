@@ -1,5 +1,6 @@
 package br.com.belongapps.appdelivery.cardapioOnline.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import com.squareup.picasso.Picasso;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherPizzaActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.TamPizza;
+import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
+import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class TabPizzas extends Fragment {
@@ -114,58 +117,58 @@ public class TabPizzas extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                            if (statusEstabelecimento == false) {
+                        if (statusEstabelecimento == false) {
 
-                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                                View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
+                            AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+                            View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
 
-                                Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
+                            Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
 
-                                mBilder.setView(layoutDialog);
-                                final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                                dialogEstabelecimentoFechado.show();
+                            mBilder.setView(layoutDialog);
+                            final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
+                            dialogEstabelecimentoFechado.show();
 
-                                btEntendi.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogEstabelecimentoFechado.dismiss();
-                                    }
-                                });
+                            btEntendi.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialogEstabelecimentoFechado.dismiss();
+                                }
+                            });
 
-                            } else if (statusDelivery == false) {
+                        } else if (statusDelivery == false) {
 
-                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                                View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
+                            AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+                            View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
 
-                                Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
-                                Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
+                            Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
+                            Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
 
-                                mBilder.setView(layoutDialog);
-                                final AlertDialog dialogDeliveryFechado = mBilder.create();
-                                dialogDeliveryFechado.show();
+                            mBilder.setView(layoutDialog);
+                            final AlertDialog dialogDeliveryFechado = mBilder.create();
+                            dialogDeliveryFechado.show();
 
-                                btVoltar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogDeliveryFechado.dismiss();
-                                    }
-                                });
+                            btVoltar.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialogDeliveryFechado.dismiss();
+                                }
+                            });
 
-                                btContinuar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogDeliveryFechado.dismiss();
-                                        selecionarItem(model);
-                                    }
-                                });
+                            btContinuar.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialogDeliveryFechado.dismiss();
+                                    selecionarItem(model);
+                                }
+                            });
 
-                            } else {
-                                selecionarItem(model);
-                            }
+                        } else {
+                            selecionarItem(model);
+                        }
                     }
                 });
             }
@@ -175,74 +178,82 @@ public class TabPizzas extends Fragment {
 
     }
 
-    public void selecionarItem(final TamPizza model){
-        AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext());
-        View layoutDialog = getActivity().getLayoutInflater().inflate(R.layout.dialog_tipo_pizza, null);
+    public void selecionarItem(final TamPizza model) {
+        if (FirebaseAuthApp.getUsuarioLogado() == null) {
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+            ((Activity) getContext()).finish();
+        } else {
 
-        mBilder.setView(layoutDialog);
-        final AlertDialog dialogEscolherTipoPizza = mBilder.create();
-        dialogEscolherTipoPizza.show();
+            AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext());
+            View layoutDialog = getActivity().getLayoutInflater().inflate(R.layout.dialog_tipo_pizza, null);
 
-        Button btConfirmTipoPizza = (Button) layoutDialog.findViewById(R.id.bt_confirmar_tipo_pizza);
-        Button btCancelTipoPizza = (Button) layoutDialog.findViewById(R.id.bt_cancel_tipo_pizza);
+            mBilder.setView(layoutDialog);
+            final AlertDialog dialogEscolherTipoPizza = mBilder.create();
+            dialogEscolherTipoPizza.show();
 
-        btCancelTipoPizza.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogEscolherTipoPizza.dismiss();
-            }
-        });
+            Button btConfirmTipoPizza = (Button) layoutDialog.findViewById(R.id.bt_confirmar_tipo_pizza);
+            Button btCancelTipoPizza = (Button) layoutDialog.findViewById(R.id.bt_cancel_tipo_pizza);
 
-        btConfirmTipoPizza.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EscolherPizzaActivity.class);
-                intent.putExtra("TamPizza", getTamPizza(model.getNome()));
-                intent.putExtra("TipoPizza", tipodaPizza(tipoPizzaSelecionada));
-                startActivity(intent);
-                getActivity().finish();
-            }
-        });
+            btCancelTipoPizza.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogEscolherTipoPizza.dismiss();
+                }
+            });
 
-        RadioButton radioInteira = (RadioButton) layoutDialog.findViewById(R.id.radio_inteira);
-        radioInteira.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tipoPizzaSelecionada = 0;
-            }
-        });
+            btConfirmTipoPizza.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), EscolherPizzaActivity.class);
+                    intent.putExtra("TamPizza", getTamPizza(model.getNome()));
+                    intent.putExtra("TipoPizza", tipodaPizza(tipoPizzaSelecionada));
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            });
 
-        RadioButton radioMetadeMetade = (RadioButton) layoutDialog.findViewById(R.id.radio_metade_metade);
-        radioMetadeMetade.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tipoPizzaSelecionada = 1;
-            }
-        });
+            RadioButton radioInteira = layoutDialog.findViewById(R.id.radio_inteira);
+            radioInteira.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tipoPizzaSelecionada = 0;
+                }
+            });
 
-        RadioButton radioTresSabores = (RadioButton) layoutDialog.findViewById(R.id.radio_tres_sabores);
-        radioTresSabores.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tipoPizzaSelecionada = 2;
-            }
-        });
+            RadioButton radioMetadeMetade = layoutDialog.findViewById(R.id.radio_metade_metade);
+            radioMetadeMetade.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tipoPizzaSelecionada = 1;
+                }
+            });
 
-        RadioButton radioQuatroSabores = (RadioButton) layoutDialog.findViewById(R.id.radio_quatro_sabores);
-        radioQuatroSabores.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tipoPizzaSelecionada = 3;
-            }
-        });
+            RadioButton radioTresSabores = layoutDialog.findViewById(R.id.radio_tres_sabores);
+            radioTresSabores.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tipoPizzaSelecionada = 2;
+                }
+            });
+
+            RadioButton radioQuatroSabores = layoutDialog.findViewById(R.id.radio_quatro_sabores);
+            radioQuatroSabores.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tipoPizzaSelecionada = 3;
+                }
+            });
+
+        }
     }
 
     private int getTamPizza(String modelNome) {
-        if (modelNome.contains("Pequena")){
+        if (modelNome.contains("Pequena")) {
             return 0;
-        } else if(modelNome.contains("Média")){
+        } else if (modelNome.contains("Média")) {
             return 1;
-        } else{
+        } else {
             return 2;
         }
     }

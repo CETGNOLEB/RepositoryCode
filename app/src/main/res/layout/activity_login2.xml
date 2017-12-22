@@ -98,13 +98,25 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/tv_redefinir_senha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/linkTextColor"
+                    android:layout_below="@+id/input_login_senha"
+                    android:text="Esqueci minha senha"/>
+
                 <Button
                     android:id="@+id/bt_entrar"
-                    android:layout_width="130dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@+id/input_login_senha"
+                    android:layout_below="@+id/tv_redefinir_senha"
                     android:layout_marginBottom="20dp"
+                    android:paddingRight="40dp"
+                    android:paddingLeft="40dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/border_button_white"

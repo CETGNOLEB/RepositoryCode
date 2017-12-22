@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editEmail;
     private EditText editSenha;
     private Button btEntrar;
+    private TextView redefinirSenha;
 
     private Button btGoCadUsuario;
     private ProgressDialog mProgressDialog;
@@ -48,9 +49,9 @@ public class LoginActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseUserReference;
 
     /*SIGN-IN GOOGLE*/
-    private SignInButton signInGoogleButton;
+    /*private SignInButton signInGoogleButton;
     private static final int RC_SIGN_IN = 1;
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mGoogleApiClient;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
         };
 
         initViews();
-
 
         btGoCadUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +99,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        /*Configure Google SignIn*/
+        redefinirSenha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RedefinirSenhaActivity.class);
+                intent.putExtra("email", editEmail.getText().toString());
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        /*Configure Google SignIn*//*
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -120,21 +130,23 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 signInGoogle();
             }
-        });
+        });*/
     }
 
     private void initViews() {
         mProgressDialog = new ProgressDialog(this);
-        editEmail = (EditText) findViewById(R.id.login_email);
-        editSenha = (EditText) findViewById(R.id.login_senha);
-        btEntrar = (Button) findViewById(R.id.bt_entrar);
-        btGoCadUsuario = (Button) findViewById(R.id.bt_init_cad_usuario);
+        editEmail = findViewById(R.id.login_email);
+        editSenha = findViewById(R.id.login_senha);
+        btEntrar = findViewById(R.id.bt_entrar);
+        btGoCadUsuario = findViewById(R.id.bt_init_cad_usuario);
+
+        redefinirSenha = findViewById(R.id.tv_redefinir_senha);
 
         /*SignIn*/
-        signInGoogleButton = (SignInButton) findViewById(R.id.bt_gmail_login);
+        //signInGoogleButton = findViewByI;d(R.id.bt_gmail_login);
 
-        TextView textView = (TextView) signInGoogleButton.getChildAt(0);
-        textView.setText("Google");
+       /* TextView textView = (TextView) signInGoogleButton.getChildAt(0);
+        textView.setText("Google");*/
     }
 
     private void startSingInEmailESenha(String email, String senha) {
@@ -168,16 +180,16 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void signInGoogle() {
+    /*private void signInGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+    }*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        /*// Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
@@ -188,10 +200,10 @@ public class LoginActivity extends AppCompatActivity {
                 // Google Sign In failed, update UI appropriately
                 // ...
             }
-        }
+        }*/
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    /*private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -200,19 +212,19 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            /*FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);*/
+                            *//*FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);*//*
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "Falha na Autentição.",
                                     Toast.LENGTH_SHORT).show();
-                            /*updateUI(null);*/
+                            *//*updateUI(null);*//*
                         }
 
                         // ...
                     }
                 });
-    }
+    }*/
 
 
     @Override
