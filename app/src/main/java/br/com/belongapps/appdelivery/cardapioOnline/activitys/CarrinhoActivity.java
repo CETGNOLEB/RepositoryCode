@@ -39,6 +39,7 @@ import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
+import br.com.belongapps.appdelivery.util.Print;
 
 public class CarrinhoActivity extends AppCompatActivity {
 
@@ -146,6 +147,12 @@ public class CarrinhoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                //Verifica Se algum item n pode ser entregue
+                for (ItemPedido item : itens_pedido) {
+                    Print.logError("NOME DO ITEM: " + item.getNome());
+                    Print.logError("PERMITE ENTREGA: " + item.getPermite_entrega());
+                }
+
                 if (!DataUtil.horaAutomaticaAtivada(getContentResolver())) {
 
                     LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -154,7 +161,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     View layoutDialog = inflater.inflate(R.layout.dialog_redefinir_data, null);
                     mBilder.setCancelable(false);
 
-                    Button btConfigData = (Button) layoutDialog.findViewById(R.id.bt_config_data);
+                    Button btConfigData = layoutDialog.findViewById(R.id.bt_config_data);
 
                     mBilder.setView(layoutDialog);
                     final AlertDialog dialogConfigData = mBilder.create();
@@ -172,7 +179,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     return;
                 }
 
-                /*Sem Conexão*/
+                //*Sem Conexão*//
                 if (!ConexaoUtil.verificaConectividade(CarrinhoActivity.this)) {
 
                     LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -180,7 +187,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
                     View layoutDialog = inflater.inflate(R.layout.dialog_sem_conexao, null);
 
-                    Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_sem_conexao);
+                    Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_sem_conexao);
 
                     mBilder.setView(layoutDialog);
                     final AlertDialog dialogSemConexao = mBilder.create();
@@ -196,7 +203,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     return;
 
                 }
-                    /*Estabelecimento Fechado*/
+                //*Estabelecimento Fechado*//
                 if (statusEstabelecimento == false) {
 
                     LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -204,7 +211,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
                     View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
 
-                    Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
+                    Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
 
                     mBilder.setView(layoutDialog);
                     final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
@@ -228,7 +235,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
                     View layoutDialog = inflater.inflate(R.layout.dialog_nao_pode_pedir, null);
 
-                    Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_nao_pode_pedir);
+                    Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_nao_pode_pedir);
 
                     mBilder.setView(layoutDialog);
                     final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
@@ -252,7 +259,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     final AlertDialog dialogEscolherFormEntrega = mBilder.create();
                     dialogEscolherFormEntrega.show();
 
-                    radioDelivery = (RadioButton) layoutDialog.findViewById(R.id.radio_delivery);
+                    radioDelivery = layoutDialog.findViewById(R.id.radio_delivery);
 
                     if (statusDelivery == false) {
                         radioDelivery.setVisibility(View.GONE);
@@ -260,14 +267,14 @@ public class CarrinhoActivity extends AppCompatActivity {
                         radioDelivery.setVisibility(View.VISIBLE);
                     }
 
-                    RelativeLayout rlSemDelivery = (RelativeLayout) layoutDialog.findViewById(R.id.rl_sem_delivery);
+                    RelativeLayout rlSemDelivery = layoutDialog.findViewById(R.id.rl_sem_delivery);
 
-                    if (statusDelivery == false){
+                    if (statusDelivery == false) {
                         rlSemDelivery.setVisibility(View.VISIBLE);
                     }
 
-                    Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_cancel_esc_forma_pagamento);
-                    Button btConfirm = (Button) layoutDialog.findViewById(R.id.bt_confirmar_forma_entrega);
+                    Button btCancel = layoutDialog.findViewById(R.id.bt_cancel_esc_forma_pagamento);
+                    Button btConfirm = layoutDialog.findViewById(R.id.bt_confirmar_forma_entrega);
 
                     btCancel.setOnClickListener(new View.OnClickListener() {
                         @Override

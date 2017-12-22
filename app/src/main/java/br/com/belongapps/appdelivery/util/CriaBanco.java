@@ -22,13 +22,15 @@ public class CriaBanco extends SQLiteOpenHelper{
     public static final String CATEGORIA_ITEM = "categoria";
     public static final String KEY_ITEM = "keyItemCardapio";
 
+    public static final String PERMITE_ENTREGA = "permite_entrega";
+
     public static final String NOME_METADE_2 = "nomeMetade2";
     public static final String DESCRICAO_METADE_2 = "descricaoMetade2";
     public static final String OBSERVACAO_METADE_2 = "observacaoMetade2";
     public static final String REF_IMG_METADE_2 = "ref_imgMetade2";
     public static final String VALOR_UNIT_METADE_2 = "valor_unit_metade_2";
 
-    private static final int VERSAO = 1;
+    private static final int VERSAO = 2;
 
     public CriaBanco(Context context){
         super(context,NOME_BANCO,null,VERSAO);
@@ -50,6 +52,8 @@ public class CriaBanco extends SQLiteOpenHelper{
                 + CATEGORIA_ITEM + " text, "
                 + KEY_ITEM + " text, "
 
+                + PERMITE_ENTREGA + " integer, "
+
                 + NOME_METADE_2 + " text, "
                 + DESCRICAO_METADE_2 + " text, "
                 + OBSERVACAO_METADE_2 + " text, "
@@ -61,8 +65,9 @@ public class CriaBanco extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS" + TABELA);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABELA);
         onCreate(sqLiteDatabase);
     }
+
 
 }

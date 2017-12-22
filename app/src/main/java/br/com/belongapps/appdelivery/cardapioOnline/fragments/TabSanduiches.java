@@ -85,11 +85,11 @@ public class TabSanduiches extends Fragment {
 
         itemPedido = new ItemPedido();
 
-        mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_escolher_sanduiche);
+        mProgressBar = getActivity().findViewById(R.id.progressbar_escolher_sanduiche);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("7");
         mDatabaseReference.keepSynced(true);
 
-        mSanduicheList = (RecyclerView) getView().findViewById(R.id.list_sanduiche);
+        mSanduicheList = getView().findViewById(R.id.list_sanduiche);
         mSanduicheList.setHasFixedSize(true);
         mSanduicheList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -116,7 +116,7 @@ public class TabSanduiches extends Fragment {
                 viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitarioEPromocao(model.getValor_unit(), model.isStatus_promocao(), model.getPreco_promocional());
                 viewHolder.setImagem(getContext(), model.getRef_img());
-                viewHolder.setStatus(model.getStatus_item());
+                viewHolder.setStatus(model.getStatus_item(), model.getPermite_entrega());
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -144,6 +144,35 @@ public class TabSanduiches extends Fragment {
                                     }
                                 });
 
+                            } else if (model.getPermite_entrega() == 2){
+
+                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+                                View layoutDialog = inflater.inflate(R.layout.dialog_nao_permite_entrega, null);
+
+                                Button btVoltar = layoutDialog.findViewById(R.id.bt_voltar_item_sem_entrega);
+                                Button btContinuar = layoutDialog.findViewById(R.id.bt_continuar_item_sem_entrega);
+
+                                mBilder.setView(layoutDialog);
+                                final AlertDialog dialogDeliveryFechado = mBilder.create();
+                                dialogDeliveryFechado.show();
+
+                                btVoltar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialogDeliveryFechado.dismiss();
+                                    }
+                                });
+
+                                btContinuar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialogDeliveryFechado.dismiss();
+                                        selecionarItem(model, key);
+                                    }
+                                });
+
                             } else if (statusDelivery == false) {
 
                                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -151,8 +180,8 @@ public class TabSanduiches extends Fragment {
                                 AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
                                 View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
 
-                                Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
-                                Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
+                                Button btVoltar = layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
+                                Button btContinuar = layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
 
                                 mBilder.setView(layoutDialog);
                                 final AlertDialog dialogDeliveryFechado = mBilder.create();
@@ -194,6 +223,7 @@ public class TabSanduiches extends Fragment {
             itemPedido.setDescricao(model.getDescricao());
             itemPedido.setRef_img(model.getRef_img());
             itemPedido.setCategoria(model.getCategoria_id());
+            itemPedido.setPermite_entrega(model.getPermite_entrega());
 
             if (model.isStatus_promocao() == true) {
                 itemPedido.setValor_unit(model.getPreco_promocional());
@@ -224,27 +254,27 @@ public class TabSanduiches extends Fragment {
             super(itemView);
 
             mView = itemView;
-            card_sanduiche = (CardView) mView.findViewById(R.id.card_sanduiche);
+            card_sanduiche = mView.findViewById(R.id.card_sanduiche);
 
         }
 
         public void setNome(String nome) {
 
-            TextView item_nome = (TextView) mView.findViewById(R.id.item_nome_sanduiche);
+            TextView item_nome = mView.findViewById(R.id.item_nome_sanduiche);
             item_nome.setText(nome);
 
         }
 
         public void setDescricao(String descricao) {
 
-            TextView item_descricao = (TextView) mView.findViewById(R.id.item_desc_sanduiche);
+            TextView item_descricao = mView.findViewById(R.id.item_desc_sanduiche);
             item_descricao.setText(descricao);
         }
 
         public void setValorUnitarioEPromocao(double valor_unit, boolean status_promocao, double valor_promocional) {
 
-            TextView item_valor_promo = (TextView) mView.findViewById(R.id.item_valor_promo_sanduiche);
-            TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_sanduiche);
+            TextView item_valor_promo = mView.findViewById(R.id.item_valor_promo_sanduiche);
+            TextView item_valor_unit = mView.findViewById(R.id.item_valor_unit_sanduiche);
 
             if (status_promocao == true) {
                 item_valor_promo.setText(StringUtil.formatToMoeda(valor_promocional));
@@ -258,19 +288,26 @@ public class TabSanduiches extends Fragment {
 
         }
 
-        public void setStatus(int status) {
-            TextView item_status = (TextView) mView.findViewById(R.id.status_sanduiche);
+        public void setStatus(int status, int permiteEntrega) {
+            TextView item_status = mView.findViewById(R.id.status_sanduiche);
 
-            if (status == 0) { //Se Indisponível
-                item_status.setVisibility(View.VISIBLE);
-            } else {
-                item_status.setVisibility(View.INVISIBLE);
+            //Não permite entrega
+            if (permiteEntrega == 2){
+                item_status.setText("Não Entregamos");
             }
 
+            if (status == 0 || permiteEntrega == 2) { //Se Indisponível ou nao faz entrega
+                item_status.setVisibility(View.VISIBLE);
+                if (status == 0){
+                    item_status.setText("Produto Indisponível");
+                }
+            } else{
+                item_status.setVisibility(View.INVISIBLE);
+            }
         }
 
         public void setImagem(final Context context, final String url) {
-            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_sanduiche);
+            final ImageView item_ref_image = mView.findViewById(R.id.img_sanduiche);
 
             Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(item_ref_image, new Callback() {
                 @Override

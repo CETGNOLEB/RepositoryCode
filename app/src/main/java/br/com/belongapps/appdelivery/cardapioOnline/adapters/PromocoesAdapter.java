@@ -64,6 +64,7 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
         viewHolder.setValorUnitario(item.getValor_unit());
         viewHolder.setValorPromo(item.getPreco_promocional());
         viewHolder.setImagem(context, item.getRef_img());
+        viewHolder.setStatusEntrega(item.getPermite_entrega());
 
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +77,7 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
                     AlertDialog.Builder mBilder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
                     View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
 
-                    Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
+                    Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
 
                     mBilder.setView(layoutDialog);
                     final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
@@ -90,6 +91,35 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
                     });
 
 
+                } else if (item.getPermite_entrega() == 2){
+
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                    AlertDialog.Builder mBilder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
+                    View layoutDialog = inflater.inflate(R.layout.dialog_nao_permite_entrega, null);
+
+                    Button btVoltar = layoutDialog.findViewById(R.id.bt_voltar_item_sem_entrega);
+                    Button btContinuar = layoutDialog.findViewById(R.id.bt_continuar_item_sem_entrega);
+
+                    mBilder.setView(layoutDialog);
+                    final AlertDialog dialogDeliveryFechado = mBilder.create();
+                    dialogDeliveryFechado.show();
+
+                    btVoltar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogDeliveryFechado.dismiss();
+                        }
+                    });
+
+                    btContinuar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogDeliveryFechado.dismiss();
+                            selecionarItem(item);
+                        }
+                    });
+
                 } else if (statusDelivery == false){
 
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -97,8 +127,8 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
                     AlertDialog.Builder mBilder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
                     View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
 
-                    Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
-                    Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
+                    Button btVoltar = layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
+                    Button btContinuar = layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
 
                     mBilder.setView(layoutDialog);
                     final AlertDialog dialogDeliveryFechado = mBilder.create();
@@ -136,6 +166,7 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
         itemPedido.setRef_img(item.getRef_img());
         itemPedido.setDescricao(item.getDescricao());
         itemPedido.setCategoria(item.getCategoria_id());
+        itemPedido.setPermite_entrega(item.getPermite_entrega());
 
         itemPedido.setKeyItem(item.getItemKey());
 
@@ -186,37 +217,37 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
             super(itemView);
 
             mView = itemView;
-            card_item_promo = (CardView) mView.findViewById(R.id.card_item_promo);
+            card_item_promo = mView.findViewById(R.id.card_item_promo);
 
         }
 
         public void setNome(String nome) {
 
-            TextView item_nome = (TextView) mView.findViewById(R.id.item_nome_item_promo);
+            TextView item_nome = mView.findViewById(R.id.item_nome_item_promo);
             item_nome.setText(nome);
 
         }
 
         public void setDescricao(String descricao) {
 
-            TextView item_descricao = (TextView) mView.findViewById(R.id.item_desc_item_promo);
+            TextView item_descricao = mView.findViewById(R.id.item_desc_item_promo);
             item_descricao.setText(descricao);
         }
 
         public void setValorUnitario(double valor_unit) {
-            TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_item_promo);
+            TextView item_valor_unit = mView.findViewById(R.id.item_valor_unit_item_promo);
             item_valor_unit.setText(StringUtil.formatToMoeda(valor_unit));
             item_valor_unit.setPaintFlags(item_valor_unit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
         public void setValorPromo(double valor_unit) {
-            TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_promo_valor_unit_item_promo);
+            TextView item_valor_unit = mView.findViewById(R.id.item_promo_valor_unit_item_promo);
             item_valor_unit.setText(StringUtil.formatToMoeda(valor_unit));
         }
 
 
         public void setImagem(final Context context, final String url) {
-            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img__item_promo);
+            final ImageView item_ref_image = mView.findViewById(R.id.img__item_promo);
 
             Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(item_ref_image, new Callback() {
                 @Override
@@ -229,6 +260,18 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
                     Picasso.with(context).load(url).into(item_ref_image);
                 }
             });
+        }
+
+        public void setStatusEntrega(int permiteEntrega) {
+            TextView item_status =  mView.findViewById(R.id.status_entrega_promo);
+
+            if (permiteEntrega == 2) { //Se Indisponível ou nao faz entrega
+                item_status.setVisibility(View.VISIBLE);
+            } else{
+                item_status.setVisibility(View.INVISIBLE);
+            }
+
+
         }
 
     }

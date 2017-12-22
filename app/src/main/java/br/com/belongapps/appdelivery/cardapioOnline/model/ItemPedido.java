@@ -4,7 +4,7 @@ package br.com.belongapps.appdelivery.cardapioOnline.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ItemPedido implements Parcelable{
+public class ItemPedido implements Parcelable {
 
     private String nome;
     private String descricao;
@@ -12,6 +12,7 @@ public class ItemPedido implements Parcelable{
     private String ref_img;
     private double valor_unit;
     private int quantidade;
+    private int permite_entrega;
 
     private double valor_total;
 
@@ -38,7 +39,7 @@ public class ItemPedido implements Parcelable{
     private String categoria;
     private String keyItem;
 
-    public ItemPedido(String nome, String descricao, String observacao, String ref_img, double valor_unit, int quantidade, double valor_total,
+    public ItemPedido(String nome, String descricao, String observacao, String ref_img, double valor_unit, int quantidade, int permite_entrega, double valor_total,
                       String nomeMetade2, String descMetade2, String obsMetade2, String imgMetade2, double valorMetade2,
                       String nomeMetade3, String descMetade3, String obsMetade3, String imgMetade3, double valorMetade3,
                       String nomeMetade4, String descMetade4, String obsMetade4, String imgMetade4, double valorMetade4,
@@ -49,6 +50,7 @@ public class ItemPedido implements Parcelable{
         this.observacao = observacao;
         this.ref_img = ref_img;
         this.valor_unit = valor_unit;
+        this.permite_entrega = permite_entrega;
         this.quantidade = quantidade;
         this.valor_total = valor_total;
 
@@ -75,7 +77,7 @@ public class ItemPedido implements Parcelable{
         this.categoria = categoria;
     }
 
-    public ItemPedido(){
+    public ItemPedido() {
 
     }
 
@@ -86,6 +88,7 @@ public class ItemPedido implements Parcelable{
         ref_img = in.readString();
 
         valor_unit = in.readDouble();
+        permite_entrega = in.readInt();
         quantidade = in.readInt();
 
         valor_total = in.readDouble();
@@ -137,6 +140,7 @@ public class ItemPedido implements Parcelable{
         dest.writeString(observacao);
         dest.writeString(ref_img);
         dest.writeDouble(valor_unit);
+        dest.writeInt(permite_entrega);
 
         dest.writeInt(quantidade);
         dest.writeDouble(valor_total);
@@ -202,6 +206,14 @@ public class ItemPedido implements Parcelable{
 
     public void setValor_unit(double valor_unit) {
         this.valor_unit = valor_unit;
+    }
+
+    public int getPermite_entrega() {
+        return permite_entrega;
+    }
+
+    public void setPermite_entrega(int permite_entrega) {
+        this.permite_entrega = permite_entrega;
     }
 
     public int getQuantidade() {

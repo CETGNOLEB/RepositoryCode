@@ -112,6 +112,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private Button btVoltarFinalizar;
 
     private Cliente cliente;
+    private Boolean statusDelivery = true;
+    private Boolean statusEstabelecimento = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +131,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         populateViewValores();
 
-        finalizarPedido = (Button) findViewById(R.id.bt_finalizar_pedido);
+        finalizarPedido = findViewById(R.id.bt_finalizar_pedido);
 
         finalizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +140,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             }
         });
 
-        btVoltarFinalizar = (Button) findViewById(R.id.bt_voltar_finalizar);
+        btVoltarFinalizar = findViewById(R.id.bt_voltar_finalizar);
         btVoltarFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,9 +151,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         });
 
         //Cadastrar Novo Endereço
-        btcadastrarEndereco = (Button) findViewById(R.id.cadastrar_endereco);
+        btcadastrarEndereco = findViewById(R.id.cadastrar_endereco);
 
-        btAlterarEndereco = (Button) findViewById(R.id.bt_alterar_endereco);
+        btAlterarEndereco = findViewById(R.id.bt_alterar_endereco);
         btcadastrarEndereco.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,7 +177,55 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         /*Verificar Conexão*/
         if (!ConexaoUtil.verificaConectividade(FinalizarPedidoActivity.this)) {
+
             exibirDilogSemConexao();
+
+        } else if (!statusEstabelecimento) { //Estabelecimento Fechado
+
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this, R.style.MyDialogTheme);
+            View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
+
+            Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
+
+            mBilder.setView(layoutDialog);
+            final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
+            dialogEstabelecimentoFechado.show();
+
+            btEntendi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogEstabelecimentoFechado.dismiss();
+                }
+            });
+
+        } else if (!statusDelivery) {
+
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this, R.style.MyDialogTheme);
+            View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
+
+            TextView descDialogDeliveryFechado = layoutDialog.findViewById(R.id.desc_dialog_delivery_fechado);
+            descDialogDeliveryFechado.setText("Nosso delivery está fechado, volte e selecione outra forma de recebimento!");
+
+            Button btVoltar = layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
+            btVoltar.setVisibility(View.INVISIBLE);
+            Button btContinuar = layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
+            btContinuar.setText("Entendi");
+
+            mBilder.setView(layoutDialog);
+            final AlertDialog dialogDeliveryFechado = mBilder.create();
+            dialogDeliveryFechado.show();
+
+            btContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogDeliveryFechado.dismiss();
+                }
+            });
+
         } else { //Conectado
 
             boolean frmPagValida = verificarFormadePagamento();
@@ -244,7 +294,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     }
 
-    private void exibirDilogSemConexao(){
+    private void exibirDilogSemConexao() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this, R.style.MyDialogTheme);
@@ -784,12 +834,35 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         bairrosNomes = new ArrayList<>();
         totaldoPedido = getIntent().getDoubleExtra("totalPedido", 0);
 
+        buscarStatusEstabelecimentoDelivery();
         buscarFormasdePagamento();
         buscarEnderecosdoUsuario();
         buscarBairros();
         populateFormasdePagamento();
         buscarDadosdoCliente(FirebaseAuthApp.getUsuarioLogado().getUid());
 
+    }
+
+    private void buscarStatusEstabelecimentoDelivery() {
+        database = FirebaseDatabase.getInstance().getReference();
+
+        database.child("configuracoes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Boolean status = Boolean.parseBoolean(dataSnapshot.child("status_delivery").child("status").getValue().toString());
+                statusDelivery = status;
+
+                Boolean statusEstab = Boolean.parseBoolean(dataSnapshot.child("status_estabelecimento").child("status").getValue().toString());
+                statusEstabelecimento = statusEstab;
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void buscarFormasdePagamento() {

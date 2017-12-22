@@ -41,6 +41,8 @@ public class CarrinhoDAO {
         valores.put(banco.CATEGORIA_ITEM, itemPedido.getCategoria());
         valores.put(banco.KEY_ITEM, itemPedido.getKeyItem());
 
+        valores.put(banco.PERMITE_ENTREGA, itemPedido.getPermite_entrega());
+
         resultado = db.insert(CriaBanco.TABELA, null, valores);
         db.close();
 
@@ -74,6 +76,8 @@ public class CarrinhoDAO {
 
                     item.setCategoria(cursor.getString(cursor.getColumnIndex(banco.CATEGORIA_ITEM)));
                     item.setKeyItem(cursor.getString(cursor.getColumnIndex(banco.KEY_ITEM)));
+
+                    item.setPermite_entrega(Integer.parseInt(cursor.getString(cursor.getColumnIndex(banco.PERMITE_ENTREGA))));
 
                     itens.add(item);
                 } while (cursor.moveToNext());

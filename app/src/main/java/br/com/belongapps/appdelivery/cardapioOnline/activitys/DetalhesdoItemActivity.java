@@ -86,7 +86,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_item);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_detalhes_item);
+        mToolbar = findViewById(R.id.toolbar_detalhes_item);
         mToolbar.setTitle("Detalhes do Produto");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -159,7 +159,6 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
 
         observacao = observacaoDetalheProduto.getText().toString();
-
 
         if (!observacao.isEmpty()) {
             itemPedido.setObservacao(observacao);
@@ -403,11 +402,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
     public void initViews() {
         //TextViews
-        nomeDetalheProduto = (TextView) findViewById(R.id.nome_produto_detalhe_item);
-        descDetalheProduto = (TextView) findViewById(R.id.descricao_produto_detalhe_item);
-        imgDetalheProduto = (ImageView) findViewById(R.id.img_produto_detalhe_item);
-        valorDetalheProduto = (TextView) findViewById(R.id.valor_produto_detalhe_item);
-        observacaoDetalheProduto = (TextView) findViewById(R.id.observacao_produto_detalhe_item);
+        nomeDetalheProduto = findViewById(R.id.nome_produto_detalhe_item);
+        descDetalheProduto = findViewById(R.id.descricao_produto_detalhe_item);
+        imgDetalheProduto = findViewById(R.id.img_produto_detalhe_item);
+        valorDetalheProduto = findViewById(R.id.valor_produto_detalhe_item);
+        observacaoDetalheProduto = findViewById(R.id.observacao_produto_detalhe_item);
 
         observacaoDetalheProduto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -416,22 +415,22 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             }
         });
 
-        qtdProdutoDetalheProduto = (TextView) findViewById(R.id.txt_qtd_item_delathe_produto);
+        qtdProdutoDetalheProduto = findViewById(R.id.txt_qtd_item_delathe_produto);
 
         //Botoes
-        btDiminuirQtd = (Button) findViewById(R.id.bt_diminuir_qtd_item_detalhe_produto);
-        btAumentarQtd = (Button) findViewById(R.id.bt_aumentar_qtd_item_detalhe_produto);
-        addAoCarrinho = (Button) findViewById(R.id.bt_proximo_detalhes);
-        btVoltar = (Button) findViewById(R.id.bt_voltar_detalhes);
+        btDiminuirQtd = findViewById(R.id.bt_diminuir_qtd_item_detalhe_produto);
+        btAumentarQtd = findViewById(R.id.bt_aumentar_qtd_item_detalhe_produto);
+        addAoCarrinho = findViewById(R.id.bt_proximo_detalhes);
+        btVoltar = findViewById(R.id.bt_voltar_detalhes);
 
         //PAO
-        cardTipoPaoItem = (CardView) findViewById(R.id.card_tipo_pao_item);
-        radioGroupPao = (RadioGroup) findViewById(R.id.radio_group_pao);
+        cardTipoPaoItem = findViewById(R.id.card_tipo_pao_item);
+        radioGroupPao = findViewById(R.id.radio_group_pao);
 
         //ACAI
-        cardItensAcai = (CardView) findViewById(R.id.card_itens_acai);
-        itensAcai = (TextView) findViewById(R.id.itens_acai);
-        btAlterarItens = (Button) findViewById(R.id.bt_alterar_itens);
+        cardItensAcai = findViewById(R.id.card_itens_acai);
+        itensAcai = findViewById(R.id.itens_acai);
+        btAlterarItens = findViewById(R.id.bt_alterar_itens);
 
         btAlterarItens.setOnClickListener(new View.OnClickListener() {
             @Override

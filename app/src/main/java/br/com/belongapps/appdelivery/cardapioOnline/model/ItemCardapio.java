@@ -10,6 +10,7 @@ public class ItemCardapio {
     private double preco_promocional;
     private int qtd_recheios;
     private int status_item;
+    private int permite_entrega;
     private boolean status_promocao;
 
     private String categoria_id;
@@ -30,7 +31,7 @@ public class ItemCardapio {
 
     private String itemKey;
 
-    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, int status_item, boolean status_promocao,
+    public ItemCardapio(String nome, String descricao, String ref_img, double valor_unit, double preco_promocional, int qtd_recheios, int status_item, int permite_entrega, boolean status_promocao,
                         String categoria_id,String itemKey,
                         double promo_pizza_p, double promo_pizza_m, double promo_pizza_g, double valor_pizza_p, double valor_pizza_m, double valor_pizza_g,
                         double promo_pao_arabe, double promo_pao_bola, double valor_pao_arabe, double valor_pao_bola) {
@@ -42,6 +43,7 @@ public class ItemCardapio {
         this.preco_promocional = preco_promocional;
         this.qtd_recheios = qtd_recheios;
         this.status_item = status_item;
+        this.permite_entrega = permite_entrega;
         this.status_promocao = status_promocao;
 
         this.categoria_id = categoria_id;
@@ -120,6 +122,14 @@ public class ItemCardapio {
 
     public void setStatus_item(int status_item) {
         this.status_item = status_item;
+    }
+
+    public int getPermite_entrega() {
+        return permite_entrega;
+    }
+
+    public void setPermite_entrega(int permite_entrega) {
+        this.permite_entrega = permite_entrega;
     }
 
     public String getCategoria_id() {

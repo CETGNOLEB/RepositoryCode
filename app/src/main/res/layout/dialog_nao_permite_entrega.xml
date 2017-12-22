@@ -11,19 +11,18 @@
         android:layout_marginTop="15dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:text="Delivery Fechado"
+        android:text="Atenção"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"/>
 
     <TextView
-        android:id="@+id/desc_dialog_delivery_fechado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="Não estamos realizando entregas no momento. Você ainda pode pedir para retirada ou consumo no estabelecimento."/>
+        android:text="Não realizamos entrega deste item. Você ainda pode pedir para consumo no estabelecimento."/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,11 +33,11 @@
         android:background="@drawable/border_bottom_around">
 
         <Button
-            android:id="@+id/bt_voltar_delivery_fechado"
+            android:id="@+id/bt_voltar_item_sem_entrega"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/bt_continuar_delivery_fechado"
+            android:layout_toLeftOf="@+id/bt_continuar_item_sem_entrega"
             android:layout_marginLeft="4dp"
             android:background="@android:color/transparent"
             android:text="VOLTAR"
@@ -46,7 +45,7 @@
             android:textSize="15sp" />
 
         <Button
-            android:id="@+id/bt_continuar_delivery_fechado"
+            android:id="@+id/bt_continuar_item_sem_entrega"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

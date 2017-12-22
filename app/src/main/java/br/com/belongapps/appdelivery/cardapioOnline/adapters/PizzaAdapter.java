@@ -74,7 +74,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
 
         viewHolder.setNome(item.getNome());
         viewHolder.setDescricao(getDescMini(item.getDescricao()));
-        viewHolder.setStatus(item.getStatus_item());
+        viewHolder.setStatus(item.getStatus_item(), item.getPermite_entrega());
 
         Print.logError("TAM PIZZA: " + tamPizza);
 
@@ -323,27 +323,27 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
             super(itemView);
 
             mView = itemView;
-            card_sabor_pizza = (CardView) mView.findViewById(R.id.card_sabor_pizzas);
+            card_sabor_pizza = mView.findViewById(R.id.card_sabor_pizzas);
 
         }
 
         public void setNome(String nome) {
 
-            TextView item_nome = (TextView) mView.findViewById(R.id.nome_sabor_pizza);
+            TextView item_nome = mView.findViewById(R.id.nome_sabor_pizza);
             item_nome.setText(nome);
 
         }
 
         public void setDescricao(String descricao) {
 
-            TextView item_descricao = (TextView) mView.findViewById(R.id.desc_sabor_pizza);
+            TextView item_descricao = mView.findViewById(R.id.desc_sabor_pizza);
             item_descricao.setText(descricao);
         }
 
         public Double setValorUnitarioEPromocao(double valor_unit, boolean status_promocao, double valor_promocional) {
 
-            TextView item_valor_promo = (TextView) mView.findViewById(R.id.promo_valor_unit_sabor_pizza);
-            TextView item_valor_unit = (TextView) mView.findViewById(R.id.valor_unit_sabor_pizza);
+            TextView item_valor_promo = mView.findViewById(R.id.promo_valor_unit_sabor_pizza);
+            TextView item_valor_unit = mView.findViewById(R.id.valor_unit_sabor_pizza);
 
             if (status_promocao == true && valor_promocional != 0) {
                 item_valor_promo.setText(StringUtil.formatToMoeda(valor_promocional));
@@ -359,7 +359,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
         }
 
         public void setImagem(final Context context, final String url) {
-            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_sabor_pizza);
+            final ImageView item_ref_image = mView.findViewById(R.id.img_sabor_pizza);
 
             Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(item_ref_image, new Callback() {
                 @Override
@@ -374,11 +374,19 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
             });
         }
 
-        public void setStatus(int status) {
-            TextView item_status = (TextView) mView.findViewById(R.id.status_sabor_pizza);
+        public void setStatus(int status, int permiteEntrega) {
+            TextView item_status = mView.findViewById(R.id.status_sabor_pizza);
 
-            if (status == 0) { //Se Indisponível
+            //Não permite entrega
+            if (permiteEntrega == 2){
+                item_status.setText("Não Entregamos");
+            }
+
+            if (status == 0 || permiteEntrega == 2) { //Se Indisponível ou nao faz entrega
                 item_status.setVisibility(View.VISIBLE);
+                if (status == 0){
+                    item_status.setText("Produto Indisponível");
+                }
             } else{
                 item_status.setVisibility(View.INVISIBLE);
             }

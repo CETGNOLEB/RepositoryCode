@@ -87,10 +87,10 @@ public class TabCombos extends Fragment {
 
         itemPedido = new ItemPedido();
 
-        mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_escolher_combo);
+        mProgressBar = getActivity().findViewById(R.id.progressbar_escolher_combo);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("itens_cardapio").child("11");
 
-        mCombosList = (RecyclerView) getView().findViewById(R.id.list_combos);
+        mCombosList = getView().findViewById(R.id.list_combos);
         mCombosList.setHasFixedSize(true);
         mCombosList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -116,7 +116,7 @@ public class TabCombos extends Fragment {
                 viewHolder.setNome(model.getNome());
                 viewHolder.setValorUnitarioEPromocao(model.getValor_unit(), model.isStatus_promocao(), model.getPreco_promocional());
                 viewHolder.setImagem(getContext(), model.getRef_img());
-                viewHolder.setStatus(model.getStatus_item());
+                viewHolder.setStatus(model.getStatus_item(), model.getPermite_entrega());
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -129,7 +129,7 @@ public class TabCombos extends Fragment {
                                 AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
                                 View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
 
-                                Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
+                                Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
 
                                 mBilder.setView(layoutDialog);
                                 final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
@@ -141,14 +141,43 @@ public class TabCombos extends Fragment {
                                         dialogEstabelecimentoFechado.dismiss();
                                     }
                                 });
+                            } else if (model.getPermite_entrega() == 2){
+
+                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+                                View layoutDialog = inflater.inflate(R.layout.dialog_nao_permite_entrega, null);
+
+                                Button btVoltar = layoutDialog.findViewById(R.id.bt_voltar_item_sem_entrega);
+                                Button btContinuar = layoutDialog.findViewById(R.id.bt_continuar_item_sem_entrega);
+
+                                mBilder.setView(layoutDialog);
+                                final AlertDialog dialogDeliveryFechado = mBilder.create();
+                                dialogDeliveryFechado.show();
+
+                                btVoltar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialogDeliveryFechado.dismiss();
+                                    }
+                                });
+
+                                btContinuar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialogDeliveryFechado.dismiss();
+                                        selecionarItem(model, key);
+                                    }
+                                });
+
                             } else if (statusDelivery == false) {
                                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                                 AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
                                 View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
 
-                                Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
-                                Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
+                                Button btVoltar = layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
+                                Button btContinuar = layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
 
                                 mBilder.setView(layoutDialog);
                                 final AlertDialog dialogDeliveryFechado = mBilder.create();
@@ -211,6 +240,7 @@ public class TabCombos extends Fragment {
         itemPedido.setDescricao(model.getDescricao());
         itemPedido.setRef_img(model.getRef_img());
         itemPedido.setCategoria(model.getCategoria_id());
+        itemPedido.setPermite_entrega(model.getPermite_entrega());
 
         if (model.isStatus_promocao() == true) {
             itemPedido.setValor_unit(model.getPreco_promocional());
@@ -238,21 +268,21 @@ public class TabCombos extends Fragment {
             super(itemView);
 
             mView = itemView;
-            card_combo = (CardView) mView.findViewById(R.id.card_combos);
+            card_combo = mView.findViewById(R.id.card_combos);
 
         }
 
         public void setNome(String nome) {
 
-            TextView item_nome = (TextView) mView.findViewById(R.id.item_nome_combo);
+            TextView item_nome = mView.findViewById(R.id.item_nome_combo);
             item_nome.setText(nome);
 
         }
 
         public void setValorUnitarioEPromocao(double valor_unit, boolean status_promocao, double valor_promocional) {
 
-            TextView item_valor_promo = (TextView) mView.findViewById(R.id.item_valor_promo_combo);
-            TextView item_valor_unit = (TextView) mView.findViewById(R.id.item_valor_unit_combo);
+            TextView item_valor_promo = mView.findViewById(R.id.item_valor_promo_combo);
+            TextView item_valor_unit = mView.findViewById(R.id.item_valor_unit_combo);
 
             if (status_promocao == true) {
                 item_valor_promo.setText(StringUtil.formatToMoeda(valor_promocional));
@@ -267,7 +297,7 @@ public class TabCombos extends Fragment {
         }
 
         public void setImagem(final Context context, final String url) {
-            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_combos);
+            final ImageView item_ref_image = mView.findViewById(R.id.img_combos);
             Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(item_ref_image, new Callback() {
                 @Override
                 public void onSuccess() {
@@ -281,12 +311,20 @@ public class TabCombos extends Fragment {
             });
         }
 
-        public void setStatus(int status) {
-            TextView item_status = (TextView) mView.findViewById(R.id.status_combo);
+        public void setStatus(int status, int permiteEntrega) {
+            TextView item_status = mView.findViewById(R.id.status_combo);
 
-            if (status == 0) { //Se Indisponível
+            //Não permite entrega
+            if (permiteEntrega == 2){
+                item_status.setText("Não Entregamos");
+            }
+
+            if (status == 0 || permiteEntrega == 2) { //Se Indisponível ou nao faz entrega
                 item_status.setVisibility(View.VISIBLE);
-            } else {
+                if (status == 0){
+                    item_status.setText("Produto Indisponível");
+                }
+            } else{
                 item_status.setVisibility(View.INVISIBLE);
             }
 
