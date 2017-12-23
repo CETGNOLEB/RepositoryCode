@@ -81,17 +81,17 @@ public class CarrinhoActivity extends AppCompatActivity {
 
         totalCarrinho = calcularValorTotal();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_carrinho);
+        mToolbar = findViewById(R.id.toolbar_carrinho);
         mToolbar.setTitle("Meu Carrinho");
         //mToolbar.setNavigationIcon(R.drawable.ic_action_cart);
         setSupportActionBar(mToolbar);
 
         //CARRINHO VAZIO
-        imgCardEmpty = (ImageView) findViewById(R.id.img_carrinho_vazio);
-        textCarrinhoVazio = (TextView) findViewById(R.id.text_carrinho_vazio);
-        descCarrinhoVazio = (TextView) findViewById(R.id.desc_carrinho_vazio);
-        confirmarPedido = (Button) findViewById(R.id.bt_realizar_pedido);
-        btCardEmpty = (Button) findViewById(R.id.bt_card_empty);
+        imgCardEmpty = findViewById(R.id.img_carrinho_vazio);
+        textCarrinhoVazio = findViewById(R.id.text_carrinho_vazio);
+        descCarrinhoVazio = findViewById(R.id.desc_carrinho_vazio);
+        confirmarPedido = findViewById(R.id.bt_realizar_pedido);
+        btCardEmpty = findViewById(R.id.bt_card_empty);
 
         if (itens_pedido.size() == 0) {
             imgCardEmpty.setVisibility(View.VISIBLE);
@@ -101,14 +101,14 @@ public class CarrinhoActivity extends AppCompatActivity {
             confirmarPedido.setVisibility(View.GONE);
         }
 
-        mRecyclerViewItemCarrinho = (RecyclerView) findViewById(R.id.itens_carrinho);
+        mRecyclerViewItemCarrinho = findViewById(R.id.itens_carrinho);
         mRecyclerViewItemCarrinho.setHasFixedSize(true);
         mRecyclerViewItemCarrinho.setLayoutManager(new LinearLayoutManager(this));
 
-        textTotal = (TextView) findViewById(R.id.text_total_carrinho);
+        textTotal = findViewById(R.id.text_total_carrinho);
         textTotal.setText("R$ " + String.format(Locale.US, "%.2f", totalCarrinho).replace(".", ","));
 
-        textQtdItem = (TextView) findViewById(R.id.text_qtd_item);
+        textQtdItem = findViewById(R.id.text_qtd_item);
 
         if (itens_pedido.size() == 1) {
             textQtdItem.setText(itens_pedido.size() + " Item");
@@ -119,7 +119,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         adapter = new ItemCarrinhoAdapter(itens_pedido, this, textTotal, textQtdItem, imgCardEmpty, textCarrinhoVazio, descCarrinhoVazio, confirmarPedido, btCardEmpty);
         mRecyclerViewItemCarrinho.setAdapter(adapter);
 
-        continuarComprando = (Button) findViewById(R.id.bt_continuar_comprando);
+        continuarComprando = findViewById(R.id.bt_continuar_comprando);
 
         /*EVENTO BOTOES*/
         btCardEmpty.setOnClickListener(new View.OnClickListener() {

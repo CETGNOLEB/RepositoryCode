@@ -3,6 +3,7 @@ package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,7 @@ import br.com.belongapps.appdelivery.gerencial.model.Bairro;
 import br.com.belongapps.appdelivery.gerencial.model.Endereco;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
+import br.com.belongapps.appdelivery.util.Print;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class FinalizarPedidoActivity extends AppCompatActivity {
@@ -73,7 +75,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     private List<FormadePagamento> formasDePagamento;
 
-    DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
     private Pedido pedido = new Pedido();
 
@@ -114,6 +116,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     private Cliente cliente;
     private Boolean statusDelivery = true;
     private Boolean statusEstabelecimento = true;
+
+    private Boolean entregaGratis = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -283,7 +287,13 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         Pagamento pagamento = new Pagamento();
         pagamento.setFormaPagamento(formadePagamento.getNome());
-        pagamento.setValorTotal(totaldoPedido + taxadeEntrega);
+
+        if (entregaGratis){
+            pagamento.setValorTotal(totaldoPedido);
+        } else {
+            pagamento.setValorTotal(totaldoPedido + taxadeEntrega);
+        }
+
         pagamento.setDescricaoPagemento(formadePagamento.getDescricao());
         pagamento.setValorPago(formadePagamento.getValorDinheiro());
 
@@ -337,15 +347,19 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void populateViewValores() {
 
-        tvtaxadeEntrega = (TextView) findViewById(R.id.taxa_de_entrega);
+        tvtaxadeEntrega = findViewById(R.id.taxa_de_entrega);
         tvtaxadeEntrega.setText("Taxa de Entrega: " + StringUtil.formatToMoeda(taxadeEntrega));
 
-        txtTotalDosItens = (TextView) findViewById(R.id.valor_pedido);
-        txtTotalDosItens.setText("Valor do Pedido: R$ " + String.format(Locale.US, "%.2f", totaldoPedido).replace(".", ","));
+        txtTotalDosItens = findViewById(R.id.valor_pedido);
+        txtTotalDosItens.setText("Valor do Pedido: " + StringUtil.formatToMoeda(totaldoPedido));
 
-        txtTotalPedido = (TextView) findViewById(R.id.valor_total_pedido);
-        txtTotalPedido.setText("Subtotal: R$ " + String.format(Locale.US, "%.2f", (totaldoPedido + taxadeEntrega)).replace(".", ","));
+        txtTotalPedido = findViewById(R.id.valor_total_pedido);
+        txtTotalPedido.setText("Subtotal: " + StringUtil.formatToMoeda(totaldoPedido + taxadeEntrega));
 
+        if (entregaGratis){
+            tvtaxadeEntrega.setPaintFlags(tvtaxadeEntrega.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            txtTotalPedido.setText("Subtotal: " + StringUtil.formatToMoeda(totaldoPedido));
+        }
     }
 
     public void populateFormasdePagamento() {
@@ -624,12 +638,12 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void initView(View root) {
 
-        rua = (EditText) root.findViewById(R.id.rua_cad_endereco);
-        numero = (EditText) root.findViewById(R.id.numero_cad_endereco);
-        complemento = (EditText) root.findViewById(R.id.complemento_cad_endereco);
-        nome = (EditText) root.findViewById(R.id.nome_cad_endereco);
+        rua = root.findViewById(R.id.rua_cad_endereco);
+        numero = root.findViewById(R.id.numero_cad_endereco);
+        complemento = root.findViewById(R.id.complemento_cad_endereco);
+        nome = root.findViewById(R.id.nome_cad_endereco);
 
-        bairroSpinner = (Spinner) root.findViewById(R.id.bairos_spinner);
+        bairroSpinner = root.findViewById(R.id.bairos_spinner);
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, bairrosNomes);
         bairroSpinner.setAdapter(adapter);
 
@@ -648,7 +662,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void initViewAlterarEndereco(final View root) {
 
-        enderecoSpinner = (Spinner) root.findViewById(R.id.enderecos_spinner);
+        enderecoSpinner = root.findViewById(R.id.enderecos_spinner);
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, enderecos);
         enderecoSpinner.setAdapter(adapter);
 
@@ -668,13 +682,13 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void updateViewsAlterarEndereco(View root, Endereco endereco) {
 
-        aeTvRuaEndereco = (TextView) root.findViewById(R.id.ae_tv_rua_endereco);
+        aeTvRuaEndereco = root.findViewById(R.id.ae_tv_rua_endereco);
         aeTvRuaEndereco.setText(endereco.getRua());
 
-        aeTvNumeroEndereco = (TextView) root.findViewById(R.id.ae_tv_numero_endereco);
+        aeTvNumeroEndereco = root.findViewById(R.id.ae_tv_numero_endereco);
         aeTvNumeroEndereco.setText(endereco.getNumero());
 
-        aeTvBairroEndereco = (TextView) root.findViewById(R.id.ae_tv_bairro_endereco);
+        aeTvBairroEndereco = root.findViewById(R.id.ae_tv_bairro_endereco);
         aeTvBairroEndereco.setText(endereco.getBairro());
 
     }
@@ -831,6 +845,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        verificarEntregaGratis();
+
         bairrosNomes = new ArrayList<>();
         totaldoPedido = getIntent().getDoubleExtra("totalPedido", 0);
 
@@ -974,6 +990,24 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         };
 
         database.child("clientes").child(userId).child("enderecos").addValueEventListener(enderecoListener); //PEGAR ID DO USUÁRIO
+    }
+
+    private void verificarEntregaGratis(){
+        ValueEventListener entregaGratisListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Boolean taxaGratis = dataSnapshot.child("taxa_gratis").getValue(Boolean.class);
+                entregaGratis = taxaGratis;
+
+                populateViewValores();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        database.child("configuracoes").child("taxa_entrega").addValueEventListener(entregaGratisListener);
     }
 
     @Override
