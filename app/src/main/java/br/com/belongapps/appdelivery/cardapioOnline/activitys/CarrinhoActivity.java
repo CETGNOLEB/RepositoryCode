@@ -35,7 +35,6 @@ import br.com.belongapps.appdelivery.cardapioOnline.adapters.ItemCarrinhoAdapter
 import br.com.belongapps.appdelivery.cardapioOnline.dao.CarrinhoDAO;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
 import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
-import br.com.belongapps.appdelivery.promocoes.activities.TelaInicialActivity;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
@@ -68,7 +67,8 @@ public class CarrinhoActivity extends AppCompatActivity {
     //PERMISSÔES
     private boolean statusDelivery = true;
     private boolean statusEstabelecimento = true;
-    RadioButton radioDelivery;
+    private RadioButton radioDelivery;
+    private RadioButton radioRetirada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,10 +147,13 @@ public class CarrinhoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String itemNaoEntregue = null;
+
                 //Verifica Se algum item n pode ser entregue
                 for (ItemPedido item : itens_pedido) {
-                    Print.logError("NOME DO ITEM: " + item.getNome());
-                    Print.logError("PERMITE ENTREGA: " + item.getPermite_entrega());
+                    if (item.getPermite_entrega() == 2) {
+                        itemNaoEntregue = item.getNome();
+                    }
                 }
 
                 if (!DataUtil.horaAutomaticaAtivada(getContentResolver())) {
@@ -260,6 +263,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     dialogEscolherFormEntrega.show();
 
                     radioDelivery = layoutDialog.findViewById(R.id.radio_delivery);
+                    radioRetirada = layoutDialog.findViewById(R.id.radio_retirada);
 
                     if (statusDelivery == false) {
                         radioDelivery.setVisibility(View.GONE);
@@ -271,6 +275,12 @@ public class CarrinhoActivity extends AppCompatActivity {
 
                     if (statusDelivery == false) {
                         rlSemDelivery.setVisibility(View.VISIBLE);
+                    } else if (itemNaoEntregue != null) {
+                        TextView infoTipoEntrega = layoutDialog.findViewById(R.id.info_tipo_entrega);
+                        infoTipoEntrega.setText("Não entregamos o item: " + itemNaoEntregue);
+                        rlSemDelivery.setVisibility(View.VISIBLE);
+                        radioDelivery.setVisibility(View.GONE);
+                        radioRetirada.setVisibility(View.GONE);
                     }
 
                     Button btCancel = layoutDialog.findViewById(R.id.bt_cancel_esc_forma_pagamento);
@@ -327,7 +337,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         }
 
         View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_entrega, null);
-        radioDelivery = (RadioButton) layoutDialog.findViewById(R.id.radio_delivery);
+        radioDelivery = layoutDialog.findViewById(R.id.radio_delivery);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 

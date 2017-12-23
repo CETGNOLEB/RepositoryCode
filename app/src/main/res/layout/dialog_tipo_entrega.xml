@@ -45,7 +45,7 @@
             android:src="@drawable/img_information"/>
 
         <TextView
-            android:id="@+id/valor_dinheiro_invalido"
+            android:id="@+id/info_tipo_entrega"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/img_error"
