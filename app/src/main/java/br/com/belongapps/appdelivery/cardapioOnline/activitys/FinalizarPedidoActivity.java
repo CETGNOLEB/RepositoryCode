@@ -288,7 +288,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         Pagamento pagamento = new Pagamento();
         pagamento.setFormaPagamento(formadePagamento.getNome());
 
-        if (entregaGratis){
+        if (entregaGratis || contemItemComEntragaGratis()) {
             pagamento.setValorTotal(totaldoPedido);
         } else {
             pagamento.setValorTotal(totaldoPedido + taxadeEntrega);
@@ -302,6 +302,22 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         FinalizarPedidoDAO finalizarPedidoDAO = new FinalizarPedidoDAO(this, mProgressDialog);
         finalizarPedidoDAO.salvarPedido(pedido, diaPedido);
 
+    }
+
+    private boolean contemItemComEntragaGratis() {
+        boolean retorno = false;
+
+        List<ItemPedido> itens_pedido;
+        CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
+        itens_pedido = crud.getAllItens();
+
+        for (ItemPedido item : itens_pedido) {
+            if (item.getEntrega_gratis() == 1){
+                retorno = true;
+            }
+        }
+
+        return retorno;
     }
 
     private void exibirDilogSemConexao() {
@@ -356,7 +372,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         txtTotalPedido = findViewById(R.id.valor_total_pedido);
         txtTotalPedido.setText("Subtotal: " + StringUtil.formatToMoeda(totaldoPedido + taxadeEntrega));
 
-        if (entregaGratis){
+        if (entregaGratis || contemItemComEntragaGratis()) {
             tvtaxadeEntrega.setPaintFlags(tvtaxadeEntrega.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             txtTotalPedido.setText("Subtotal: " + StringUtil.formatToMoeda(totaldoPedido));
         }
@@ -992,7 +1008,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         database.child("clientes").child(userId).child("enderecos").addValueEventListener(enderecoListener); //PEGAR ID DO USUÁRIO
     }
 
-    private void verificarEntregaGratis(){
+    private void verificarEntregaGratis() {
         ValueEventListener entregaGratisListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

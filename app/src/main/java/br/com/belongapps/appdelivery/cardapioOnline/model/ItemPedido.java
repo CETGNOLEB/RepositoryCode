@@ -14,6 +14,8 @@ public class ItemPedido implements Parcelable {
     private int quantidade;
     private int permite_entrega;
 
+    private int entrega_gratis;
+
     private double valor_total;
 
     //Para Pizzas
@@ -39,7 +41,7 @@ public class ItemPedido implements Parcelable {
     private String categoria;
     private String keyItem;
 
-    public ItemPedido(String nome, String descricao, String observacao, String ref_img, double valor_unit, int quantidade, int permite_entrega, double valor_total,
+    public ItemPedido(String nome, String descricao, String observacao, String ref_img, double valor_unit, int quantidade, int permite_entrega, int entrega_gratis, double valor_total,
                       String nomeMetade2, String descMetade2, String obsMetade2, String imgMetade2, double valorMetade2,
                       String nomeMetade3, String descMetade3, String obsMetade3, String imgMetade3, double valorMetade3,
                       String nomeMetade4, String descMetade4, String obsMetade4, String imgMetade4, double valorMetade4,
@@ -51,6 +53,7 @@ public class ItemPedido implements Parcelable {
         this.ref_img = ref_img;
         this.valor_unit = valor_unit;
         this.permite_entrega = permite_entrega;
+        this.entrega_gratis = entrega_gratis;
         this.quantidade = quantidade;
         this.valor_total = valor_total;
 
@@ -89,6 +92,7 @@ public class ItemPedido implements Parcelable {
 
         valor_unit = in.readDouble();
         permite_entrega = in.readInt();
+        entrega_gratis = in.readInt();
         quantidade = in.readInt();
 
         valor_total = in.readDouble();
@@ -141,6 +145,7 @@ public class ItemPedido implements Parcelable {
         dest.writeString(ref_img);
         dest.writeDouble(valor_unit);
         dest.writeInt(permite_entrega);
+        dest.writeInt(entrega_gratis);
 
         dest.writeInt(quantidade);
         dest.writeDouble(valor_total);
@@ -214,6 +219,14 @@ public class ItemPedido implements Parcelable {
 
     public void setPermite_entrega(int permite_entrega) {
         this.permite_entrega = permite_entrega;
+    }
+
+    public int getEntrega_gratis() {
+        return entrega_gratis;
+    }
+
+    public void setEntrega_gratis(int entrega_gratis) {
+        this.entrega_gratis = entrega_gratis;
     }
 
     public int getQuantidade() {
