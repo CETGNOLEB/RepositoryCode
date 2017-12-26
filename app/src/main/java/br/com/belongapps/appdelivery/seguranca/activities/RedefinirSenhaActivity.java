@@ -67,8 +67,14 @@ public class RedefinirSenhaActivity extends AppCompatActivity {
         btRedefinirSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mProgressDialog.show();
-                redefinirSenhaDoUsuario();
+
+                if (email_para_redefinir_senha.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(RedefinirSenhaActivity.this, "Informe seu e-mail para redefinição de senha!", Toast.LENGTH_SHORT).show();
+                } else {
+                    mProgressDialog.show();
+                    redefinirSenhaDoUsuario();
+                }
+
             }
         });
     }
