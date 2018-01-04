@@ -224,6 +224,7 @@ public class TabSanduiches extends Fragment {
             itemPedido.setRef_img(model.getRef_img());
             itemPedido.setCategoria(model.getCategoria_id());
             itemPedido.setPermite_entrega(model.getPermite_entrega());
+            itemPedido.setEntrega_gratis(model.getEntrega_gratis());
 
             if (model.isStatus_promocao() == true) {
                 itemPedido.setValor_unit(model.getPreco_promocional());

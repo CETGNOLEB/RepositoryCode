@@ -3,7 +3,6 @@ package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -41,7 +40,6 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabPromocoes;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSucos;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabVitaminas;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
-import br.com.belongapps.appdelivery.cardapioOnline.pedidoDePizza.TabPizza;
 import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.gerencial.activities.EnderecosActivity;
 import br.com.belongapps.appdelivery.gerencial.activities.PerfilActivity;
@@ -54,7 +52,6 @@ import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSalgados;
 import br.com.belongapps.appdelivery.cardapioOnline.fragments.TabSanduiches;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
-import br.com.belongapps.appdelivery.util.DataUtil;
 
 public class CardapioMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

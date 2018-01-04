@@ -101,6 +101,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                             itemPedido.setDescricao(item.getDescricao());
                             itemPedido.setRef_img(item.getRef_img());
                             itemPedido.setValor_unit(finalValoUniTario);
+                            itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                             Intent intent = new Intent(context, DetalhesdoItemActivity.class);
                             intent.putExtra("ItemPedido", itemPedido);
@@ -116,6 +117,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                                 itemPedido.setDescMetade2(item.getDescricao());
                                 itemPedido.setImgMetade2(item.getRef_img());
                                 itemPedido.setValorMetade2(finalValoUniTario / 2);
+                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                                 Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
                                 intent.putExtra("TamPizza", tamPizza);
@@ -132,6 +134,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                                 itemPedido.setDescricao(item.getDescricao());
                                 itemPedido.setRef_img(item.getRef_img());
                                 itemPedido.setValor_unit(finalValoUniTario / 2);
+                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                                 Intent intent = new Intent(context, EscolherPizzaActivity2.class);
                                 intent.putExtra("TamPizza", tamPizza);
@@ -152,6 +155,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                                 itemPedido.setDescMetade3(item.getDescricao());
                                 itemPedido.setImgMetade3(item.getRef_img());
                                 itemPedido.setValorMetade3(finalValoUniTario / 3);
+                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                                 Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
                                 intent.putExtra("TamPizza", tamPizza);
@@ -168,6 +172,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                                 itemPedido.setDescricao(item.getDescricao());
                                 itemPedido.setRef_img(item.getRef_img());
                                 itemPedido.setValor_unit(finalValoUniTario / 3);
+                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                                 Intent intent = new Intent(context, EscolherPizzaActivity2.class);
                                 intent.putExtra("TamPizza", tamPizza);
@@ -184,6 +189,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                                 itemPedido.setDescMetade2(item.getDescricao());
                                 itemPedido.setImgMetade2(item.getRef_img());
                                 itemPedido.setValorMetade2(finalValoUniTario / 3);
+                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                                 Intent intent = new Intent(context, EscolherPizzaActivity3.class);
                                 intent.putExtra("TamPizza", tamPizza);
@@ -203,6 +209,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                                 itemPedido.setDescMetade4(item.getDescricao());
                                 itemPedido.setImgMetade4(item.getRef_img());
                                 itemPedido.setValorMetade4(finalValoUniTario / 4);
+                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                                 Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
                                 intent.putExtra("TamPizza", tamPizza);
@@ -219,6 +226,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                                 itemPedido.setDescricao(item.getDescricao());
                                 itemPedido.setRef_img(item.getRef_img());
                                 itemPedido.setValor_unit(finalValoUniTario / 4);
+                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                                 Intent intent = new Intent(context, EscolherPizzaActivity2.class);
                                 intent.putExtra("TamPizza", tamPizza);
@@ -235,6 +243,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                                 itemPedido.setDescMetade2(item.getDescricao());
                                 itemPedido.setImgMetade2(item.getRef_img());
                                 itemPedido.setValorMetade2(finalValoUniTario / 4);
+                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                                 Intent intent = new Intent(context, EscolherPizzaActivity3.class);
                                 intent.putExtra("TamPizza", tamPizza);
@@ -251,6 +260,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
                                 itemPedido.setDescMetade3(item.getDescricao());
                                 itemPedido.setImgMetade3(item.getRef_img());
                                 itemPedido.setValorMetade3(finalValoUniTario / 4);
+                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
                                 Intent intent = new Intent(context, EscolherPizzaActivity4.class);
                                 intent.putExtra("TamPizza", tamPizza);
