@@ -114,6 +114,7 @@ public class TabCombos extends Fragment {
                 final String key = getRef(position).getKey();
 
                 viewHolder.setNome(model.getNome());
+                viewHolder.setDescricao(model.getDescricao());
                 viewHolder.setValorUnitarioEPromocao(model.getValor_unit(), model.isStatus_promocao(), model.getPreco_promocional());
                 viewHolder.setImagem(getContext(), model.getRef_img());
                 viewHolder.setStatus(model.getStatus_item(), model.getPermite_entrega());
@@ -277,6 +278,13 @@ public class TabCombos extends Fragment {
 
             TextView item_nome = mView.findViewById(R.id.item_nome_combo);
             item_nome.setText(nome);
+
+        }
+
+        public void setDescricao(String descricao) {
+
+            TextView item_descricao = mView.findViewById(R.id.item_descricao_combo);
+            item_descricao.setText(descricao);
 
         }
 

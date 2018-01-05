@@ -33,4 +33,30 @@
     <string name="slide_4_title">Rastrei Tudo</string>
     <string name="slide_4_desc">Finalize o pedido e acompanhe todo o processo até a entrega!</string>
 
+
+    <!--NOTIFICAÇÔES-->
+    <!-- FCM Related Strings -->
+    <string name="default_notification_channel_id" translatable="false">br.com.belongapps.appdelivery.default_notification_channel_id</string>
+    <string name="data_type">data_type</string>
+    <string name="direct_message">direct_message</string>
+    <string name="data_message">message</string>
+    <string name="data_title">title</string>
+    <string name="data_message_id">message_id</string>
+
+    <!-- Bundle Extras -->
+    <string name="intent_user_id">intent_user_id</string>
+
+    <!-- Dialog Names -->
+    <string name="dialog_message">dialog_message</string>
+
+    <!-- Firebase Database Nodes -->
+    <string name="dbnode_users">clientes</string>
+    <string name="dbnode_messages">mensagens</string>
+
+
+    <!-- Firebase Database Fields -->
+    <string name="field_message">message</string>
+    <string name="field_user_id">user_id</string>
+    <string name="field_messaging_token">device_token</string>
+
 </resources>
