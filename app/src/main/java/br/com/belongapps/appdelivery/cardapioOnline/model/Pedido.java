@@ -29,7 +29,9 @@ public class Pedido{
     /*CANCELAMENTO*/
     private String motivo_cancel;
 
-    public Pedido(String data, String status_tempo, String numero_pedido, int status, int entrega_retirada, double valor_total, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento, String motivo_cancel) {
+    private String id_cliente;
+
+    public Pedido(String data, String status_tempo, String numero_pedido, int status, int entrega_retirada, double valor_total, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento, String motivo_cancel, String id_cliente) {
         this.data = data;
         this.status_tempo = status_tempo;
         this.numero_pedido = numero_pedido;
@@ -40,6 +42,7 @@ public class Pedido{
         this.cliente = cliente;
         this.pagamento = pagamento;
         this.motivo_cancel = motivo_cancel;
+        this.id_cliente = id_cliente;
     }
 
     public Pedido() {
@@ -55,6 +58,7 @@ public class Pedido{
         itens_pedido = in.createTypedArrayList(ItemPedido.CREATOR);
 
         motivo_cancel = in.readString();
+        id_cliente = in.readString();
     }
 
     public Map<String, Object> toMap() {
@@ -69,11 +73,14 @@ public class Pedido{
         result.put("itens_pedido", itens_pedido);
 
         //cliente
+        result.put("id_cliente", id_cliente);
+
         result.put("nome_cliente", cliente.getNomeCliente());
         result.put("rua_end_cliente", cliente.getRuaEndCliente());
         result.put("numero_end_cliente", cliente.getNumeroEndCliente());
         result.put("bairro_end_cliente", cliente.getBairroEndCliente());
         result.put("complemento_end_cliente", cliente.getComplementoEndCliente());
+        result.put("telefone_cliente", cliente.getCelular());
 
         //pagamento
         result.put("valor_total", pagamento.getValorTotal());
@@ -163,5 +170,13 @@ public class Pedido{
 
     public void setMotivo_cancel(String motivo_cancel) {
         this.motivo_cancel = motivo_cancel;
+    }
+
+    public String getId_cliente() {
+        return id_cliente;
+    }
+
+    public void setId_cliente(String id_cliente) {
+        this.id_cliente = id_cliente;
     }
 }

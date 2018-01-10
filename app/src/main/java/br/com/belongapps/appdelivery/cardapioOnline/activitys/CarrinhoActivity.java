@@ -156,12 +156,12 @@ public class CarrinhoActivity extends AppCompatActivity {
                     }
                 }
 
-                if (!DataUtil.horaAutomaticaAtivada(getContentResolver())) {
+                /*if (!DataUtil.horaAutomaticaAtivada(getContentResolver())) {
 
                     LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                     AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
-                    View layoutDialog = inflater.inflate(R.layout.dialog_redefinir_data, null);
+                    View layoutDialog = i]nflater.inflate(R.layout.dialog_redefinir_data, null);
                     mBilder.setCancelable(false);
 
                     Button btConfigData = layoutDialog.findViewById(R.id.bt_config_data);
@@ -180,7 +180,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     });
 
                     return;
-                }
+                }*/
 
                 //*Sem Conexão*//
                 if (!ConexaoUtil.verificaConectividade(CarrinhoActivity.this)) {

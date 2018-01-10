@@ -204,7 +204,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
                 }
             });
 
-        } else if (!statusDelivery) {
+        } else if (!statusDelivery) { //Delivery Frechado
 
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -305,19 +305,20 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     }
 
     private boolean contemItemComEntragaGratis() {
-        boolean retorno = false;
-
         List<ItemPedido> itens_pedido;
         CarrinhoDAO crud = new CarrinhoDAO(getBaseContext());
         itens_pedido = crud.getAllItens();
 
         for (ItemPedido item : itens_pedido) {
+            Print.logError("ITEM: " + item.getNome());
+            Print.logError("ENTREGA GRATIS: " + item.getEntrega_gratis());
+
             if (item.getEntrega_gratis() == 1){
-                retorno = true;
+                return true;
             }
         }
 
-        return retorno;
+        return false;
     }
 
     private void exibirDilogSemConexao() {
@@ -455,6 +456,7 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Cliente c = new Cliente();
                 c.setNomeCliente(dataSnapshot.child("nome").getValue(String.class));
+                c.setCelular(dataSnapshot.child("celular").getValue(String.class));
 
                 cliente = c;
             }

@@ -60,6 +60,9 @@ public class FinalizarPedidoDAO {
     //SALVAR PEDIDO
     /*METÓDOS PARA ENVIO DO PEDIDO -----------------------*/
     public void salvarPedido(final Pedido pedido, final String dataPedido) {
+        //SET ID DO USUÁRIO PARA ENVIO DE NOTIFICAÇÕES
+        pedido.setId_cliente(usuarioLogado.getUid());
+
         final String mesPedido = StringUtil.mesdoPedido(dataPedido);
         final String keyPedido = database.child("pedidos").push().getKey();
 

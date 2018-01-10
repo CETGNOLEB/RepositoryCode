@@ -27,7 +27,9 @@ public class FirebaseAuthApp {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Integer permisao = dataSnapshot.child("permite_ped").getValue(Integer.class);
-                permite_pedidos = permisao;
+                if (permisao != null) {
+                    permite_pedidos = permisao;
+                }
             }
 
             @Override

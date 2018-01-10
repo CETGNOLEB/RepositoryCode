@@ -2,6 +2,8 @@ package br.com.belongapps.appdelivery.promocoes.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -27,10 +29,12 @@ import java.util.TimerTask;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
+import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
 import br.com.belongapps.appdelivery.promocoes.adapter.ViewPagerAdapter;
 import br.com.belongapps.appdelivery.promocoes.model.Promocao;
 import br.com.belongapps.appdelivery.util.DataUtil;
+import br.com.belongapps.appdelivery.util.Print;
 
 public class TelaInicialActivity extends AppCompatActivity {
     private Button btFazerPedido, btMeusPedidos;
@@ -74,7 +78,8 @@ public class TelaInicialActivity extends AppCompatActivity {
                     View layoutDialog = inflater.inflate(R.layout.dialog_redefinir_data, null);
                     mBilder.setCancelable(false);
 
-                    Button btConfigData = (Button) layoutDialog.findViewById(R.id.bt_config_data);
+                    Button btConfigData = layoutDialog.findViewById(R.id.bt_config_data);
+                    Button btAlterarData = layoutDialog.findViewById(R.id.bt_alterar_hora);
 
                     mBilder.setView(layoutDialog);
                     final AlertDialog dialogConfigData = mBilder.create();
@@ -83,6 +88,16 @@ public class TelaInicialActivity extends AppCompatActivity {
                     btConfigData.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            dialogConfigData.dismiss();
+                            Intent i = new Intent(TelaInicialActivity.this, CardapioMainActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+
+                    btAlterarData.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                             dialogConfigData.dismiss();
                             Toast.makeText(TelaInicialActivity.this, "Marque a data/hora como automático.", Toast.LENGTH_LONG).show();
                             startActivityForResult(new Intent(Settings.ACTION_DATE_SETTINGS), 0);
@@ -215,5 +230,28 @@ public class TelaInicialActivity extends AppCompatActivity {
 
             }
         });
+
+        recuperarVersaoAtualUtilizada();
+    }
+
+    private void recuperarVersaoAtualUtilizada() {
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            int verCode = pInfo.versionCode;
+
+            salvarVersaoUtilizada(verCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void salvarVersaoUtilizada(Integer vesaoApp) {
+        DatabaseReference mDatabaseUserReference = FirebaseDatabase.getInstance().getReference().child("clientes");
+
+        if (FirebaseAuthApp.getUsuarioLogado() != null) {
+            Print.logError(FirebaseAuthApp.getUsuarioLogado().getUid());
+            mDatabaseUserReference.child(FirebaseAuthApp.getUsuarioLogado().getUid()).child("versao_app").setValue(vesaoApp);
+        }
     }
 }

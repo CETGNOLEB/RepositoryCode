@@ -33,6 +33,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.util.Print;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 
@@ -244,6 +245,8 @@ public class TabCombos extends Fragment {
         itemPedido.setPermite_entrega(model.getPermite_entrega());
         itemPedido.setEntrega_gratis(model.getEntrega_gratis());
 
+        Print.logError("ENTREGA GRATIS: " + model.getEntrega_gratis());
+
         if (model.isStatus_promocao() == true) {
             itemPedido.setValor_unit(model.getPreco_promocional());
         } else {
@@ -256,6 +259,7 @@ public class TabCombos extends Fragment {
 
         intent.putExtra("ItemPedido", itemPedido);
         intent.putExtra("TelaAnterior", "TabVitaminas");
+        intent.putExtra("Combo", model.getNome());
         startActivity(intent);
 
         getActivity().finish();

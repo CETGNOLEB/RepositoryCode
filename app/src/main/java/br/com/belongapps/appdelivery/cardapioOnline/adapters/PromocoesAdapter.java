@@ -167,6 +167,7 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
         itemPedido.setDescricao(item.getDescricao());
         itemPedido.setCategoria(item.getCategoria_id());
         itemPedido.setPermite_entrega(item.getPermite_entrega());
+        itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
         itemPedido.setKeyItem(item.getItemKey());
 
@@ -197,6 +198,11 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
 
             intent.putExtra("ItemPedido", itemPedido);
             intent.putExtra("TelaAnterior", "TabPromocoes");
+
+            if (item.getCategoria_id().equals("11")){
+                intent.putExtra("Combo", itemPedido.getNome());
+            }
+
             context.startActivity(intent);
             ((Activity) context).finish();
         }

@@ -12,9 +12,9 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:text="Atenção"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"/>
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,25 +22,37 @@
         android:layout_marginTop="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="Antes de realizar qualquer pedido, por favor verifique se a data e hora de seu dispositivo está correta!"/>
+        android:text="Antes de realizar qualquer pedido, por favor verifique se a data e hora de seu dispositivo está correta!" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/border_bottom_around">
+
+        <Button
+            android:id="@+id/bt_alterar_hora"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/bt_config_data"
+            android:background="@android:color/transparent"
+            android:text="Alterar hora"
+            android:textColor="@color/textColorSecundary"
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/bt_config_data"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="4dp"
+            android:layout_alignParentTop="true"
             android:background="@android:color/transparent"
-            android:text="Alterar Data/Hora"
+            android:text="CONTINUAR"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 

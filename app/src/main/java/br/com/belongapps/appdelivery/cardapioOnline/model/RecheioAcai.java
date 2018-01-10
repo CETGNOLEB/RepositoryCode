@@ -5,19 +5,19 @@ import android.os.Parcelable;
 
 public class RecheioAcai implements Parcelable {
 
-    String categoria_id;
-    String nome;
-    String ref_img;
-    int status_item;
-    int tipo_recheio;
-    Double valor_unit;
+    private String categoria_id;
+    private String nome;
+    private String ref_img;
+    private int status_item;
+    private int tipo_recheio;
+    private double valor_unit;
 
-    Integer qtd;
+    private Integer qtd;
 
     private String itemKey;
 
     public RecheioAcai(String categoria_id, String nome, String ref_img, int status_item,
-                       int tipo_recheio, Double valor_unit, Integer qtd, String itemKey) {
+                       int tipo_recheio, double valor_unit, Integer qtd, String itemKey) {
         this.categoria_id = categoria_id;
         this.nome = nome;
         this.ref_img = ref_img;
@@ -113,11 +113,11 @@ public class RecheioAcai implements Parcelable {
         this.tipo_recheio = tipo_recheio;
     }
 
-    public Double getValor_unit() {
+    public double getValor_unit() {
         return valor_unit;
     }
 
-    public void setValor_unit(Double valor_unit) {
+    public void setValor_unit(double valor_unit) {
         this.valor_unit = valor_unit;
     }
 

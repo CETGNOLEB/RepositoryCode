@@ -385,6 +385,22 @@ public class CardapioMainActivity extends AppCompatActivity
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
+        //VERIFICA CONEXÃO
+        snackbar = Snackbar
+                .make(layout, "Sem Conexão", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Recarregar",new MyUndoListener() );
+
+        statusConexao = ConexaoUtil.verificaConectividade(this);
+
+        if (statusConexao){
+            snackbar.dismiss();
+        } else{
+            View snackView = snackbar.getView();
+            snackView.setBackgroundColor(ContextCompat.getColor(CardapioMainActivity.this, R.color.snakebarColor));
+            snackbar.setActionTextColor(getResources().getColor(R.color.textColorPrimary));
+            snackbar.show();
+        }
+
         mDatabaseReference.child("configuracoes").child("status_estabelecimento").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -412,21 +428,7 @@ public class CardapioMainActivity extends AppCompatActivity
             }
         });
 
-        //VERIFICA CONEXÃO
-        snackbar = Snackbar
-                .make(layout, "Sem Conexão", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Recarregar",new MyUndoListener() );
 
-        statusConexao = ConexaoUtil.verificaConectividade(this);
-
-        if (statusConexao){
-            snackbar.dismiss();
-        } else{
-            View snackView = snackbar.getView();
-            snackView.setBackgroundColor(ContextCompat.getColor(CardapioMainActivity.this, R.color.snakebarColor));
-            snackbar.setActionTextColor(getResources().getColor(R.color.textColorPrimary));
-            snackbar.show();
-        }
 
     }
 

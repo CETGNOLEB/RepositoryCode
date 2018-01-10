@@ -9,6 +9,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = "MyFirebaseIIDService";
@@ -23,7 +24,9 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Atualizar token: " + refreshedToken);
 
-        sendRegistrationToServer(refreshedToken);
+        if (FirebaseAuthApp.getUsuarioLogado() != null) {
+            sendRegistrationToServer(refreshedToken);
+        }
     }
 
 
@@ -34,7 +37,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token Novo Token.
      */
     private void sendRegistrationToServer(String token) {
-        Log.d(TAG, "sendRegistrationToServer: enviar token to o banco: " + token);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child(getString(R.string.dbnode_users))
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

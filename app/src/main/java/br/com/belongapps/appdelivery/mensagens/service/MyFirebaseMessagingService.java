@@ -8,11 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
 import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
+import br.com.belongapps.appdelivery.util.Print;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -57,15 +60,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 			String titulo = remoteMessage.getData().get(getString(R.string.data_title));
 			String menssagem = remoteMessage.getData().get(getString(R.string.data_message));
 			String messagemId = remoteMessage.getData().get(getString(R.string.data_message_id));
+			String tipoMensagem = remoteMessage.getData().get(getString(R.string.update_message));
 
-			sendMessageNotification(titulo, menssagem, messagemId);
+
+			if (tipoMensagem != null){
+				Print.logError("TIPO DA MENSAGEM" + tipoMensagem);
+			}
+
+			sendMessageNotification(titulo, menssagem, messagemId, tipoMensagem);
 		}
     }
 
 	/**
 	 * Crie uma notificação push para uma mensagem de mudança de status do pedido
 	 */
-	private void sendMessageNotification(String titulo, String message, String messageId){
+	private void sendMessageNotification(String titulo, String message, String messageId, String tipoMensagem){
 		Log.d(TAG, "sendChatmessageNotification: Criando uma notificação");
 
 		//get the notification id
@@ -74,8 +83,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
 				getString(R.string.default_notification_channel_id));
 
-		Intent pendingIntent = new Intent(this, MeusPedidosActivity.class);
-		pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		Intent pendingIntent;
+
+		if (tipoMensagem.equals("update")){
+
+			pendingIntent = new Intent(Intent.ACTION_VIEW);
+			pendingIntent.setData(Uri.parse("https://play.google.com/store/apps/details?id=br.com.belongapps.appdelivery"));
+			pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+		} else if(tipoMensagem.equals("acompanhamento")) {
+
+			pendingIntent = new Intent(this, MeusPedidosActivity.class);
+			pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+		}	else {
+
+			pendingIntent = new Intent(this, CardapioMainActivity.class);
+			pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+		}
 
 		PendingIntent notifyPendingIntent =
 				PendingIntent.getActivity(

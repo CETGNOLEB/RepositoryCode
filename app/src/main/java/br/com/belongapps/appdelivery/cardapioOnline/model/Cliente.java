@@ -7,6 +7,7 @@ import java.util.Map;
 public class Cliente {
 
     private String nomeCliente;
+    private String celular;
     private String ruaEndCliente;
     private String numeroEndCliente;
     private String bairroEndCliente;
@@ -14,8 +15,9 @@ public class Cliente {
 
     private List<KeyPedido> keypedidos;
 
-    public Cliente(String nomeCliente, String ruaEndCliente, String numeroEndCliente, String bairroEndCliente, String complementoEndCliente, List<KeyPedido> keypedidos) {
+    public Cliente(String nomeCliente, String celular, String ruaEndCliente, String numeroEndCliente, String bairroEndCliente, String complementoEndCliente, List<KeyPedido> keypedidos) {
         this.nomeCliente = nomeCliente;
+        this.celular = celular;
         this.ruaEndCliente = ruaEndCliente;
         this.numeroEndCliente = numeroEndCliente;
         this.bairroEndCliente = bairroEndCliente;
@@ -41,6 +43,14 @@ public class Cliente {
 
     public void setNomeCliente(String nomeCliente) {
         this.nomeCliente = nomeCliente;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
     }
 
     public String getRuaEndCliente() {

@@ -233,10 +233,10 @@ public class TabPromocoes extends Fragment {
 
                 Integer permissao = dataSnapshot.child("permite_ped").getValue(Integer.class);
 
-                Print.logError("Permissão: " + permissao);
-
-                if (permissao == 0) {
-                    permissaoUsuarioFazerPedido = false;
+                if (permissao != null) {
+                    if (permissao == 0){
+                        permissaoUsuarioFazerPedido = false;
+                    }
                 } else {
                     permissaoUsuarioFazerPedido = true;
                 }

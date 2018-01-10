@@ -126,6 +126,7 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
 
     private void getParametros() {
         Intent intent = getIntent();
+
         numeroPedido = intent.getStringExtra("NumeroPedido");
         dataPedido = intent.getStringExtra("DataPedido");
         horaPedido = intent.getStringExtra("HoraPedido");
@@ -359,7 +360,11 @@ public class AcompanharPedidoActivity extends AppCompatActivity {
                         valorPedido = pedido.getValor_total();
                         statusPedido = pedido.getStatus();
                         tipoEntrega = pedido.getEntrega_retirada();
-                        statusTempo = pedido.getStatus_tempo();
+
+                        if (pedido.getStatus_tempo() != null) {
+                            statusTempo = pedido.getStatus_tempo();
+                        }
+
                         itensdoPedido = pedido.getItens_pedido();
 
                         setViewInfoDoPedido();
