@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 
 import br.com.belongapps.appdelivery.R;
+import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.seguranca.activities.CadastrarUsuarioActivity;
 import br.com.belongapps.appdelivery.seguranca.model.Usuario;
 
@@ -65,8 +66,14 @@ public class PoliticaPrivacidadeActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent intent = new Intent(PoliticaPrivacidadeActivity.this, CadastrarUsuarioActivity.class);
-        intent.putExtra("usuario", usuario);
+        Intent intent;
+        if (usuario != null) {
+            intent = new Intent(PoliticaPrivacidadeActivity.this, CadastrarUsuarioActivity.class);
+            intent.putExtra("usuario", usuario);
+        } else{
+            intent = new Intent(PoliticaPrivacidadeActivity.this, SobreActivity.class);
+        }
+
         startActivity(intent);
         finish();
     }

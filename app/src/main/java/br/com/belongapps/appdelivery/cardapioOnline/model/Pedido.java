@@ -25,13 +25,14 @@ public class Pedido{
 
     /*---PAGAMENTO---*/
     Pagamento pagamento = new Pagamento();
+    private Double taxa_entrega;
 
     /*CANCELAMENTO*/
     private String motivo_cancel;
 
     private String id_cliente;
 
-    public Pedido(String data, String status_tempo, String numero_pedido, int status, int entrega_retirada, double valor_total, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento, String motivo_cancel, String id_cliente) {
+    public Pedido(String data, String status_tempo, String numero_pedido, int status, int entrega_retirada, double valor_total, List<ItemPedido> itens_pedido, Cliente cliente, Pagamento pagamento, Double taxa_entrega, String motivo_cancel, String id_cliente) {
         this.data = data;
         this.status_tempo = status_tempo;
         this.numero_pedido = numero_pedido;
@@ -41,6 +42,7 @@ public class Pedido{
         this.itens_pedido = itens_pedido;
         this.cliente = cliente;
         this.pagamento = pagamento;
+        this.taxa_entrega = taxa_entrega;
         this.motivo_cancel = motivo_cancel;
         this.id_cliente = id_cliente;
     }
@@ -87,6 +89,7 @@ public class Pedido{
         result.put("forma_pagamento", pagamento.getFormaPagamento());
         result.put("descricao_pagamento", pagamento.getDescricaoPagemento());
         result.put("valor_pago", pagamento.getValorPago());
+        result.put("taxa_entrega", taxa_entrega);
 
         return result;
     }
@@ -158,6 +161,14 @@ public class Pedido{
 
     public Pagamento getPagamento() {
         return pagamento;
+    }
+
+    public Double getTaxa_entrega() {
+        return taxa_entrega;
+    }
+
+    public void setTaxa_entrega(Double taxa_entrega) {
+        this.taxa_entrega = taxa_entrega;
     }
 
     public void setPagamento(Pagamento pagamento) {

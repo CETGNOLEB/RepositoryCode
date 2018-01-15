@@ -1,7 +1,6 @@
 package br.com.belongapps.appdelivery.mensagens.service;
 
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -54,20 +53,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 		Log.d(TAG, "onMessageReceived: notification title: " + notificationTitle);
 
 		String dataType = remoteMessage.getData().get(getString(R.string.data_type));
-		if(dataType.equals(getString(R.string.direct_message))){
-			Log.d(TAG, "onMessageReceived: nova mensagem recebida.");
 
-			String titulo = remoteMessage.getData().get(getString(R.string.data_title));
-			String menssagem = remoteMessage.getData().get(getString(R.string.data_message));
-			String messagemId = remoteMessage.getData().get(getString(R.string.data_message_id));
-			String tipoMensagem = remoteMessage.getData().get(getString(R.string.update_message));
+		if(dataType != null) {
+
+			if (dataType.equals(getString(R.string.direct_message))) {
+				Log.d(TAG, "onMessageReceived: nova mensagem recebida.");
+
+				String titulo = remoteMessage.getData().get(getString(R.string.data_title));
+				String menssagem = remoteMessage.getData().get(getString(R.string.data_message));
+				String messagemId = remoteMessage.getData().get(getString(R.string.data_message_id));
+				String tipoMensagem = remoteMessage.getData().get(getString(R.string.update_message));
 
 
-			if (tipoMensagem != null){
-				Print.logError("TIPO DA MENSAGEM" + tipoMensagem);
+				if (tipoMensagem != null) {
+					Print.logError("TIPO DA MENSAGEM" + tipoMensagem);
+				}
+
+				sendMessageNotification(titulo, menssagem, messagemId, tipoMensagem);
 			}
-
-			sendMessageNotification(titulo, menssagem, messagemId, tipoMensagem);
 		}
     }
 
@@ -85,22 +88,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 		Intent pendingIntent;
 
-		if (tipoMensagem.equals("update")){
-
-			pendingIntent = new Intent(Intent.ACTION_VIEW);
-			pendingIntent.setData(Uri.parse("https://play.google.com/store/apps/details?id=br.com.belongapps.appdelivery"));
-			pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-		} else if(tipoMensagem.equals("acompanhamento")) {
-
-			pendingIntent = new Intent(this, MeusPedidosActivity.class);
-			pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-		}	else {
-
-			pendingIntent = new Intent(this, CardapioMainActivity.class);
-			pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
+		switch (tipoMensagem){
+			case "update":
+				pendingIntent = new Intent(Intent.ACTION_VIEW);
+				pendingIntent.setData(Uri.parse("https://play.google.com/store/apps/details?id=br.com.belongapps.appdelivery"));
+				pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				break;
+			case "acompanhamento":
+				pendingIntent = new Intent(this, MeusPedidosActivity.class);
+				pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				break;
+			default:
+				pendingIntent = new Intent(this, CardapioMainActivity.class);
+				pendingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				break;
 		}
 
 		PendingIntent notifyPendingIntent =

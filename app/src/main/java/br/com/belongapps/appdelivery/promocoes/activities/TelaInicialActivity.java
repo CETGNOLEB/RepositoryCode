@@ -29,6 +29,7 @@ import java.util.TimerTask;
 
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.CardapioMainActivity;
+import br.com.belongapps.appdelivery.cardapioOnline.model.Cliente;
 import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.posPedido.activities.MeusPedidosActivity;
 import br.com.belongapps.appdelivery.promocoes.adapter.ViewPagerAdapter;
@@ -254,4 +255,5 @@ public class TelaInicialActivity extends AppCompatActivity {
             mDatabaseUserReference.child(FirebaseAuthApp.getUsuarioLogado().getUid()).child("versao_app").setValue(vesaoApp);
         }
     }
+
 }

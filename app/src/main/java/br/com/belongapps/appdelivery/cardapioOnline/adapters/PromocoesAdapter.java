@@ -120,7 +120,7 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
                         }
                     });
 
-                } else if (statusDelivery == false){
+                } else if (!statusDelivery){
 
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -171,25 +171,20 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
 
         itemPedido.setKeyItem(item.getItemKey());
 
-        if (item.isStatus_promocao() == true) {
+        if (item.isStatus_promocao()) {
             itemPedido.setValor_unit(item.getPreco_promocional());
         } else {
             itemPedido.setValor_unit(item.getValor_unit());
         }
 
-
         if (item.getCategoria_id().equals("1")) { //Açai, direcionar para a montagem
-            Intent intent = new Intent(context, MontagemAcaiActivity.class);
-
-            intent.putExtra("acaiNome", item.getNome());
-            intent.putExtra("acaiImg", item.getRef_img());
-            intent.putExtra("acaiKey", item.getItemKey());
-            intent.putExtra("acaiTotal", item.getValor_unit());
+            Intent intent = new Intent(context, DetalhesdoItemActivity.class);
+            intent.putExtra("acai", "pedidoDeAcai");
+            intent.putExtra("ItemPedido", itemPedido);
 
             context.startActivity(intent);
             ((Activity) context).finish();
         } else {
-
             if (item.getCategoria_id().equals("5")){
                 itemPedido.setNome("Pizza " + item.getNome());
             }

@@ -45,7 +45,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
     private String tipoPizza;
     private int countMetadesSelecionadas;
 
-    public PizzaAdapter(List<ItemCardapio> pizzas, ItemPedido itemPedido ,Context context, ProgressBar progressBar, int tamPizza, String tipoPizza, int countMetadesSelecionadas) {
+    public PizzaAdapter(List<ItemCardapio> pizzas, ItemPedido itemPedido, Context context, ProgressBar progressBar, int tamPizza, String tipoPizza, int countMetadesSelecionadas) {
         this.pizzas = pizzas;
         this.context = context;
         this.mProgressBar = progressBar;
@@ -79,7 +79,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
         Print.logError("TAM PIZZA: " + tamPizza);
 
         if (tamPizza == 0) { //Pizza Pequena
-            valoUniTario =  viewHolder.setValorUnitarioEPromocao(item.getValor_pizza_p(), item.isStatus_promocao(), item.getPromo_pizza_p());
+            valoUniTario = viewHolder.setValorUnitarioEPromocao(item.getValor_pizza_p(), item.isStatus_promocao(), item.getPromo_pizza_p());
         } else if (tamPizza == 1) { //Pizza Média
             valoUniTario = viewHolder.setValorUnitarioEPromocao(item.getValor_pizza_m(), item.isStatus_promocao(), item.getPromo_pizza_m());
         } else { //Pizza Grande
@@ -88,202 +88,203 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
 
         viewHolder.setImagem(context, item.getRef_img());
 
-            final Double finalValoUniTario = valoUniTario;
-            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        final Double finalValoUniTario = valoUniTario;
 
-                    if (item.getStatus_item() == 1) {
+        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                        if (tipoPizza.equals("Inteira")) {
+                if (item.getStatus_item() == 1) {
 
-                            itemPedido.setNome("Pizza " + item.getNome() + " " + getTamanho());
+                    if (tipoPizza.equals("Inteira")) {
+
+                        itemPedido.setNome("Pizza " + item.getNome() + " " + getTamanho());
+                        itemPedido.setDescricao(item.getDescricao());
+                        itemPedido.setRef_img(item.getRef_img());
+                        itemPedido.setValor_unit(finalValoUniTario);
+                        itemPedido.setEntrega_gratis(item.getEntrega_gratis());
+
+                        Intent intent = new Intent(context, DetalhesdoItemActivity.class);
+                        intent.putExtra("ItemPedido", itemPedido);
+                        intent.putExtra("TelaAnterior", "TabPizza");
+                        context.startActivity(intent);
+                        ((Activity) context).finish();
+
+                    } else if (tipoPizza.equals("Metade-Metade")) {
+
+                        if (countMetadesSelecionadas == 2) {
+
+                            itemPedido.setNomeMetade2(item.getNome());
+                            itemPedido.setDescMetade2(item.getDescricao());
+                            itemPedido.setImgMetade2(item.getRef_img());
+                            itemPedido.setValorMetade2(finalValoUniTario);
+                            itemPedido.setEntrega_gratis(item.getEntrega_gratis());
+
+                            Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
+                            intent.putExtra("TamPizza", tamPizza);
+                            intent.putExtra("TipoPizza", tipoPizza);
+                            intent.putExtra("ItemPedido", itemPedido);
+                            context.startActivity(intent);
+                            ((Activity) context).finish();
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
+
+                        } else {
+
+                            itemPedido.setNome(item.getNome());
                             itemPedido.setDescricao(item.getDescricao());
                             itemPedido.setRef_img(item.getRef_img());
                             itemPedido.setValor_unit(finalValoUniTario);
                             itemPedido.setEntrega_gratis(item.getEntrega_gratis());
 
-                            Intent intent = new Intent(context, DetalhesdoItemActivity.class);
+                            Intent intent = new Intent(context, EscolherPizzaActivity2.class);
+                            intent.putExtra("TamPizza", tamPizza);
+                            intent.putExtra("TipoPizza", tipoPizza);
                             intent.putExtra("ItemPedido", itemPedido);
-                            intent.putExtra("TelaAnterior", "TabPizza");
                             context.startActivity(intent);
                             ((Activity) context).finish();
 
-                        } else if (tipoPizza.equals("Metade-Metade")) {
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
 
-                            if (countMetadesSelecionadas == 2) {
-
-                                itemPedido.setNomeMetade2(item.getNome());
-                                itemPedido.setDescMetade2(item.getDescricao());
-                                itemPedido.setImgMetade2(item.getRef_img());
-                                itemPedido.setValorMetade2(finalValoUniTario / 2);
-                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
-
-                                Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
-                                intent.putExtra("TamPizza", tamPizza);
-                                intent.putExtra("TipoPizza", tipoPizza);
-                                intent.putExtra("ItemPedido", itemPedido);
-                                context.startActivity(intent);
-                                ((Activity) context).finish();
-
-                                Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
-
-                            } else {
-
-                                itemPedido.setNome(item.getNome());
-                                itemPedido.setDescricao(item.getDescricao());
-                                itemPedido.setRef_img(item.getRef_img());
-                                itemPedido.setValor_unit(finalValoUniTario / 2);
-                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
-
-                                Intent intent = new Intent(context, EscolherPizzaActivity2.class);
-                                intent.putExtra("TamPizza", tamPizza);
-                                intent.putExtra("TipoPizza", tipoPizza);
-                                intent.putExtra("ItemPedido", itemPedido);
-                                context.startActivity(intent);
-                                ((Activity) context).finish();
-
-                                Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
-
-                            }
-
-                        } else if (tipoPizza.equals("Três Sabores")) {
-
-                            if (countMetadesSelecionadas == 3) {
-
-                                itemPedido.setNomeMetade3(item.getNome());
-                                itemPedido.setDescMetade3(item.getDescricao());
-                                itemPedido.setImgMetade3(item.getRef_img());
-                                itemPedido.setValorMetade3(finalValoUniTario / 3);
-                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
-
-                                Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
-                                intent.putExtra("TamPizza", tamPizza);
-                                intent.putExtra("TipoPizza", tipoPizza);
-                                intent.putExtra("ItemPedido", itemPedido);
-                                context.startActivity(intent);
-                                ((Activity) context).finish();
-
-                                Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
-
-                            } else if (countMetadesSelecionadas == 1) {
-
-                                itemPedido.setNome(item.getNome());
-                                itemPedido.setDescricao(item.getDescricao());
-                                itemPedido.setRef_img(item.getRef_img());
-                                itemPedido.setValor_unit(finalValoUniTario / 3);
-                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
-
-                                Intent intent = new Intent(context, EscolherPizzaActivity2.class);
-                                intent.putExtra("TamPizza", tamPizza);
-                                intent.putExtra("TipoPizza", tipoPizza);
-                                intent.putExtra("ItemPedido", itemPedido);
-                                context.startActivity(intent);
-                                ((Activity) context).finish();
-
-                                Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
-
-                            } else {
-
-                                itemPedido.setNomeMetade2(item.getNome());
-                                itemPedido.setDescMetade2(item.getDescricao());
-                                itemPedido.setImgMetade2(item.getRef_img());
-                                itemPedido.setValorMetade2(finalValoUniTario / 3);
-                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
-
-                                Intent intent = new Intent(context, EscolherPizzaActivity3.class);
-                                intent.putExtra("TamPizza", tamPizza);
-                                intent.putExtra("TipoPizza", tipoPizza);
-                                intent.putExtra("ItemPedido", itemPedido);
-                                context.startActivity(intent);
-                                ((Activity) context).finish();
-
-                                Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
-
-                            }
-                        } else if (tipoPizza.equals("Quatro Sabores")) {
-
-                            if (countMetadesSelecionadas == 4) {
-
-                                itemPedido.setNomeMetade4(item.getNome());
-                                itemPedido.setDescMetade4(item.getDescricao());
-                                itemPedido.setImgMetade4(item.getRef_img());
-                                itemPedido.setValorMetade4(finalValoUniTario / 4);
-                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
-
-                                Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
-                                intent.putExtra("TamPizza", tamPizza);
-                                intent.putExtra("TipoPizza", tipoPizza);
-                                intent.putExtra("ItemPedido", itemPedido);
-                                context.startActivity(intent);
-                                ((Activity) context).finish();
-
-                                Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
-
-                            } else if (countMetadesSelecionadas == 1) {
-
-                                itemPedido.setNome(item.getNome());
-                                itemPedido.setDescricao(item.getDescricao());
-                                itemPedido.setRef_img(item.getRef_img());
-                                itemPedido.setValor_unit(finalValoUniTario / 4);
-                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
-
-                                Intent intent = new Intent(context, EscolherPizzaActivity2.class);
-                                intent.putExtra("TamPizza", tamPizza);
-                                intent.putExtra("TipoPizza", tipoPizza);
-                                intent.putExtra("ItemPedido", itemPedido);
-                                context.startActivity(intent);
-                                ((Activity) context).finish();
-
-                                Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
-
-                            } else if (countMetadesSelecionadas == 2) {
-
-                                itemPedido.setNomeMetade2(item.getNome());
-                                itemPedido.setDescMetade2(item.getDescricao());
-                                itemPedido.setImgMetade2(item.getRef_img());
-                                itemPedido.setValorMetade2(finalValoUniTario / 4);
-                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
-
-                                Intent intent = new Intent(context, EscolherPizzaActivity3.class);
-                                intent.putExtra("TamPizza", tamPizza);
-                                intent.putExtra("TipoPizza", tipoPizza);
-                                intent.putExtra("ItemPedido", itemPedido);
-                                context.startActivity(intent);
-                                ((Activity) context).finish();
-
-                                Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
-
-                            } else {
-
-                                itemPedido.setNomeMetade3(item.getNome());
-                                itemPedido.setDescMetade3(item.getDescricao());
-                                itemPedido.setImgMetade3(item.getRef_img());
-                                itemPedido.setValorMetade3(finalValoUniTario / 4);
-                                itemPedido.setEntrega_gratis(item.getEntrega_gratis());
-
-                                Intent intent = new Intent(context, EscolherPizzaActivity4.class);
-                                intent.putExtra("TamPizza", tamPizza);
-                                intent.putExtra("TipoPizza", tipoPizza);
-                                intent.putExtra("ItemPedido", itemPedido);
-                                context.startActivity(intent);
-                                ((Activity) context).finish();
-
-                                Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
-                            }
                         }
-                    } else {
-                        Toast.makeText(context, "Produto Indisponível!", Toast.LENGTH_SHORT).show();
+
+                    } else if (tipoPizza.equals("Três Sabores")) {
+
+                        if (countMetadesSelecionadas == 3) {
+
+                            itemPedido.setNomeMetade3(item.getNome());
+                            itemPedido.setDescMetade3(item.getDescricao());
+                            itemPedido.setImgMetade3(item.getRef_img());
+                            itemPedido.setValorMetade3(finalValoUniTario);
+                            itemPedido.setEntrega_gratis(item.getEntrega_gratis());
+
+                            Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
+                            intent.putExtra("TamPizza", tamPizza);
+                            intent.putExtra("TipoPizza", tipoPizza);
+                            intent.putExtra("ItemPedido", itemPedido);
+                            context.startActivity(intent);
+                            ((Activity) context).finish();
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
+
+                        } else if (countMetadesSelecionadas == 1) {
+
+                            itemPedido.setNome(item.getNome());
+                            itemPedido.setDescricao(item.getDescricao());
+                            itemPedido.setRef_img(item.getRef_img());
+                            itemPedido.setValor_unit(finalValoUniTario);
+                            itemPedido.setEntrega_gratis(item.getEntrega_gratis());
+
+                            Intent intent = new Intent(context, EscolherPizzaActivity2.class);
+                            intent.putExtra("TamPizza", tamPizza);
+                            intent.putExtra("TipoPizza", tipoPizza);
+                            intent.putExtra("ItemPedido", itemPedido);
+                            context.startActivity(intent);
+                            ((Activity) context).finish();
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
+
+                        } else {
+
+                            itemPedido.setNomeMetade2(item.getNome());
+                            itemPedido.setDescMetade2(item.getDescricao());
+                            itemPedido.setImgMetade2(item.getRef_img());
+                            itemPedido.setValorMetade2(finalValoUniTario);
+                            itemPedido.setEntrega_gratis(item.getEntrega_gratis());
+
+                            Intent intent = new Intent(context, EscolherPizzaActivity3.class);
+                            intent.putExtra("TamPizza", tamPizza);
+                            intent.putExtra("TipoPizza", tipoPizza);
+                            intent.putExtra("ItemPedido", itemPedido);
+                            context.startActivity(intent);
+                            ((Activity) context).finish();
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else if (tipoPizza.equals("Quatro Sabores")) {
+
+                        if (countMetadesSelecionadas == 4) {
+
+                            itemPedido.setNomeMetade4(item.getNome());
+                            itemPedido.setDescMetade4(item.getDescricao());
+                            itemPedido.setImgMetade4(item.getRef_img());
+                            itemPedido.setValorMetade4(finalValoUniTario);
+                            itemPedido.setEntrega_gratis(item.getEntrega_gratis());
+
+                            Intent intent = new Intent(context, DetalhesdoItemPizzaMMActivity.class);
+                            intent.putExtra("TamPizza", tamPizza);
+                            intent.putExtra("TipoPizza", tipoPizza);
+                            intent.putExtra("ItemPedido", itemPedido);
+                            context.startActivity(intent);
+                            ((Activity) context).finish();
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
+
+                        } else if (countMetadesSelecionadas == 1) {
+
+                            itemPedido.setNome(item.getNome());
+                            itemPedido.setDescricao(item.getDescricao());
+                            itemPedido.setRef_img(item.getRef_img());
+                            itemPedido.setValor_unit(finalValoUniTario);
+                            itemPedido.setEntrega_gratis(item.getEntrega_gratis());
+
+                            Intent intent = new Intent(context, EscolherPizzaActivity2.class);
+                            intent.putExtra("TamPizza", tamPizza);
+                            intent.putExtra("TipoPizza", tipoPizza);
+                            intent.putExtra("ItemPedido", itemPedido);
+                            context.startActivity(intent);
+                            ((Activity) context).finish();
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
+
+                        } else if (countMetadesSelecionadas == 2) {
+
+                            itemPedido.setNomeMetade2(item.getNome());
+                            itemPedido.setDescMetade2(item.getDescricao());
+                            itemPedido.setImgMetade2(item.getRef_img());
+                            itemPedido.setValorMetade2(finalValoUniTario);
+                            itemPedido.setEntrega_gratis(item.getEntrega_gratis());
+
+                            Intent intent = new Intent(context, EscolherPizzaActivity3.class);
+                            intent.putExtra("TamPizza", tamPizza);
+                            intent.putExtra("TipoPizza", tipoPizza);
+                            intent.putExtra("ItemPedido", itemPedido);
+                            context.startActivity(intent);
+                            ((Activity) context).finish();
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
+
+                        } else {
+
+                            itemPedido.setNomeMetade3(item.getNome());
+                            itemPedido.setDescMetade3(item.getDescricao());
+                            itemPedido.setImgMetade3(item.getRef_img());
+                            itemPedido.setValorMetade3(finalValoUniTario);
+                            itemPedido.setEntrega_gratis(item.getEntrega_gratis());
+
+                            Intent intent = new Intent(context, EscolherPizzaActivity4.class);
+                            intent.putExtra("TamPizza", tamPizza);
+                            intent.putExtra("TipoPizza", tipoPizza);
+                            intent.putExtra("ItemPedido", itemPedido);
+                            context.startActivity(intent);
+                            ((Activity) context).finish();
+
+                            Toast.makeText(context, "Pizza " + item.getNome() + " selecionada!", Toast.LENGTH_SHORT).show();
+                        }
                     }
+                } else {
+                    Toast.makeText(context, "Produto Indisponível!", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }
+        });
 
     }
 
     private String getDescMini(String descricao) {
         String desc = descricao;
 
-        if (descricao != null && descricao.length() > 50){
+        if (descricao != null && descricao.length() > 50) {
             return desc.substring(0, 30) + " ...";
         }
 
@@ -304,14 +305,14 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
         return retorno;
     }
 
-    public String getTamanho(){
+    public String getTamanho() {
         String retorno = "";
 
-        if (tamPizza == 0){
+        if (tamPizza == 0) {
             retorno = "Pequena";
-        } else if (tamPizza == 1){
+        } else if (tamPizza == 1) {
             retorno = "Média";
-        } else if(tamPizza == 2){
+        } else if (tamPizza == 2) {
             retorno = "Grande";
         }
 
@@ -388,16 +389,16 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
             TextView item_status = mView.findViewById(R.id.status_sabor_pizza);
 
             //Não permite entrega
-            if (permiteEntrega == 2){
+            if (permiteEntrega == 2) {
                 item_status.setText("Não Entregamos");
             }
 
             if (status == 0 || permiteEntrega == 2) { //Se Indisponível ou nao faz entrega
                 item_status.setVisibility(View.VISIBLE);
-                if (status == 0){
+                if (status == 0) {
                     item_status.setText("Produto Indisponível");
                 }
-            } else{
+            } else {
                 item_status.setVisibility(View.INVISIBLE);
             }
 

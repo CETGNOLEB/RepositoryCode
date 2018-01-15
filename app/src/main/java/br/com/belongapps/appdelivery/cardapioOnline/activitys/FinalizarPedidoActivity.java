@@ -281,6 +281,8 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             cliente.setComplementoEndCliente(endereco.getComplemento());
         }
 
+
+
         pedido.setCliente(cliente); //Adicionar Cliente ao Pedido
 
         FormadePagamento formadePagamento = getFormaPagamento();
@@ -288,10 +290,14 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         Pagamento pagamento = new Pagamento();
         pagamento.setFormaPagamento(formadePagamento.getNome());
 
+
         if (entregaGratis || contemItemComEntragaGratis()) {
             pagamento.setValorTotal(totaldoPedido);
         } else {
             pagamento.setValorTotal(totaldoPedido + taxadeEntrega);
+
+            //SALVAR TAXA DE ENTREGA
+            pedido.setTaxa_entrega(taxadeEntrega);
         }
 
         pagamento.setDescricaoPagemento(formadePagamento.getDescricao());
@@ -434,8 +440,13 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
                 Collections.sort(formasDePagamento, new FormadePagamento());
 
-                adapter = new FormasdePagamentoAdapter(formasDePagamento, FinalizarPedidoActivity.this, totaldoPedido + taxadeEntrega);
-                mRecyclerViewFormasdePagamento.setAdapter(adapter);
+                if (entregaGratis || contemItemComEntragaGratis()) {
+                    adapter = new FormasdePagamentoAdapter(formasDePagamento, FinalizarPedidoActivity.this, totaldoPedido);
+                    mRecyclerViewFormasdePagamento.setAdapter(adapter);
+                } else {
+                    adapter = new FormasdePagamentoAdapter(formasDePagamento, FinalizarPedidoActivity.this, totaldoPedido + taxadeEntrega);
+                    mRecyclerViewFormasdePagamento.setAdapter(adapter);
+                }
 
             }
 

@@ -142,11 +142,11 @@ public class EditarPizzaAdapter extends RecyclerView.Adapter<EditarPizzaAdapter.
     public double getValorPorTipo(double valorUnit) {
 
         if (tipoPizza.equals("Metade-Metade")) {
-            return valorUnit / 2;
+            return valorUnit;
         } else if (tipoPizza.equals("Três Sabores")) {
-            return valorUnit / 3;
+            return valorUnit;
         } else {
-            return valorUnit / 4;
+            return valorUnit;
         }
 
     }

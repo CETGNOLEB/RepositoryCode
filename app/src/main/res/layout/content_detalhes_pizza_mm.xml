@@ -12,6 +12,7 @@
         android:id="@+id/activity_detalhes_do_item_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="35dp"
         android:scrollbars="vertical"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -184,14 +185,14 @@
                         android:layout_toRightOf="@+id/img_metade1"
                         android:orientation="horizontal">
 
-                        <TextView
+                       <!-- <TextView
                             android:id="@+id/valor_metade1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="4dp"
                             android:text="R$ 12,00"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="16sp" />
+                            android:textSize="16sp" />-->
 
                         <TextView
                             android:id="@+id/button_editar_metade1"
@@ -294,14 +295,14 @@
                         android:layout_toRightOf="@+id/img_metade2"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <!--<TextView
                             android:id="@+id/valor_metade2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="4dp"
                             android:text="R$ 12,00"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="16sp" />
+                            android:textSize="16sp" />-->
 
                         <TextView
                             android:id="@+id/button_editar_metade2"
@@ -406,14 +407,14 @@
                         android:layout_toRightOf="@+id/img_metade3"
                         android:orientation="horizontal">
 
-                        <TextView
+                       <!-- <TextView
                             android:id="@+id/valor_metade3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="4dp"
                             android:text="R$ 12,00"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="16sp" />
+                            android:textSize="16sp" />-->
 
                         <TextView
                             android:id="@+id/button_editar_metade3"
@@ -518,14 +519,14 @@
                         android:layout_toRightOf="@+id/img_metade4"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <!--<TextView
                             android:id="@+id/valor_metade4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="4dp"
                             android:text="R$ 12,00"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="16sp" />
+                            android:textSize="16sp" />-->
 
                         <TextView
                             android:id="@+id/button_editar_metade4"
@@ -625,6 +626,28 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/detalhe_cart"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#e0dede"
+        android:layout_above="@+id/buttons"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/text_total_pizza"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:text="R$ 50,00"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/buttons"

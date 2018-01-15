@@ -32,6 +32,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import br.com.belongapps.appdelivery.R;
@@ -71,11 +72,6 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     private Button btDiminuirQtd;
     private Button btVoltar;
 
-    //Pizza
-    private String tamPizza = "";
-    private String tipoPizza = "";
-    private String categoria = "";
-
     //Sanduiche
     private CardView cardTipoPaoItem;
     private RadioGroup radioGroupPao;
@@ -96,9 +92,15 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     private Button btSelecionarBebidaCombo;
     private Button btAlterarBebida;
     private Spinner bebidasSpinner;
-    private List<String> keyBebidasDisponiveis;
     private String bebidaSelecionada;
     private boolean comboCombebidas = false;
+
+    private CardView cardPizzaCombo;
+    private TextView nomePizzacombo;
+    private Button btSelecionarPizzaCombo;
+    private Button btAlterarPizza;
+    private String pizzaSelecionada;
+    private boolean comboComPizza = false;
 
     private double valorTotal;//
     private double valorUnitario;//
@@ -159,7 +161,9 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                     } else {
                         adicionarAoCarrinho();
                     }
-                } else if(comboCombebidas && bebidaSelecionada == null) {
+                } else if (comboCombebidas && pizzaSelecionada == null) {
+                    Toast.makeText(DetalhesdoItemActivity.this, "Selecione a pizza de sua preferência!", Toast.LENGTH_SHORT).show();
+                } else if (comboCombebidas && bebidaSelecionada == null) {
                     Toast.makeText(DetalhesdoItemActivity.this, "Selecione a bebida de sua preferência!", Toast.LENGTH_SHORT).show();
                 } else {
                     adicionarAoCarrinho();
@@ -194,14 +198,25 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             itemPedido.setValor_unit(valorTotal); //Seta valor unitario final
 
             //SET DESC SANDUICHE
-            String desc = itemPedido.getDescricao();
-            itemPedido.setDescricao(desc += " (" + paoSelecinado + ")");
+            itemPedido.setDescricao(itemPedido.getDescricao() + " (" + paoSelecinado + ")");
         }
 
-        if (isPedidoCombo()){
-            if (bebidaSelecionada != null) {
-                itemPedido.setDescricao(bebidaSelecionada);
+        if (isPedidoCombo()) {
+            String descricaoCombo = "";
+
+            if (pizzaSelecionada != null){
+                descricaoCombo += "Pizza " + pizzaSelecionada;
             }
+
+            if (bebidaSelecionada != null) {
+                if (pizzaSelecionada != null) {
+                    descricaoCombo += " + " + bebidaSelecionada;
+                } else{
+                    descricaoCombo += bebidaSelecionada;
+                }
+            }
+
+            itemPedido.setDescricao(descricaoCombo);
         }
 
         Intent intent = new Intent(DetalhesdoItemActivity.this, CarrinhoActivity.class);
@@ -233,15 +248,15 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mProgressBar = findViewById(R.id.progressbar_detalhes_do_item);
-
-        getParametros();
-
         if (FirebaseAuthApp.getUsuarioLogado() == null) {
             Intent i = new Intent(DetalhesdoItemActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
         }
+
+        mProgressBar = findViewById(R.id.progressbar_detalhes_do_item);
+
+        getParametros();
 
         //Verifica se o pedido é de Sanduíche
         if (isPedidoSanduiche()) {
@@ -249,39 +264,21 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         }
 
         if (isPedidoCombo()) {
-            verificarSeDeveEscolherBebida();
+            verificarItensAEscolher();
         }
 
     }
 
     private boolean isPedidoSanduiche() {
-        //Print.logError("SANDUICHE SELECIONADO: " + getIntent().getStringExtra("sanduiche"));
-
-        if (getIntent().getStringExtra("sanduiche") != null) {
-            return true;
-        }
-
-        return false;
+        return getIntent().getStringExtra("sanduiche") != null;
     }
 
     private boolean isPedidoAcai() {
-        //Print.logError("ACAI SELECIONADO: " + getIntent().getStringExtra("acai"));
-
-        if (getIntent().getStringExtra("acai") != null) {
-            return true;
-        }
-
-        return false;
+        return getIntent().getStringExtra("acai") != null;
     }
 
     private boolean isPedidoCombo() {
-        //Print.logError("COMBO SELECIONADO: " + getIntent().getStringExtra("Combo"));
-
-        if (getIntent().getStringExtra("Combo") != null) {
-            return true;
-        }
-
-        return false;
+        return getIntent().getStringExtra("Combo") != null;
     }
 
     private void buscarKeysPaesdoSanduiche() {
@@ -317,12 +314,10 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
     }
 
-    private void verificarSeDeveEscolherBebida() {
+    private void verificarItensAEscolher() {
         openProgressBar();
 
-        Print.logError("VERIFICANDO SE TEM BEBIBAS DISPONÍVEIS...");
-
-        keyBebidasDisponiveis = new ArrayList<>();
+        Print.logError("VERIFICANDO OS ITEM Q DEVEM SER ESCOLHIDOS...");
 
         DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mDatabaseReference = mDatabaseReference.child("itens_cardapio").child("11").child(itemPedido.getKeyItem());
@@ -331,11 +326,11 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Boolean temBebidas = dataSnapshot.child("bebidas_permitidas").hasChildren();
+                Boolean temPizzas = dataSnapshot.child("pizzas_permitidas").hasChildren();
 
                 if (temBebidas) {
-
+                    Print.logError("TEM BEBIDAS...");
                     comboCombebidas = true;
-
                     List<String> nomeBebidas = new ArrayList<>();
                     DataSnapshot dataBebidas = dataSnapshot.child("bebidas_permitidas");
 
@@ -345,6 +340,25 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                     }
 
                     mostrarCardEscolherBebida(nomeBebidas);
+                }
+
+                if (temPizzas) {
+                    Print.logError("TEM PIZZAS...");
+
+                    comboComPizza = true;
+                    List<String> keyPizzas = new ArrayList<>();
+                    DataSnapshot dataBebidas = dataSnapshot.child("pizzas_permitidas");
+
+                    for (DataSnapshot nomeData : dataBebidas.getChildren()) {
+                        String keyPizza = nomeData.getValue(String.class);
+                        keyPizzas.add(keyPizza);
+                    }
+
+                   for (String pizza : keyPizzas) {
+                        Print.logError("PIZZA: " + pizza);
+                   }
+
+                    mostrarCardEscolherPizza(keyPizzas);
                 }
             }
 
@@ -400,10 +414,10 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         for (final Pao pao : paesDoSanduiche) {
             final RadioButton radioButton = new RadioButton(this);
 
+            radioButton.setText(pao.getNome());
+
             if (pao.getValor_unit() > 0) {
-                radioButton.setText(pao.getNome() + " (+ " + StringUtil.formatToMoeda(pao.getValor_unit()) + ")");
-            } else {
-                radioButton.setText(pao.getNome());
+                radioButton.setText(pao.getNome() + " ( " + StringUtil.formatToMoeda(pao.getValor_unit()) + ")");
             }
 
             opcoesDePaes.add(radioButton);
@@ -423,20 +437,39 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
     }
 
+    private void mostrarCardEscolherPizza(final List<String> keyPizzas) {
+        closeProgressBar();
+        initViewsCombos();
+        cardPizzaCombo.setVisibility(View.VISIBLE);
+        btSelecionarPizzaCombo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //MANDAR LISTA DE ITENS PARA A TELA DE ESCOLHA
+
+                Intent i = new Intent(DetalhesdoItemActivity.this, EscolherItemComboActivity.class);
+                i.putExtra("ItemPedido", itemPedido);
+                i.putExtra("ItemNome", "a Pizza");
+                i.putStringArrayListExtra("KeyItens", new ArrayList<>(keyPizzas));
+                startActivity(i);
+                finish();
+            }
+        });
+
+        atualizarViewsCardSelecionarPizza(keyPizzas);
+
+    }
+
     private void mostrarCardEscolherBebida(final List<String> nomeBebidas) {
         closeProgressBar();
-
-        initViews();
-
+        initViewsCombos();
         cardBebidaCombo.setVisibility(View.VISIBLE);
-
         btSelecionarBebidaCombo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 exibirDialogSelecionarBebida(nomeBebidas);
             }
         });
-
     }
 
     private void exibirDialogSelecionarBebida(final List<String> nomeBebidas) {
@@ -497,7 +530,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             btAlterarBebida.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    exibirDialogSelecionarBebida(nomeBebidas);
+                exibirDialogSelecionarBebida(nomeBebidas);
                 }
             });
         } else {
@@ -505,6 +538,39 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             btAlterarBebida.setVisibility(View.GONE);
             btSelecionarBebidaCombo.setVisibility(View.VISIBLE);
 
+        }
+    }
+
+    private void atualizarViewsCardSelecionarPizza(final List<String> keyPizzas) {
+
+        initViewsCombos();
+        nomePizzacombo = findViewById(R.id.nome_pizza_combo);
+        btAlterarPizza = findViewById(R.id.bt_alterar_pizza);
+
+        if (pizzaSelecionada != null) {
+            nomePizzacombo.setText(pizzaSelecionada);
+            nomePizzacombo.setVisibility(View.VISIBLE);
+
+            btSelecionarPizzaCombo.setVisibility(View.GONE);
+            btAlterarPizza.setVisibility(View.VISIBLE);
+
+            btAlterarPizza.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(DetalhesdoItemActivity.this, EscolherItemComboActivity.class);
+                    i.putExtra("ItemNome", "a Pizza");
+                    i.putExtra("ItemPedido", itemPedido);
+                    i.putExtra("ItemSelecionado", pizzaSelecionada);
+                    i.putStringArrayListExtra("KeyItens", new ArrayList<>(keyPizzas));
+                    startActivity(i);
+                    finish();
+                }
+            });
+
+        } else {
+            nomePizzacombo.setVisibility(View.GONE);
+            btAlterarPizza.setVisibility(View.GONE);
+            btSelecionarPizzaCombo.setVisibility(View.VISIBLE);
         }
     }
 
@@ -550,15 +616,13 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
         telaAnterior = getIntent().getStringExtra("TelaAnterior");
         itemPedido = getIntent().getExtras().getParcelable("ItemPedido");
-        categoria = getIntent().getStringExtra("Categoria");
-
-        //Pizzas
-        tamPizza = getIntent().getStringExtra("TamPizza");
-        tipoPizza = getIntent().getStringExtra("TipoPizza");
 
         //Acai
         todosRecheios = getIntent().getParcelableArrayListExtra("recheiosSelecionados");
         recheiosPadrao = getIntent().getParcelableArrayListExtra("recheiosPadrao");
+
+        //Combo
+        pizzaSelecionada = getIntent().getStringExtra("ItemSelecionado");
 
         //SetValorTotal
         valorTotal = itemPedido.getValor_unit();
@@ -598,13 +662,25 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
         addAoCarrinho = findViewById(R.id.bt_proximo_detalhes);
         btVoltar = findViewById(R.id.bt_voltar_detalhes);
 
-        //PAO
+        //SANDUICHES
+        initViewsSanduiches();
+
+        //ACAI
+        initViewAcai();
+
+        //COMBOS
+        initViewsCombos();
+
+    }
+
+    private void initViewsSanduiches() {
         if (isPedidoSanduiche()) {
             cardTipoPaoItem = findViewById(R.id.card_tipo_pao_item);
             radioGroupPao = findViewById(R.id.radio_group_pao);
         }
+    }
 
-        //ACAI
+    private void initViewAcai() {
         if (isPedidoAcai()) {
             cardItensAcai = findViewById(R.id.card_itens_acai);
             itensAcai = findViewById(R.id.itens_acai);
@@ -628,16 +704,21 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 }
             });
         }
+    }
 
-        //COMBOS
+    private void initViewsCombos() {
         if (isPedidoCombo()) {
+            cardPizzaCombo = findViewById(R.id.card_pizza_combo);
+            nomePizzacombo = findViewById(R.id.nome_pizza_combo);
+            btSelecionarPizzaCombo = findViewById(R.id.bt_selecionar_pizza_combo);
+            btAlterarPizza = findViewById(R.id.bt_alterar_pizza);
+
             cardBebidaCombo = findViewById(R.id.card_bebida_combo);
             nomeBebidacombo = findViewById(R.id.nome_bebida_combo);
             btSelecionarBebidaCombo = findViewById(R.id.bt_selecionar_bebida_combo);
             btAlterarBebida = findViewById(R.id.bt_alterar_bebida);
+
         }
-
-
     }
 
     public void pupulateViewDetalhes() {

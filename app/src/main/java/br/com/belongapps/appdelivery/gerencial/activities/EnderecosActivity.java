@@ -381,6 +381,7 @@ public class EnderecosActivity extends AppCompatActivity {
         numero.setText(endereco.getNumero());
         bairroSpinner.setSelection(getPositionItemBairro(endereco.getBairro()));
         nome.setText(endereco.getNome());
+        complemento.setText(endereco.getComplemento());
     }
 
     public int getPositionItemBairro(String bairro) {
