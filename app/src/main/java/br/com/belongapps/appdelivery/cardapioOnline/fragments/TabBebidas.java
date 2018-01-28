@@ -33,6 +33,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.util.OpenDialogUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 
@@ -103,7 +104,6 @@ public class TabBebidas extends Fragment {
             public void onBindViewHolder(final TabBebidas.SanduichesViewHolder viewHolder, final int position) {
                 super.onBindViewHolder(viewHolder, position);
 
-                //YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_bebida);
             }
 
             @Override
@@ -124,23 +124,11 @@ public class TabBebidas extends Fragment {
                         if (model.getStatus_item() == 1) { //Disponível no Cardápio
 
                             if (statusEstabelecimento == false) {
-                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                                View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
+                                OpenDialogUtil.openSimpleDialog("Estabelecimento Fechado",
+                                        "Desculpe, nosso estabelecimento não está recebendo pedidos pelo aplicativo no momento.",
+                                        getContext());
 
-                                Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
-
-                                mBilder.setView(layoutDialog);
-                                final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                                dialogEstabelecimentoFechado.show();
-
-                                btEntendi.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogEstabelecimentoFechado.dismiss();
-                                    }
-                                });
                             } else if (model.getPermite_entrega() == 2) {
 
                                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

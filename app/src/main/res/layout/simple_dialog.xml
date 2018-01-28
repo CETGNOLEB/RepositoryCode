@@ -6,23 +6,25 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/title_simple_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:text="Estabelecimento Fechado"
+        android:text="Titulo"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"/>
 
     <TextView
+        android:id="@+id/msg_simple_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="Desculpe, nosso estabeleciemento está fechado no momento."/>
+        android:text="Mensagem do dialog!"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,7 +35,7 @@
         android:background="@drawable/border_bottom_around">
 
         <Button
-            android:id="@+id/bt_entendi_estabeleciemento_fechado"
+            android:id="@+id/bt_close_simple_dialog"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

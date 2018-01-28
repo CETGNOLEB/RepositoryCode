@@ -35,6 +35,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.model.Pedido;
 import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
+import br.com.belongapps.appdelivery.util.OpenDialogUtil;
 
 public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
 
@@ -137,23 +138,9 @@ public class FinalizarPedidoRetiradaActivity extends AppCompatActivity {
     }
 
     private void exibirDialogSemConexao() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoRetiradaActivity.this, R.style.MyDialogTheme);
-        View layoutDialog = inflater.inflate(R.layout.dialog_sem_conexao, null);
-
-        Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_sem_conexao);
-
-        mBilder.setView(layoutDialog);
-        final AlertDialog dialogSemConexao = mBilder.create();
-        dialogSemConexao.show();
-
-        btEntendi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSemConexao.dismiss();
-            }
-        });
+        OpenDialogUtil.openSimpleDialog("Conexão ruim",
+                "Sua conexão com a internet parece ruim, verifique a conexão e tente novamente.",
+                FinalizarPedidoRetiradaActivity.this);
     }
 
     private String setTextFormaRecebimento() {

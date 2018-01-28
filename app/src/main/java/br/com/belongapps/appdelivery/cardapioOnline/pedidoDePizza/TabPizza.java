@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso;
 import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPizza;
 import br.com.belongapps.appdelivery.cardapioOnline.model.TamPizza;
+import br.com.belongapps.appdelivery.util.OpenDialogUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class TabPizza extends Fragment {
@@ -116,23 +117,9 @@ public class TabPizza extends Fragment {
 
                             if (statusEstabelecimento == false) {
 
-                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                                View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
-
-                                Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
-
-                                mBilder.setView(layoutDialog);
-                                final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                                dialogEstabelecimentoFechado.show();
-
-                                btEntendi.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogEstabelecimentoFechado.dismiss();
-                                    }
-                                });
+                                OpenDialogUtil.openSimpleDialog("Estabelecimento Fechado",
+                                        "Desculpe, nosso estabelecimento não está recebendo pedidos pelo aplicativo no momento.",
+                                        getContext());
 
                             } else if (statusDelivery == false) {
 

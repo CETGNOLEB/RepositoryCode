@@ -26,6 +26,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActi
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.MontagemAcaiActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.util.OpenDialogUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 
@@ -72,24 +73,9 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
 
                 if (statusEstabelecimento == false) {
 
-                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                    AlertDialog.Builder mBilder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
-                    View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
-
-                    Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
-
-                    mBilder.setView(layoutDialog);
-                    final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                    dialogEstabelecimentoFechado.show();
-
-                    btEntendi.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialogEstabelecimentoFechado.dismiss();
-                        }
-                    });
-
+                    OpenDialogUtil.openSimpleDialog("Estabelecimento Fechado",
+                            "Desculpe, nosso estabelecimento não está recebendo pedidos pelo aplicativo no momento.",
+                            context);
 
                 } else if (item.getPermite_entrega() == 2){
 

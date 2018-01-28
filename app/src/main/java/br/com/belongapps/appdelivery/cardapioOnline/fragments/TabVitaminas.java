@@ -34,6 +34,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.util.OpenDialogUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 
@@ -90,7 +91,6 @@ public class TabVitaminas extends Fragment {
             public void onBindViewHolder(final VitaminasViewHolder viewHolder, final int position) {
                 super.onBindViewHolder(viewHolder, position);
 
-                //YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_vitaminas);
             }
 
             @Override
@@ -111,51 +111,10 @@ public class TabVitaminas extends Fragment {
                         if (model.getStatus_item() == 1) { //Se Disponível no Cardápio
 
                             if (statusEstabelecimento == false) {
-                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                                View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
-
-                                Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
-
-                                mBilder.setView(layoutDialog);
-                                final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                                dialogEstabelecimentoFechado.show();
-
-                                btEntendi.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogEstabelecimentoFechado.dismiss();
-                                    }
-                                });
-                            } else if (model.getPermite_entrega() == 2) {
-
-                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                                View layoutDialog = inflater.inflate(R.layout.dialog_nao_permite_entrega, null);
-
-                                Button btVoltar = layoutDialog.findViewById(R.id.bt_voltar_item_sem_entrega);
-                                Button btContinuar = layoutDialog.findViewById(R.id.bt_continuar_item_sem_entrega);
-
-                                mBilder.setView(layoutDialog);
-                                final AlertDialog dialogDeliveryFechado = mBilder.create();
-                                dialogDeliveryFechado.show();
-
-                                btVoltar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogDeliveryFechado.dismiss();
-                                    }
-                                });
-
-                                btContinuar.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogDeliveryFechado.dismiss();
-                                        selecionarItem(model, key);
-                                    }
-                                });
+                                OpenDialogUtil.openSimpleDialog("Estabelecimento Fechado",
+                                        "Desculpe, nosso estabelecimento não está recebendo pedidos pelo aplicativo no momento.",
+                                        getContext());
 
                             } else if (model.getPermite_entrega() == 2) {
 

@@ -53,6 +53,7 @@ import br.com.belongapps.appdelivery.gerencial.model.Bairro;
 import br.com.belongapps.appdelivery.gerencial.model.Endereco;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
+import br.com.belongapps.appdelivery.util.OpenDialogUtil;
 import br.com.belongapps.appdelivery.util.Print;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
@@ -186,23 +187,9 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
         } else if (!statusEstabelecimento) { //Estabelecimento Fechado
 
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this, R.style.MyDialogTheme);
-            View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
-
-            Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
-
-            mBilder.setView(layoutDialog);
-            final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-            dialogEstabelecimentoFechado.show();
-
-            btEntendi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialogEstabelecimentoFechado.dismiss();
-                }
-            });
+            OpenDialogUtil.openSimpleDialog("Estabelecimento Fechado",
+                    "Desculpe, nosso estabelecimento não está recebendo pedidos pelo aplicativo no momento.",
+                    FinalizarPedidoActivity.this);
 
         } else if (!statusDelivery) { //Delivery Frechado
 
@@ -236,16 +223,16 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
             //verificar se endereço e form pag. selecionados
             if (frmPagValida && endereco != null) {
-               /* try {*/
+               try {
                     openProgressDialog(); //Exibir status de envio
                     iniciarEnvioDoPedido();
                     //new exibirDialogdeEnvio().execute((Void[]) null); //Executar dialog de status de envio]
-               /* } catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     //Exibir Dialog de Erro ao enviar o pedido
                     Print.logError("ERROR: " + e.getMessage());
-                    //exibirErroAoEnviarPedido();
-                }*/
+                    exibirErroAoEnviarPedido();
+                }
             } else {
                 naoEnviarPedido(frmPagValida);
             }
@@ -330,44 +317,15 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
     }
 
     private void exibirDilogSemConexao() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this, R.style.MyDialogTheme);
-        View layoutDialog = inflater.inflate(R.layout.dialog_sem_conexao, null);
-
-        Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_sem_conexao);
-
-        mBilder.setView(layoutDialog);
-        final AlertDialog dialogSemConexao = mBilder.create();
-        dialogSemConexao.show();
-
-        btEntendi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSemConexao.dismiss();
-            }
-        });
+        OpenDialogUtil.openSimpleDialog("Conexão ruim",
+                "Sua conexão com a internet parece ruim, verifique a conexão e tente novamente.",
+                FinalizarPedidoActivity.this);
     }
 
     public void exibirErroAoEnviarPedido() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        AlertDialog.Builder mBilder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
-        View layoutDialog = inflater.inflate(R.layout.dialog_erro_ao_enviar_pedido, null);
-        initView(layoutDialog);
-
-        Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_erro);
-
-        mBilder.setView(layoutDialog);
-        final AlertDialog dialogErro = mBilder.create();
-        dialogErro.show();
-
-        btEntendi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogErro.dismiss();
-            }
-        });
+        OpenDialogUtil.openSimpleDialog("Error ao enviar",
+                "Desculpe, ocorreu um erro ao enviar seu pedido. Tente novamente mais tarde ou entre em contato com o estabelecimento.",
+                FinalizarPedidoActivity.this);
     }
 
     public void populateViewValores() {
@@ -484,33 +442,19 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
     public void naoEnviarPedido(boolean formadepagamento) {
 
-        AlertDialog.Builder mBilder = new AlertDialog.Builder(FinalizarPedidoActivity.this, R.style.MyDialogTheme);
-        View layoutDialog = getLayoutInflater().inflate(R.layout.dialog_entendi, null);
-
-        mBilder.setView(layoutDialog);
-        final AlertDialog dialogEscolhaFormPag = mBilder.create();
-        dialogEscolhaFormPag.show();
-
-        TextView textDialod = (TextView) layoutDialog.findViewById(R.id.text_dialog_entendi);
+        String dialogMsg = "";
 
         if (formadepagamento == false && endereco == null) {
-            textDialod.setText("Você precisa cadastrar um endereço e selecionar uma forma de pagamento.");
+            dialogMsg = "Você precisa cadastrar um endereço e selecionar uma forma de pagamento.";
         } else if (formadepagamento == false) {
-            textDialod.setText("Você precisa selecionar uma forma de pagamento.");
+            dialogMsg = "Você precisa selecionar uma forma de pagamento.";
         } else {
-            textDialod.setText("Você precisa cadastrar um endereço.");
+            dialogMsg = "Você precisa cadastrar um endereço.";
         }
 
-
-        Button btCancel = (Button) layoutDialog.findViewById(R.id.bt_entendi);
-
-
-        btCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogEscolhaFormPag.dismiss();
-            }
-        });
+        OpenDialogUtil.openSimpleDialog("Atenção",
+                dialogMsg,
+                FinalizarPedidoActivity.this);
     }
 
     public void cadastrarEndereco() {

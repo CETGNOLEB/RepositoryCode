@@ -33,6 +33,7 @@ import br.com.belongapps.appdelivery.R;
 import br.com.belongapps.appdelivery.cardapioOnline.activitys.DetalhesdoItemActivity;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemCardapio;
 import br.com.belongapps.appdelivery.cardapioOnline.model.ItemPedido;
+import br.com.belongapps.appdelivery.util.OpenDialogUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class TabAcai extends Fragment {
@@ -102,7 +103,6 @@ public class TabAcai extends Fragment {
             public void onBindViewHolder(final AcaiViewHolder viewHolder, final int position) {
                 super.onBindViewHolder(viewHolder, position);
 
-                //YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_acai);
             }
 
             @Override
@@ -124,23 +124,11 @@ public class TabAcai extends Fragment {
                         public void onClick(View v) {
 
                             if (!statusEstabelecimento) {
-                                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                                AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                                View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
+                                OpenDialogUtil.openSimpleDialog("Estabelecimento Fechado",
+                                        "Desculpe, nosso estabelecimento não está recebendo pedidos pelo aplicativo no momento.",
+                                        getContext());
 
-                                Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
-
-                                mBilder.setView(layoutDialog);
-                                final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                                dialogEstabelecimentoFechado.show();
-
-                                btEntendi.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialogEstabelecimentoFechado.dismiss();
-                                    }
-                                });
                             } else if (model.getPermite_entrega() == 2) {
 
                                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -215,23 +203,6 @@ public class TabAcai extends Fragment {
     }
 
     public void selecionarItem(final ItemCardapio model, String key) {
-
-        /*Intent intent = new Intent(getActivity(), MontagemAcaiActivity.class);
-        intent.putExtra("acaiKey", key);
-        intent.putExtra("acaiNome", model.getNome());
-
-        if (model.isStatus_promocao() == true) {
-            intent.putExtra("acaiTotal", model.getPreco_promocional());
-        }else {
-            intent.putExtra("acaiTotal", model.getValor_unit());
-        }
-
-        intent.putExtra("acaiImg", model.getRef_img());
-        intent.putExtra("acai", itemPedido);
-
-        startActivity(intent);
-        getActivity().finish();*/
-
 
         itemPedido.setNome(model.getNome());
         itemPedido.setDescricao(model.getDescricao());

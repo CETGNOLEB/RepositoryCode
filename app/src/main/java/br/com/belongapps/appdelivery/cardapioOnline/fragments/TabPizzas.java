@@ -34,6 +34,7 @@ import br.com.belongapps.appdelivery.cardapioOnline.activitys.EscolherPizzaActiv
 import br.com.belongapps.appdelivery.cardapioOnline.model.TamPizza;
 import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
+import br.com.belongapps.appdelivery.util.OpenDialogUtil;
 import br.com.belongapps.appdelivery.util.StringUtil;
 
 public class TabPizzas extends Fragment {
@@ -84,11 +85,11 @@ public class TabPizzas extends Fragment {
         });
 
 
-        mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar_escolher_pizzas);
+        mProgressBar = getActivity().findViewById(R.id.progressbar_escolher_pizzas);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("tipos_pizzas");
         mDatabaseReference.keepSynced(true);
 
-        mTamPizzaList = (RecyclerView) getView().findViewById(R.id.list_pizzas);
+        mTamPizzaList = getView().findViewById(R.id.list_pizzas);
         mTamPizzaList.setHasFixedSize(true);
         mTamPizzaList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -102,7 +103,6 @@ public class TabPizzas extends Fragment {
             public void onBindViewHolder(final TamPizzaViewHolder viewHolder, final int position) {
                 super.onBindViewHolder(viewHolder, position);
 
-                //YoYo.with(Techniques.BounceInUp).playOn(viewHolder.card_tam_pizza);
             }
 
             @Override
@@ -119,23 +119,9 @@ public class TabPizzas extends Fragment {
 
                         if (statusEstabelecimento == false) {
 
-                            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                            AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-                            View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
-
-                            Button btEntendi = (Button) layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
-
-                            mBilder.setView(layoutDialog);
-                            final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                            dialogEstabelecimentoFechado.show();
-
-                            btEntendi.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialogEstabelecimentoFechado.dismiss();
-                                }
-                            });
+                            OpenDialogUtil.openSimpleDialog("Estabelecimento Fechado",
+                                    "Desculpe, nosso estabelecimento não está recebendo pedidos pelo aplicativo no momento.",
+                                    getContext());
 
                         } else if (statusDelivery == false) {
 
@@ -144,8 +130,8 @@ public class TabPizzas extends Fragment {
                             AlertDialog.Builder mBilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
                             View layoutDialog = inflater.inflate(R.layout.dialog_delivery_fechado, null);
 
-                            Button btVoltar = (Button) layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
-                            Button btContinuar = (Button) layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
+                            Button btVoltar = layoutDialog.findViewById(R.id.bt_voltar_delivery_fechado);
+                            Button btContinuar = layoutDialog.findViewById(R.id.bt_continuar_delivery_fechado);
 
                             mBilder.setView(layoutDialog);
                             final AlertDialog dialogDeliveryFechado = mBilder.create();
@@ -192,8 +178,8 @@ public class TabPizzas extends Fragment {
             final AlertDialog dialogEscolherTipoPizza = mBilder.create();
             dialogEscolherTipoPizza.show();
 
-            Button btConfirmTipoPizza = (Button) layoutDialog.findViewById(R.id.bt_confirmar_tipo_pizza);
-            Button btCancelTipoPizza = (Button) layoutDialog.findViewById(R.id.bt_cancel_tipo_pizza);
+            Button btConfirmTipoPizza = layoutDialog.findViewById(R.id.bt_confirmar_tipo_pizza);
+            Button btCancelTipoPizza = layoutDialog.findViewById(R.id.bt_cancel_tipo_pizza);
 
             btCancelTipoPizza.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -282,24 +268,24 @@ public class TabPizzas extends Fragment {
             super(itemView);
 
             mView = itemView;
-            card_tam_pizza = (CardView) mView.findViewById(R.id.card_tam_pizzas);
+            card_tam_pizza = mView.findViewById(R.id.card_tam_pizzas);
 
         }
 
         public void setNome(String nome) {
 
-            TextView item_nome = (TextView) mView.findViewById(R.id.item_nome_pizza);
+            TextView item_nome = mView.findViewById(R.id.item_nome_pizza);
             item_nome.setText(nome);
 
         }
 
         public void setApartirDe(double valor_unit) {
-            TextView apartir_de = (TextView) mView.findViewById(R.id.apartir_de_pizza);
+            TextView apartir_de = mView.findViewById(R.id.apartir_de_pizza);
             apartir_de.setText("A partir de " + StringUtil.formatToMoeda(valor_unit));
         }
 
         public void setImagem(final Context context, final String url) {
-            final ImageView item_ref_image = (ImageView) mView.findViewById(R.id.img_tam_pizza);
+            final ImageView item_ref_image = mView.findViewById(R.id.img_tam_pizza);
 
             Picasso.with(context).load(url).networkPolicy(NetworkPolicy.OFFLINE).into(item_ref_image, new Callback() {
                 @Override

@@ -38,6 +38,7 @@ import br.com.belongapps.appdelivery.firebaseAuthApp.FirebaseAuthApp;
 import br.com.belongapps.appdelivery.seguranca.activities.LoginActivity;
 import br.com.belongapps.appdelivery.util.ConexaoUtil;
 import br.com.belongapps.appdelivery.util.DataUtil;
+import br.com.belongapps.appdelivery.util.OpenDialogUtil;
 import br.com.belongapps.appdelivery.util.Print;
 
 public class CarrinhoActivity extends AppCompatActivity {
@@ -156,52 +157,12 @@ public class CarrinhoActivity extends AppCompatActivity {
                     }
                 }
 
-                /*if (!DataUtil.horaAutomaticaAtivada(getContentResolver())) {
-
-                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                    AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
-                    View layoutDialog = i]nflater.inflate(R.layout.dialog_redefinir_data, null);
-                    mBilder.setCancelable(false);
-
-                    Button btConfigData = layoutDialog.findViewById(R.id.bt_config_data);
-
-                    mBilder.setView(layoutDialog);
-                    final AlertDialog dialogConfigData = mBilder.create();
-                    dialogConfigData.show();
-
-                    btConfigData.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialogConfigData.dismiss();
-                            Toast.makeText(CarrinhoActivity.this, "Marque a data/hora como automático.", Toast.LENGTH_LONG).show();
-                            startActivityForResult(new Intent(Settings.ACTION_DATE_SETTINGS), 0);
-                        }
-                    });
-
-                    return;
-                }*/
-
                 //*Sem Conexão*//
                 if (!ConexaoUtil.verificaConectividade(CarrinhoActivity.this)) {
 
-                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                    AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
-                    View layoutDialog = inflater.inflate(R.layout.dialog_sem_conexao, null);
-
-                    Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_sem_conexao);
-
-                    mBilder.setView(layoutDialog);
-                    final AlertDialog dialogSemConexao = mBilder.create();
-                    dialogSemConexao.show();
-
-                    btEntendi.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialogSemConexao.dismiss();
-                        }
-                    });
+                    OpenDialogUtil.openSimpleDialog("Conexão ruim",
+                            "Sua conexão com a internet parece ruim, verifique a conexão e tente novamente.",
+                            CarrinhoActivity.this);
 
                     return;
 
@@ -209,23 +170,9 @@ public class CarrinhoActivity extends AppCompatActivity {
                 //*Estabelecimento Fechado*//
                 if (statusEstabelecimento == false) {
 
-                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                    AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
-                    View layoutDialog = inflater.inflate(R.layout.dialog_estabelecimento_fechado, null);
-
-                    Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_estabeleciemento_fechado);
-
-                    mBilder.setView(layoutDialog);
-                    final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                    dialogEstabelecimentoFechado.show();
-
-                    btEntendi.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialogEstabelecimentoFechado.dismiss();
-                        }
-                    });
+                    OpenDialogUtil.openSimpleDialog("Estabelecimento Fechado",
+                            "Desculpe, nosso estabelecimento não está recebendo pedidos pelo aplicativo no momento.",
+                            CarrinhoActivity.this);
 
                     return;
 
@@ -233,23 +180,9 @@ public class CarrinhoActivity extends AppCompatActivity {
 
                 if (!FirebaseAuthApp.podeFazerPedidos()) {
 
-                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                    AlertDialog.Builder mBilder = new AlertDialog.Builder(CarrinhoActivity.this, R.style.MyDialogTheme);
-                    View layoutDialog = inflater.inflate(R.layout.dialog_nao_pode_pedir, null);
-
-                    Button btEntendi = layoutDialog.findViewById(R.id.bt_entendi_nao_pode_pedir);
-
-                    mBilder.setView(layoutDialog);
-                    final AlertDialog dialogEstabelecimentoFechado = mBilder.create();
-                    dialogEstabelecimentoFechado.show();
-
-                    btEntendi.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialogEstabelecimentoFechado.dismiss();
-                        }
-                    });
+                    OpenDialogUtil.openSimpleDialog("Desculpe",
+                            "O estabelecimento o impediu de relizar pedidos, favor o procure-o para prosseguir pedindo.",
+                            CarrinhoActivity.this);
 
                 } else {
                     //atualiza itens do pedido
