@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Locale;
@@ -136,21 +137,29 @@ public class FormasdePagamentoAdapter extends RecyclerView.Adapter<FormasdePagam
             @Override
             public void onClick(View v) {
 
-                Double valorInformado = Double.parseDouble(valorEmDinheiro.getText().toString().replace("R$", "").replace(",", ".").trim());
+                try {
 
-                if (valorInformado < totalPedido) {
+                    Double valorInformado = Double.parseDouble(valorEmDinheiro.getText().toString().replace("R$", "").replace(",", ".").trim());
+
+                    if (valorInformado < totalPedido) {
+                        imgError.setVisibility(View.VISIBLE);
+                        valorDinheiroInvalido.setVisibility(View.VISIBLE);
+                    } else {
+                        imgError.setVisibility(View.GONE);
+                        valorDinheiroInvalido.setVisibility(View.GONE);
+
+                        dinheiro.setValorDinheiro(StringUtil.formatMoedaToDouble(valorEmDinheiro.getText().toString()));
+
+                        ativarFormadePagamento(dinheiro);
+                        notifyDataSetChanged();
+
+                        dialogFormadePagamento.dismiss();
+                    }
+
+                } catch (Exception e){
                     imgError.setVisibility(View.VISIBLE);
                     valorDinheiroInvalido.setVisibility(View.VISIBLE);
-                } else {
-                    imgError.setVisibility(View.GONE);
-                    valorDinheiroInvalido.setVisibility(View.GONE);
-
-                    dinheiro.setValorDinheiro(StringUtil.formatMoedaToDouble(valorEmDinheiro.getText().toString()));
-
-                    ativarFormadePagamento(dinheiro);
-                    notifyDataSetChanged();
-
-                    dialogFormadePagamento.dismiss();
+                    valorDinheiroInvalido.setText("Por favor, não informe um valor tão alto!");
                 }
             }
         });

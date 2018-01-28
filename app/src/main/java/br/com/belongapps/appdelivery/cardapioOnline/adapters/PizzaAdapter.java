@@ -98,7 +98,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
 
                     if (tipoPizza.equals("Inteira")) {
 
-                        itemPedido.setNome("Pizza " + item.getNome() + " " + getTamanho());
+                        itemPedido.setNome("Pizza " + item.getNome() + " " + getInicialTamanho());
                         itemPedido.setDescricao(item.getDescricao());
                         itemPedido.setRef_img(item.getRef_img());
                         itemPedido.setValor_unit(finalValoUniTario);
@@ -319,6 +319,19 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.ViewHolder> 
         return retorno;
     }
 
+    public String getInicialTamanho() {
+        String retorno = "";
+
+        if (tamPizza == 0) {
+            retorno = "(P)";
+        } else if (tamPizza == 1) {
+            retorno = "(M)";
+        } else if (tamPizza == 2) {
+            retorno = "(G)";
+        }
+
+        return retorno;
+    }
 
     @Override
     public int getItemCount() {

@@ -236,15 +236,16 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
 
             //verificar se endereço e form pag. selecionados
             if (frmPagValida && endereco != null) {
-                try {
+               /* try {*/
                     openProgressDialog(); //Exibir status de envio
                     iniciarEnvioDoPedido();
                     //new exibirDialogdeEnvio().execute((Void[]) null); //Executar dialog de status de envio]
-                } catch (Exception e) {
+               /* } catch (Exception e) {
                     e.printStackTrace();
                     //Exibir Dialog de Erro ao enviar o pedido
-                    exibirErroAoEnviarPedido();
-                }
+                    Print.logError("ERROR: " + e.getMessage());
+                    //exibirErroAoEnviarPedido();
+                }*/
             } else {
                 naoEnviarPedido(frmPagValida);
             }
@@ -281,8 +282,6 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
             cliente.setComplementoEndCliente(endereco.getComplemento());
         }
 
-
-
         pedido.setCliente(cliente); //Adicionar Cliente ao Pedido
 
         FormadePagamento formadePagamento = getFormaPagamento();
@@ -301,7 +300,10 @@ public class FinalizarPedidoActivity extends AppCompatActivity {
         }
 
         pagamento.setDescricaoPagemento(formadePagamento.getDescricao());
-        pagamento.setValorPago(formadePagamento.getValorDinheiro());
+
+        if (!pagamento.getFormaPagamento().equals("CARTÃO")) {
+            pagamento.setValorPago(formadePagamento.getValorDinheiro());
+        }
 
         pedido.setPagamento(pagamento);
 

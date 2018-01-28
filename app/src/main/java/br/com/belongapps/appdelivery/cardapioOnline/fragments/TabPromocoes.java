@@ -138,7 +138,7 @@ public class TabPromocoes extends Fragment {
                                     ic.setItemKey(itemKey);
                                     ic.setValor_unit(ic.getValor_pizza_p());
                                     ic.setPreco_promocional(ic.getPromo_pizza_p());
-                                    ic.setNome(ic.getNome() + " Pequena");
+                                    ic.setNome("Pizza " + ic.getNome() + " (P)");
                                     ic.setDescricao(getDescricaoMini(ic.getDescricao()));
                                     itensPromocaoAux.add(ic);
                                 }
@@ -158,7 +158,7 @@ public class TabPromocoes extends Fragment {
                                     ic.setItemKey(itemKey);
                                     ic.setValor_unit(ic.getValor_pizza_m());
                                     ic.setPreco_promocional(ic.getPromo_pizza_m());
-                                    ic.setNome(ic.getNome() + " Média");
+                                    ic.setNome("Pizza " + ic.getNome() + " (M)");
                                     ic.setDescricao(getDescricaoMini(ic.getDescricao()));
                                     itensPromocaoAux.add(ic);
                                 }
@@ -178,7 +178,7 @@ public class TabPromocoes extends Fragment {
                                     ic.setItemKey(itemKey);
                                     ic.setValor_unit(ic.getValor_pizza_g());
                                     ic.setPreco_promocional(ic.getPromo_pizza_g());
-                                    ic.setNome(ic.getNome() + " Grande");
+                                    ic.setNome("Pizza " + ic.getNome() + " (G)");
                                     ic.setDescricao(getDescricaoMini(ic.getDescricao()));
                                     itensPromocaoAux.add(ic);
                                 }

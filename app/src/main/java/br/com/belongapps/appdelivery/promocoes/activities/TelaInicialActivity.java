@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -23,7 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
@@ -49,6 +52,7 @@ public class TelaInicialActivity extends AppCompatActivity {
     LinearLayout promoDots;
     private int promoCount;
     private ImageView[] dots;
+    private Boolean statusEstabelecimento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,7 @@ public class TelaInicialActivity extends AppCompatActivity {
                 if (DataUtil.horaAutomaticaAtivada(getContentResolver())) {
 
                     Intent i = new Intent(TelaInicialActivity.this, CardapioMainActivity.class);
+                    i.putExtra("StatusEstabelecimento", statusEstabelecimento);
                     startActivity(i);
                     finish();
                 } else {
@@ -91,6 +96,7 @@ public class TelaInicialActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             dialogConfigData.dismiss();
                             Intent i = new Intent(TelaInicialActivity.this, CardapioMainActivity.class);
+                            i.putExtra("StatusEstabelecimento", statusEstabelecimento);
                             startActivity(i);
                             finish();
                         }
@@ -233,6 +239,8 @@ public class TelaInicialActivity extends AppCompatActivity {
         });
 
         recuperarVersaoAtualUtilizada();
+        atualizarDataUltimoAcesso();
+        verificarStatusStabelecimento();
     }
 
     private void recuperarVersaoAtualUtilizada() {
@@ -254,6 +262,28 @@ public class TelaInicialActivity extends AppCompatActivity {
             Print.logError(FirebaseAuthApp.getUsuarioLogado().getUid());
             mDatabaseUserReference.child(FirebaseAuthApp.getUsuarioLogado().getUid()).child("versao_app").setValue(vesaoApp);
         }
+    }
+
+    private void atualizarDataUltimoAcesso(){
+        DatabaseReference mDatabaseUserReference = FirebaseDatabase.getInstance().getReference().child("clientes");
+        String dataAtual = DataUtil.formatar(new Date(), "dd/MM/yyyy");
+        mDatabaseUserReference.child(FirebaseAuthApp.getUsuarioLogado().getUid()).child("ultimo_acesso").setValue(dataAtual);
+    }
+
+    private void verificarStatusStabelecimento(){
+        mDatabaseReference.child("configuracoes").child("status_estabelecimento").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Boolean status = Boolean.parseBoolean(dataSnapshot.child("status").getValue().toString());
+                statusEstabelecimento = status;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

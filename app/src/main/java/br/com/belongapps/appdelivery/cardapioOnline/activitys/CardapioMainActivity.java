@@ -383,6 +383,8 @@ public class CardapioMainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
+        statusEstabelecimento = getIntent().getBooleanExtra("StatusEstabelecimento", false);
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         //VERIFICA CONEXÃO

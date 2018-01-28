@@ -198,6 +198,10 @@ public class PromocoesAdapter extends RecyclerView.Adapter<PromocoesAdapter.View
                 intent.putExtra("Combo", itemPedido.getNome());
             }
 
+            if (item.getCategoria_id().equals("7")){
+                intent.putExtra("sanduiche", itemPedido.getKeyItem());
+            }
+
             context.startActivity(intent);
             ((Activity) context).finish();
         }

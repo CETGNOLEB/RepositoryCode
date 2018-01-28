@@ -2,9 +2,9 @@ package br.com.belongapps.appdelivery.cardapioOnline.activitys;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +42,7 @@ public class EscolherItemComboActivity extends AppCompatActivity {
     private String nomeItem;
     private List<String> keyItens;
     private String itemSelecionado;
+    private String bebidaSelecionada;
     private ItemPedido itemPedido;
 
     @Override
@@ -65,6 +66,7 @@ public class EscolherItemComboActivity extends AppCompatActivity {
         nomeItem = getIntent().getStringExtra("ItemNome");
         itemPedido = getIntent().getParcelableExtra("ItemPedido");
         itemSelecionado = getIntent().getStringExtra("ItemSelecionado");
+        bebidaSelecionada = getIntent().getStringExtra("BebidaSelecionada");
         keyItens = getIntent().getStringArrayListExtra("KeyItens");
     }
 
@@ -95,7 +97,7 @@ public class EscolherItemComboActivity extends AppCompatActivity {
 
                 }
 
-                adapter = new ItemComboAdapter(itens, EscolherItemComboActivity.this, mProgressBar, itemSelecionado, itemPedido);
+                adapter = new ItemComboAdapter(itens, EscolherItemComboActivity.this, mProgressBar, itemSelecionado, bebidaSelecionada, itemPedido);
                 mItemComboList.setAdapter(adapter);
             }
 
@@ -135,6 +137,7 @@ public class EscolherItemComboActivity extends AppCompatActivity {
                 Intent intent = new Intent(EscolherItemComboActivity.this, DetalhesdoItemActivity.class);
                 intent.putExtra("ItemPedido", itemPedido);
                 intent.putExtra("ItemSelecionado", itemSelecionado);
+                intent.putExtra("BebidaSelecionada", bebidaSelecionada);
                 intent.putExtra("Combo", "Combo");
                 startActivity(intent);
                 finish();

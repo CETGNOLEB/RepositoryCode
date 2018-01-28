@@ -450,6 +450,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 Intent i = new Intent(DetalhesdoItemActivity.this, EscolherItemComboActivity.class);
                 i.putExtra("ItemPedido", itemPedido);
                 i.putExtra("ItemNome", "a Pizza");
+                i.putExtra("BebidaSelecionada", bebidaSelecionada);
                 i.putStringArrayListExtra("KeyItens", new ArrayList<>(keyPizzas));
                 startActivity(i);
                 finish();
@@ -470,6 +471,8 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                 exibirDialogSelecionarBebida(nomeBebidas);
             }
         });
+
+        atualizarViewsCardSelecionarBebida(nomeBebidas);
     }
 
     private void exibirDialogSelecionarBebida(final List<String> nomeBebidas) {
@@ -537,7 +540,6 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
             nomeBebidacombo.setVisibility(View.GONE);
             btAlterarBebida.setVisibility(View.GONE);
             btSelecionarBebidaCombo.setVisibility(View.VISIBLE);
-
         }
     }
 
@@ -561,6 +563,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
                     i.putExtra("ItemNome", "a Pizza");
                     i.putExtra("ItemPedido", itemPedido);
                     i.putExtra("ItemSelecionado", pizzaSelecionada);
+                    i.putExtra("BebidaSelecionada", bebidaSelecionada);
                     i.putStringArrayListExtra("KeyItens", new ArrayList<>(keyPizzas));
                     startActivity(i);
                     finish();
@@ -623,6 +626,7 @@ public class DetalhesdoItemActivity extends AppCompatActivity {
 
         //Combo
         pizzaSelecionada = getIntent().getStringExtra("ItemSelecionado");
+        bebidaSelecionada = getIntent().getStringExtra("BebidaSelecionada");
 
         //SetValorTotal
         valorTotal = itemPedido.getValor_unit();

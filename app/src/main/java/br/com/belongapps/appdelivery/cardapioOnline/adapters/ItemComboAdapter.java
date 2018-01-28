@@ -36,14 +36,16 @@ public class ItemComboAdapter extends RecyclerView.Adapter<ItemComboAdapter.View
 
     private ItemPedido itemPedido;
     private String itemSelecionado;
+    private String bebidaSelecionada;
 
-    public ItemComboAdapter(List<ItemCardapio> itens, Context context, ProgressBar progressBar, String itemSelcionado, ItemPedido itemPedido) {
+    public ItemComboAdapter(List<ItemCardapio> itens, Context context, ProgressBar progressBar, String itemSelecionado, String bebidaSelecionada, ItemPedido itemPedido) {
         this.itens = itens;
         this.context = context;
         this.mProgressBar = progressBar;
 
         this.itemPedido = itemPedido;
-        this.itemSelecionado = itemSelcionado;
+        this.itemSelecionado = itemSelecionado;
+        this.bebidaSelecionada = bebidaSelecionada;
     }
 
     @Override
@@ -75,6 +77,7 @@ public class ItemComboAdapter extends RecyclerView.Adapter<ItemComboAdapter.View
                 Intent i = new Intent(context, DetalhesdoItemActivity.class);
                 i.putExtra("ItemPedido", itemPedido);
                 i.putExtra("ItemSelecionado", itemSelecionado);
+                i.putExtra("BebidaSelecionada", bebidaSelecionada);
                 i.putExtra("Combo", "Combo");
                 context.startActivity(i);
                 ((Activity) context).finish();

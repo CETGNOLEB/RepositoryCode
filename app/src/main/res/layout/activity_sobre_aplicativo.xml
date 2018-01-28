@@ -151,7 +151,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Se você tem alguma dúvida ou sugestão sobre o aplicativo, por favor fique a vontade para enviar comentários ou acessse nosso site:"
+                android:text="Se você tem alguma dúvida ou sugestão sobre o aplicativo, por favor fique a vontade para enviar comentários:"
                 android:textAlignment="center"
                 android:textColor="#212121"
                 android:textSize="16sp" />
